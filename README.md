@@ -29,4 +29,4 @@ dustinjaeger-net/
 3. Custom domain: dustinjaeger.net
 
 ## Changelog
-See CHANGELOG.md for nightly updates.
+See [CHANGELOG.md](CHANGELOG.md) for nightly updates.

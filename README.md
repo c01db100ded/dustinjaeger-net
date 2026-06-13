@@ -4,8 +4,8 @@ A living, breathing portfolio site that gets better every night.
 
 ## What This Is
 - **Domain:** dustinjaeger.net
-- **Hosting:** Cloudflare Pages (free)
-- **Source:** GitHub repo → auto-deploys to Cloudflare
+- **Hosting:** GitHub Pages (free)
+- **Source:** GitHub repo → auto-deploys to GitHub Pages
 - **Design:** Dark theme, teal accents, animated grid background
 
 ## How It Works
@@ -25,7 +25,7 @@ dustinjaeger-net/
 
 ## Deployment
 1. Push to GitHub
-2. Cloudflare Pages auto-deploys on push
+2. GitHub Pages auto-deploys on push
 3. Custom domain: dustinjaeger.net
 
 ## Changelog

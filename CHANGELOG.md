@@ -21,8 +21,8 @@
 - Meta tags and Open Graph data
 
 ## TODO / Ideas for Future Nights
-- [ ] Set up GitHub repo and Cloudflare Pages deployment
-- [ ] Configure DNS at Squarespace → Cloudflare
+- [ ] Set up GitHub repo and GitHub Pages deployment
+- [ ] Configure DNS at Squarespace
 - [ ] Add dark/light mode toggle
 - [ ] Add blog section
 - [ ] Add visitor counter
@@ -30,7 +30,7 @@
 - [ ] Add certifications/credentials section
 - [ ] Add "Now" page
 - [ ] Add PWA manifest
-- [ ] Add Cloudflare Web Analytics
+- [ ] 
 - [ ] Create sitemap.xml and robots.txt
 - [ ] Add Open Graph image
 - [ ] Add scroll animations

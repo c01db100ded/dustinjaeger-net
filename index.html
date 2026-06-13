@@ -48,7 +48,8 @@
       padding: 1rem 0;
     }
     nav .container { display: flex; justify-content: space-between; align-items: center; }
-    .logo { font-size: 1.2rem; font-weight: 700; color: #64ffda; letter-spacing: -0.5px; }
+    .logo { display: flex; align-items: center; gap: 0.5rem; font-size: 1.2rem; font-weight: 700; color: #64ffda; letter-spacing: -0.5px; }
+    .logo img { height: 32px; width: 32px; border-radius: 6px; }
     .logo span { color: #e0e0e0; }
     .nav-links { display: flex; gap: 2rem; list-style: none; }
     .nav-links a { font-size: 0.9rem; color: #aaa; }
@@ -298,7 +299,10 @@
   <!-- Nav -->
   <nav>
     <div class="container">
-      <div class="logo">dustin<span>j</span>aeger</div>
+      <div class="logo">
+        <img src="assets/dragon-icon.png" alt="dustinjaeger logo" />
+        dustin<span>j</span>aeger
+      </div>
       <ul class="nav-links">
         <li><a href="#about">About</a></li>
         <li><a href="#skills">Skills</a></li>

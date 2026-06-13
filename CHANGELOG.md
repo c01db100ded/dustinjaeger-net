@@ -1,5 +1,10 @@
 # CHANGELOG — dustinjaeger.net
 
+## 2026-06-13 — v3: Scroll Reveal Animations
+- Added subtle scroll-reveal animations to hero, About, Skills, Experience, Impact, and Contact sections
+- New `.reveal` class with IntersectionObserver-based entrance transitions
+- Removed redundant blank-line comments in timeline/experience items for cleaner markup
+
 ## 2026-06-12 — v2: Real Content from LinkedIn
 - Replaced all placeholder content with real data from LinkedIn profile
 - Added stats bar: 10+ years, $2M+ savings, 2,700+ endpoints

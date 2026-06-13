@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dustin Jaeger — Systems Administrator Manager | IT Infrastructure</title>
+  <meta name="description" content="Dustin Jaeger — Systems Administrator Manager at Rimini Street. 10+ years in IT infrastructure, converged/hyperconverged systems, data protection, and team leadership. Based in Las Vegas, NV.">
+  <meta property="og:title" content="Dustin Jaeger — IT Portfolio">
+  <meta property="og:description" content="Systems Administrator Manager · 10+ years in IT infrastructure · Las Vegas, NV">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://dustinjaeger.net">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🖥️</text></svg>">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: #0a0a0f;
+      color: #e0e0e0;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    a { color: #64ffda; text-decoration: none; transition: color 0.2s; }
+    a:hover { color: #a7ffeb; }
+    .container { max-width: 900px; margin: 0 auto; padding: 0 1.5rem; }
+
+    /* ── Animated Background ──────────────────────── */
+    .bg-grid {
+      position: fixed; inset: 0; z-index: -1;
+      background-image:
+        linear-gradient(rgba(100,255,218,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(100,255,218,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      animation: gridScroll 20s linear infinite;
+    }
+    @keyframes gridScroll {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(60px, 60px); }
+    }
+
+    /* ── Nav ──────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(10,10,15,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(100,255,218,0.08);
+      padding: 1rem 0;
+    }
+    nav .container { display: flex; justify-content: space-between; align-items: center; }
+    .logo { font-size: 1.2rem; font-weight: 700; color: #64ffda; letter-spacing: -0.5px; }
+    .logo span { color: #e0e0e0; }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a { font-size: 0.9rem; color: #aaa; }
+    .nav-links a:hover { color: #64ffda; }
+
+    /* ── Hero ─────────────────────────────────────── */
+    .hero {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      text-align: center;
+      padding: 6rem 1.5rem 4rem;
+    }
+    .hero-content { max-width: 700px; }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(100,255,218,0.1);
+      border: 1px solid rgba(100,255,218,0.2);
+      color: #64ffda;
+      padding: 0.3rem 1rem;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      letter-spacing: 0.5px;
+    }
+    .hero h1 {
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #fff 0%, #64ffda 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-sub {
+      font-size: 1.2rem;
+      color: #888;
+      margin-bottom: 0.75rem;
+      max-width: 550px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .hero-location {
+      font-size: 0.95rem;
+      color: #666;
+      margin-bottom: 2rem;
+    }
+    .hero-cta { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn {
+      display: inline-block;
+      padding: 0.75rem 2rem;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .btn-primary {
+      background: #64ffda;
+      color: #0a0a0f;
+      border: 2px solid #64ffda;
+    }
+    .btn-primary:hover { background: #a7ffeb; border-color: #a7ffeb; transform: translateY(-1px); }
+    .btn-outline {
+      background: transparent;
+      color: #64ffda;
+      border: 2px solid rgba(100,255,218,0.3);
+    }
+    .btn-outline:hover { border-color: #64ffda; background: rgba(100,255,218,0.05); transform: translateY(-1px); }
+
+    /* ── Stats Bar ────────────────────────────────── */
+    .stats {
+      display: flex; justify-content: center; gap: 3rem;
+      padding: 2rem 0;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      margin-top: 2rem;
+    }
+    .stat { text-align: center; }
+    .stat-number { font-size: 1.8rem; font-weight: 800; color: #64ffda; }
+    .stat-label { font-size: 0.8rem; color: #666; text-transform: uppercase; letter-spacing: 1px; }
+
+    /* ── Sections ─────────────────────────────────── */
+    section { padding: 5rem 0; }
+    .section-label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #64ffda;
+      margin-bottom: 0.5rem;
+    }
+    .section-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 2rem;
+      color: #fff;
+    }
+
+    /* ── About ────────────────────────────────────── */
+    .about-text { font-size: 1.05rem; color: #aaa; max-width: 700px; }
+    .about-text p { margin-bottom: 1.2rem; }
+    .highlight { color: #64ffda; font-weight: 600; }
+
+    /* ── Skills ───────────────────────────────────── */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+    .skill-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      padding: 1.25rem;
+      transition: all 0.2s;
+    }
+    .skill-card:hover {
+      border-color: rgba(100,255,218,0.2);
+      background: rgba(100,255,218,0.03);
+      transform: translateY(-2px);
+    }
+    .skill-card h3 { font-size: 1rem; color: #fff; margin-bottom: 0.3rem; }
+    .skill-card p { font-size: 0.85rem; color: #777; }
+
+    /* ── Projects / Achievements ──────────────────── */
+    .projects-grid { display: grid; gap: 1.5rem; }
+    .project-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 16px;
+      padding: 2rem;
+      transition: all 0.3s;
+    }
+    .project-card:hover {
+      border-color: rgba(100,255,218,0.15);
+      background: rgba(100,255,218,0.02);
+    }
+    .project-card h3 { font-size: 1.2rem; color: #fff; margin-bottom: 0.5rem; }
+    .project-card p { color: #999; margin-bottom: 0.75rem; font-size: 0.95rem; }
+    .project-savings {
+      display: inline-block;
+      background: rgba(100,255,218,0.08);
+      color: #64ffda;
+      padding: 0.2rem 0.8rem;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border: 1px solid rgba(100,255,218,0.15);
+      margin-bottom: 0.75rem;
+    }
+    .project-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .tag {
+      background: rgba(100,255,218,0.08);
+      color: #64ffda;
+      padding: 0.2rem 0.7rem;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      border: 1px solid rgba(100,255,218,0.12);
+    }
+
+    /* ── Experience ───────────────────────────────── */
+    .timeline { position: relative; padding-left: 2rem; }
+    .timeline::before {
+      content: '';
+      position: absolute; left: 0; top: 0; bottom: 0;
+      width: 2px;
+      background: rgba(100,255,218,0.15);
+    }
+    .timeline-item { position: relative; margin-bottom: 3rem; }
+    .timeline-item::before {
+      content: '';
+      position: absolute; left: -2rem; top: 0.4rem;
+      width: 10px; height: 10px;
+      background: #64ffda;
+      border-radius: 50%;
+      transform: translateX(-4px);
+      box-shadow: 0 0 10px rgba(100,255,218,0.3);
+    }
+    .timeline-date { font-size: 0.8rem; color: #64ffda; margin-bottom: 0.3rem; }
+    .timeline-item h3 { font-size: 1.1rem; color: #fff; }
+    .timeline-item h4 { font-size: 0.9rem; color: #888; font-weight: 400; margin-bottom: 0.5rem; }
+    .timeline-item p { color: #999; font-size: 0.95rem; }
+    .timeline-item ul { list-style: none; margin-top: 0.5rem; }
+    .timeline-item ul li {
+      position: relative;
+      padding-left: 1.2rem;
+      margin-bottom: 0.4rem;
+      color: #999;
+      font-size: 0.9rem;
+    }
+    .timeline-item ul li::before {
+      content: '▸';
+      position: absolute; left: 0;
+      color: #64ffda;
+      font-size: 0.8rem;
+    }
+
+    /* ── Contact ──────────────────────────────────── */
+    .contact { text-align: center; }
+    .contact .about-text { margin: 0 auto 2rem; }
+    .social-links { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-top: 2rem; }
+    .social-links a {
+      font-size: 0.9rem;
+      color: #888;
+      padding: 0.6rem 1.2rem;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+    .social-links a:hover { color: #64ffda; border-color: rgba(100,255,218,0.2); }
+
+    /* ── Footer ───────────────────────────────────── */
+    footer {
+      border-top: 1px solid rgba(255,255,255,0.05);
+      padding: 2rem 0;
+      text-align: center;
+      color: #555;
+      font-size: 0.85rem;
+    }
+
+    /* ── Responsive ───────────────────────────────── */
+    @media (max-width: 600px) {
+      .nav-links { gap: 1rem; }
+      .hero h1 { font-size: 2rem; }
+      .skills-grid { grid-template-columns: 1fr; }
+      .hero-cta { flex-direction: column; align-items: center; }
+      .stats { gap: 1.5rem; }
+      .stat-number { font-size: 1.4rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-grid"></div>
+
+  <!-- Nav -->
+  <nav>
+    <div class="container">
+      <div class="logo">dustin<span>j</span>aeger</div>
+      <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#experience">Experience</a></li>
+        <li><a href="#achievements">Impact</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">👋 Welcome to my corner of the internet</div>
+      <h1>Dustin Jaeger</h1>
+      <p class="hero-sub">
+        Systems Administrator Manager · IT Infrastructure Leader · Problem Solver
+      </p>
+      <p class="hero-location">📍 Las Vegas, Nevada</p>
+      <div class="hero-cta">
+        <a href="#experience" class="btn btn-primary">See My Work</a>
+        <a href="#contact" class="btn btn-outline">Get In Touch</a>
+      </div>
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-number">10+</div>
+          <div class="stat-label">Years in IT</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">$2M+</div>
+          <div class="stat-label">Cost Savings</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">2.7K+</div>
+          <div class="stat-label">Endpoints Managed</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about">
+    <div class="container">
+      <div class="section-label">About</div>
+      <h2 class="section-title">Who I Am</h2>
+      <div class="about-text">
+        <p>
+          I'm a <span class="highlight">versatile IT leader and problem-solver</span> with over a decade of experience keeping critical infrastructure running across the Las Vegas area. I specialize in <span class="highlight">server hardware and operating systems</span>, <span class="highlight">data protection</span>, and <span class="highlight">systems monitoring</span>.
+        </p>
+        <p>
+          Throughout my career I've worked across <span class="highlight">converged and hyperconverged infrastructure</span>, <span class="highlight">storage area networks</span>, and large-scale endpoint environments — consistently finding ways to consolidate, optimize, and save money while improving reliability.
+        </p>
+        <p>
+          I'm a creative and strategic thinker who translates complex technical challenges into <span class="highlight">cost-effective implementation plans</span>. I've trained property IT teams as a single contributor, led cross-functional projects, and built vendor relationships that deliver real results.
+        </p>
+        <p>
+          When I'm not managing infrastructure, you'll find me tinkering with a homelab built around an Intel NUC, experimenting with AI agents, or figuring out how to make Starlink work without port forwarding.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills -->
+  <section id="skills">
+    <div class="container">
+      <div class="section-label">Skills</div>
+      <h2 class="section-title">What I Work With</h2>
+      <div class="skills-grid">
+        <div class="skill-card">
+          <h3>🖥️ Systems & Infrastructure</h3>
+          <p>Windows Server, Linux, Active Directory, Group Policy, VMware, Hyperconverged Infrastructure</p>
+        </div>
+        <div class="skill-card">
+          <h3>💾 Storage & Data Protection</h3>
+          <p>NetApp, SAN/NAS, FlexPod UCS, Rubrik, Veeam, Disk-to-Disk, DR Replication</p>
+        </div>
+        <div class="skill-card">
+          <h3>🌐 Networking</h3>
+          <p>TCP/IP, DNS, DHCP, VLANs, Firewalls, VPN, Starlink, Cloudflare Tunnels</p>
+        </div>
+        <div class="skill-card">
+          <h3>📊 Monitoring & Security</h3>
+          <p>Splunk, SolarWinds, Tanium, PRTG, SIEM, Endpoint Protection, Vulnerability Management</p>
+        </div>
+        <div class="skill-card">
+          <h3>⚙️ Automation & Scripting</h3>
+          <p>PowerShell, Bash, Python, VBA/VB.NET, SSRS, SQL Queries, Ansible</p>
+        </div>
+        <div class="skill-card">
+          <h3>👥 Leadership & Training</h3>
+          <p>Team Leadership, Cross-functional Collaboration, Vendor Management, IT Training, Supply Chain</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Experience -->
+  <section id="experience">
+    <div class="container">
+      <div class="section-label">Experience</div>
+      <h2 class="section-title">Where I've Worked</h2>
+      <div class="timeline">
+
+        <!-- Rimini Street -->
+        <div class="timeline-item">
+          <div class="timeline-date">Sep 2022 — Present</div>
+          <h3>Systems Administrator Manager</h3>
+          <h4>Rimini Street · Las Vegas, NV</h4>
+          <ul>
+            <li>Leading systems administration operations for a third-party enterprise software support company</li>
+            <li>Managing infrastructure across converged and hyperconverged environments</li>
+            <li>Overseeing data protection, systems monitoring, and vendor relationships</li>
+          </ul>
+        </div>
+
+        <!-- Rimini Street — earlier roles -->
+        <div class="timeline-item">
+          <div class="timeline-date">May 2020 — Oct 2022</div>
+          <h3>Lead System Administrator → Sr. Systems Administrator</h3>
+          <h4>Rimini Street · Las Vegas, NV</h4>
+          <ul>
+            <li>Progressed from Senior to Lead to Manager through demonstrated expertise</li>
+            <li>Managed critical server infrastructure and data protection systems</li>
+          </ul>
+        </div>
+
+        <!-- Penn National Gaming -->
+        <div class="timeline-item">
+          <div class="timeline-date">Oct 2018 — May 2020</div>
+          <h3>Systems Engineer</h3>
+          <h4>Penn National Gaming / Hollywood Casinos · Las Vegas, NV</h4>
+          <ul>
+            <li>Saved the organization <strong>$300K/year</strong> by consolidating 6 SANs into 1 all-flash NetApp</li>
+            <li>Reduced colocation footprint to just 6 racks</li>
+            <li>Independently migrated backup infrastructure: disk → tape → disk-to-disk → full DR Replication (Rubrik)</li>
+            <li>Administered converged and hyperconverged infrastructure across the enterprise</li>
+            <li>Successfully transitioned through company acquisition via demonstrated SME and communication skills</li>
+          </ul>
+        </div>
+
+        <!-- Pinnacle Entertainment -->
+        <div class="timeline-item">
+          <div class="timeline-date">Oct 2015 — Oct 2018</div>
+          <h3>Systems Engineer → IT Business Analyst</h3>
+          <h4>Pinnacle Entertainment · Las Vegas, NV</h4>
+          <ul>
+            <li>Maintained infrastructure health for <strong>15 properties and 2,700+ endpoints</strong></li>
+            <li>Removed unnecessary hardware, resulting in energy savings of <strong>over $2M</strong></li>
+            <li>Installed and administered FlexPod UCS, NetApp, and VMware environments</li>
+            <li>Recognized as SME for new deployments, critical incidents, and global outage resolution</li>
+            <li>Led P2V migrations for application teams across database and server environments</li>
+            <li>Leveraged Splunk, Tanium, and SolarWinds for enterprise-wide system health monitoring</li>
+            <li>As IT Business Analyst: troubleshot gaming systems across 13 properties, wrote SSRS reports and SQL queries for hardware trend analysis</li>
+          </ul>
+        </div>
+
+        <!-- River City Casino -->
+        <div class="timeline-item">
+          <div class="timeline-date">Jan 2014 — Sep 2015</div>
+          <h3>Systems Analyst</h3>
+          <h4>River City Casino & Hotel · St. Louis, MO</h4>
+          <ul>
+            <li>Help Desk support for all IT-related systems across the property</li>
+            <li>Created custom software using Microsoft VB.NET</li>
+            <li>Built VBA-automated Excel, Word, and InfoPath documents</li>
+            <li>Established IT policies supporting executive leadership strategies</li>
+            <li>Diagnosed and replaced faulty hardware across network-attached peripherals</li>
+          </ul>
+        </div>
+
+        <!-- Ameristar Casino -->
+        <div class="timeline-item">
+          <div class="timeline-date">May 2009 — Jan 2014</div>
+          <h3>Associate Systems Analyst</h3>
+          <h4>Ameristar Casino · Saint Charles, MO</h4>
+          <ul>
+            <li>Help Desk troubleshooting for end user issues across gaming and non-gaming systems</li>
+            <li>Created and supported VBA-automated Excel, Word, and InfoPath documents</li>
+            <li>Maintained user accounts for gaming and non-gaming systems</li>
+            <li>Diagnosed and resolved hardware and software issues across the property</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Key Achievements -->
+  <section id="achievements">
+    <div class="container">
+      <div class="section-label">Impact</div>
+      <h2 class="section-title">Key Achievements</h2>
+      <div class="projects-grid">
+        <div class="project-card">
+          <span class="project-savings">💰 $2M+ Saved</span>
+          <h3>Hardware Consolidation & Energy Savings</h3>
+          <p>At Pinnacle Entertainment, identified and removed unnecessary hardware across 15 properties — resulting in over $2 million in energy savings while maintaining full operational capacity.</p>
+          <div class="project-tags">
+            <span class="tag">Cost Optimization</span>
+            <span class="tag">Infrastructure</span>
+            <span class="tag">Energy Efficiency</span>
+          </div>
+        </div>
+        <div class="project-card">
+          <span class="project-savings">💰 $300K/yr Saved</span>
+          <h3>SAN Consolidation</h3>
+          <p>At Penn National Gaming, consolidated 6 separate SANs into a single all-flash NetApp array — saving $300K annually while improving performance and reducing management overhead.</p>
+          <div class="project-tags">
+            <span class="tag">NetApp</span>
+            <span class="tag">Storage</span>
+            <span class="tag">Consolidation</span>
+          </div>
+        </div>
+        <div class="project-card">
+          <span class="project-savings">🔄 Full Migration</span>
+          <h3>Backup Infrastructure Overhaul</h3>
+          <p>Independently designed and executed a complete backup migration: disk → tape → disk-to-disk → full DR Replication using Rubrik. Zero data loss, minimal downtime.</p>
+          <div class="project-tags">
+            <span class="tag">Rubrik</span>
+            <span class="tag">DR Replication</span>
+            <span class="tag">Data Protection</span>
+          </div>
+        </div>
+        <div class="project-card">
+          <span class="project-savings">📡 2,700+ Endpoints</span>
+          <h3>Multi-Property Infrastructure</h3>
+          <p>Maintained system health across 15 properties and 2,700+ endpoints using Splunk, Tanium, and SolarWinds — recognized as the go-to SME for critical incidents and global outages.</p>
+          <div class="project-tags">
+            <span class="tag">Splunk</span>
+            <span class="tag">Tanium</span>
+            <span class="tag">SolarWinds</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact">
+    <div class="container">
+      <div class="section-label">Contact</div>
+      <h2 class="section-title">Let's Connect</h2>
+      <div class="about-text">
+        <p>
+          Interested in working together, have a question about infrastructure, or just want to talk shop? 
+          I'm always open to a good conversation about IT, career moves, or the best way to consolidate a SAN.
+        </p>
+      </div>
+      <div class="social-links">
+        <a href="https://linkedin.com/in/dustinjaeger" target="_blank" rel="noopener">💼 LinkedIn</a>
+        <a href="mailto:hello@dustinjaeger.net">📧 Email</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>© 2026 Dustin Jaeger · Built with ☕ and occasional swearing</p>
+      <p style="margin-top: 0.3rem; font-size: 0.75rem;">Powered by Cloudflare Pages · Hosted on GitHub · Updated nightly by AI</p>
+    </div>
+  </footer>
+
+</body>
+</html>

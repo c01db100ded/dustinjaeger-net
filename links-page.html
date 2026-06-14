@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dustin Jaeger - Useful Links & Alternatives</title>
+  <style>
+    :root {
+      --bg: #0f1115;
+      --surface: #1a1d23;
+      --surface-2: #22262e;
+      --text: #e6e8eb;
+      --muted: #9aa0a6;
+      --accent: #ff7b00;
+      --accent-2: #ff9d42;
+      --border: #2d3139;
+      --good: #2d9c4a;
+      --warn: #c9a227;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+    }
+    a { color: var(--accent-2); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    header {
+      border-bottom: 1px solid var(--border);
+      padding: 28px 24px;
+      background: linear-gradient(180deg, #161920, var(--bg));
+    }
+    .wrap { max-width: 1100px; margin: 0 auto; }
+    header h1 { margin: 0 0 6px; font-size: 26px; letter-spacing: 0.2px; }
+    header p { margin: 0; color: var(--muted); font-size: 14px; }
+    .pill {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      background: var(--surface-2);
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(15, 17, 21, 0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+    }
+    nav .wrap { padding: 10px 24px; display: flex; gap: 18px; flex-wrap: wrap; }
+    nav a { color: var(--muted); font-size: 13px; font-weight: 500; }
+    nav a:hover { color: var(--text); }
+    main { padding: 28px 24px 60px; }
+    section { margin-bottom: 44px; scroll-margin-top: 64px; }
+    section h2 {
+      font-size: 20px;
+      margin: 0 0 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .desc { color: var(--muted); font-size: 13px; margin: -8px 0 14px; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 14px;
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      transition: border-color 0.15s ease;
+    }
+    .card:hover { border-color: #3d4450; }
+    .card h3 { margin: 0 0 6px; font-size: 15px; color: var(--text); }
+    .card p { margin: 0; font-size: 13px; color: var(--muted); }
+    .card .meta { margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap; }
+    .tag {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: var(--surface-2);
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    th, td {
+      text-align: left;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    th {
+      font-weight: 600;
+      color: var(--muted);
+      background: var(--surface-2);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+    tr:last-child td { border-bottom: none; }
+    .compare-paid { color: #f4a6a6; }
+    .compare-free { color: var(--good); }
+    .section-icon { font-size: 18px; }
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 18px 24px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    @media (max-width: 640px) {
+      header h1 { font-size: 22px; }
+      nav .wrap { gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <h1>Dustin Jaeger — Useful Links & Alternatives</h1>
+    <p>Curated local links page. Intended for future use on dustinjaeger.net.
+    Includes software alternatives, pentesting/firmware resources, emulation/ROM references, and Linux distributions.</p>
+    <span class="pill">Local build</span>
+    <span class="pill">Not deployed yet</span>
+  </div>
+</header>
+
+<nav>
+  <div class="wrap">
+    <a href="#software-alternatives">Software Alternatives</a>
+    <a href="#great-links">Curated Links</a>
+    <a href="#pentesting">Pentesting & Firmware</a>
+    <a href="#emulation">Emulation</a>
+    <a href="#linux">Linux Distros</a>
+  </div>
+</nav>
+
+<main class="wrap">
+
+  <section id="software-alternatives">
+    <h2><span class="section-icon">⚡</span> Paid Software Open-Source Alternatives</h2>
+    <p class="desc">Common replacements with feature comparisons. “Paid” indicates the original is typically commercial; “Free” indicates the alternative is free/open-source.</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Category</th>
+          <th>Paid / Proprietary</th>
+          <th>Open-Source / Free Alternative</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Office Suite</td>
+          <td class="compare-paid">Microsoft Office</td>
+          <td class="compare-free"><a href="https://www.libreoffice.org/" target="_blank">LibreOffice</a></td>
+          <td>Writer, Calc, Impress compatible with DOCX/XLSX/PPTX.</td>
+        </tr>
+        <tr>
+          <td>Word Processor</td>
+          <td class="compare-paid">Microsoft Word</td>
+          <td class="compare-free"><a href="https://www.libreoffice.org/" target="_blank">LibreOffice Writer</a></td>
+          <td>Rich-text and desktop publishing; strong DOCX support.</td>
+        </tr>
+        <tr>
+          <td>Spreadsheet</td>
+          <td class="compare-paid">Microsoft Excel</td>
+          <td class="compare-free"><a href="https://www.libreoffice.org/" target="_blank">LibreOffice Calc</a></td>
+          <td>Formula compatibility, pivot tables, macros.</td>
+        </tr>
+        <tr>
+          <td>Presentation</td>
+          <td class="compare-paid">Microsoft PowerPoint</td>
+          <td class="compare-free"><a href="https://www.libreoffice.org/" target="_blank">LibreOffice Impress</a></td>
+          <td>Slide decks, transitions, presenter console.</td>
+        </tr>
+        <tr>
+          <td>Office Suite (Alt)</td>
+          <td class="compare-paid">Microsoft 365 / Office</td>
+          <td class="compare-free"><a href="https://www.onlyoffice.com/" target="_blank">ONLYOFFICE</a></td>
+          <td>DOCX/XLSX/PPTX fidelity focused; also self-hosted.</td>
+        </tr>
+        <tr>
+          <td>Image Editing</td>
+          <td class="compare-paid">Adobe Photoshop</td>
+          <td class="compare-free"><a href="https://www.gimp.org/" target="_blank">GIMP</a></td>
+          <td>Raster retouching, compositing, batch processing.</td>
+        </tr>
+        <tr>
+          <td>Vector Graphics</td>
+          <td class="compare-paid">Adobe Illustrator</td>
+          <td class="compare-free"><a href="https://inkscape.org/" target="_blank">Inkscape</a></td>
+          <td>SVG-first vector design; print and web output.</td>
+        </tr>
+        <tr>
+          <td>Photo Management</td>
+          <td class="compare-paid">Adobe Lightroom</td>
+          <td class="compare-free"><a href="https://www.darktable.org/" target="_blank">darktable</a></td>
+          <td>RAW development, non-destructive workflow.</td>
+        </tr>
+        <tr>
+          <td>3D Modeling / Animation</td>
+          <td class="compare-paid">Autodesk Maya / 3ds Max</td>
+          <td class="compare-free"><a href="https://www.blender.org/" target="_blank">Blender</a></td>
+          <td>Modeling, rigging, animation, render, video editor.</td>
+        </tr>
+        <tr>
+          <td>Video Editing</td>
+          <td class="compare-paid">Adobe Premiere Pro</td>
+          <td class="compare-free"><a href="https://www.shotcut.org/" target="_blank">Shotcut</a></td>
+          <td>Timeline-based NLE; MLT framework, wide format support.</td>
+        </tr>
+        <tr>
+          <td>Video Editing</td>
+          <td class="compare-paid">Adobe Premiere Pro</td>
+          <td class="compare-free"><a href="https://www.openshot.org/" target="_blank">OpenShot</a></td>
+          <td>Beginner-friendly with drag-and-drop interface.</td>
+        </tr>
+        <tr>
+          <td>Video Editing</td>
+          <td class="compare-paid">DaVinci Resolve (Studio)</td>
+          <td class="compare-free"><a href="https://www.blackmagicdesign.com/products/davinciresolve/" target="_blank">DaVinci Resolve (Free)</a></td>
+          <td>Free tier is very capable; Studio adds collaboration/AI features.</td>
+        </tr>
+        <tr>
+          <td>Video Conversion</td>
+          <td class="compare-paid">Various commercial converters</td>
+          <td class="compare-free"><a href="https://handbrake.fr/" target="_blank">HandBrake</a></td>
+          <td>Transcodes to H.264/H.265/AV1; presets included.</td>
+        </tr>
+        <tr>
+          <td>Media Player</td>
+          <td class="compare-paid">Windows Media Player</td>
+          <td class="compare-free"><a href="https://www.videolan.org/vlc/" target="_blank">VLC</a></td>
+          <td>Plays nearly any codec/container; streaming too.</td>
+        </tr>
+        <tr>
+          <td>Music Production</td>
+          <td class="compare-paid">Pro Tools / FL Studio</td>
+          <td class="compare-free"><a href="https://ardour.org/" target="_blank">Ardour</a></td>
+          <td>Multitrack recording and mixing; open-source.</td>
+        </tr>
+        <tr>
+          <td>Audio Editing</td>
+          <td class="compare-paid">Adobe Audition</td>
+          <td class="compare-free"><a href="https://www.audacityteam.org/" target="_blank">Audacity</a></td>
+          <td>Waveform editing, effects, noise reduction.</td>
+        </tr>
+        <tr>
+          <td>Password Manager</td>
+          <td class="compare-paid">1Password / LastPass</td>
+          <td class="compare-free"><a href="https://keepass.info/" target="_blank">KeePass</a></td>
+          <td>Local encrypted database; no cloud required.</td>
+        </tr>
+        <tr>
+          <td>Password Manager</td>
+          <td class="compare-paid">1Password</td>
+          <td class="compare-free"><a href="https://bitwarden.com/" target="_blank">Bitwarden</a></td>
+          <td>Open-source; cloud or self-hosted options.</td>
+        </tr>
+        <tr>
+          <td>IDE / Editor</td>
+          <td class="compare-paid">JetBrains IDEs</td>
+          <td class="compare-free"><a href="https://code.visualstudio.com/" target="_blank">VS Code</a></td>
+          <td>Extensible editor; many languages via extensions.</td>
+        </tr>
+        <tr>
+          <td>Web Browser</td>
+          <td class="compare-paid">Google Chrome</td>
+          <td class="compare-free"><a href="https://www.mozilla.org/firefox/" target="_blank">Firefox</a></td>
+          <td>Open-source engine; strong privacy controls.</td>
+        </tr>
+        <tr>
+          <td>PDF Reader / Editor</td>
+          <td class="compare-paid">Adobe Acrobat Pro</td>
+          <td class="compare-free"><a href="https://okular.kde.org/" target="_blank">Okular</a></td>
+          <td>View, annotate, fill forms; KDE but cross-platform.</td>
+        </tr>
+        <tr>
+          <td>PDF Toolkit</td>
+          <td class="compare-paid">Adobe Acrobat / proprietary PDF tools</td>
+          <td class="compare-free"><a href="https://pdf.studio/" target="_blank">PDF Studio</a></td>
+          <td>Editor alternative; free viewer available.</td>
+        </tr>
+        <tr>
+          <td>Email Client</td>
+          <td class="compare-paid">Microsoft Outlook</td>
+          <td class="compare-free"><a href="https://www.thunderbird.net/" target="_blank">Thunderbird</a></td>
+          <td>Cross-platform mail, calendars, feeds.</td>
+        </tr>
+        <tr>
+          <td>Diagramming</td>
+          <td class="compare-paid">Microsoft Visio</td>
+          <td class="compare-free"><a href="https://www.drawio.com/" target="_blank">draw.io / diagrams.net</a></td>
+          <td>Security-first diagramming; web, desktop, Confluence plugin.</td>
+        </tr>
+        <tr>
+          <td>Remote Desktop</td>
+          <td class="compare-paid">TeamViewer (commercial)</td>
+          <td class="compare-free"><a href="https://rustdesk.com/" target="_blank">RustDesk</a></td>
+          <td>Self-hosted or cloud; open-source remote desktop.</td>
+        </tr>
+        <tr>
+          <td>File Storage / Sync</td>
+          <td class="compare-paid">Dropbox / Google Drive</td>
+          <td class="compare-free"><a href="https://nextcloud.com/" target="_blank">Nextcloud</a></td>
+          <td>Self-hosted file sync, collaboration, apps.</td>
+        </tr>
+        <tr>
+          <td>DNS / Ad Blocking</td>
+          <td class="compare-paid">Various DNS services</td>
+          <td class="compare-free"><a href="https://pi-hole.net/" target="_blank">Pi-hole</a></td>
+          <td>Network-wide ad/tracker blocking.</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="great-links">
+    <h2><span class="section-icon">🔗</span> Curated Useful Links</h2>
+    <p class="desc">Hand-picked reference lists and niche tools worth bookmarking.</p>
+    <div class="grid">
+      <div class="card">
+        <h3><a href="https://github.com/atakanaltok/awesome-useful-websites" target="_blank">Awesome Useful Websites</a></h3>
+        <p>Thousands of curated websites across tools, learning, design, productivity, AI, and developer utilities.</p>
+        <div class="meta">
+          <span class="tag">Reference</span>
+          <span class="tag">CC BY 4.0</span>
+        </div>
+      </div>
+      <div class="card">
+        <h3><a href="https://awesome-selfhosted.net/" target="_blank">Awesome Selfhosted</a></h3>
+        <p>Huge list of self-hostable software alternatives to common online services. Great for privacy and control.</p>
+        <div class="meta">
+          <span class="tag">Self-hosted</span>
+          <span class="tag">350+ apps</span>
+        </div>
+      </div>
+      <div class="card">
+        <h3><a href="https://selfh.st/apps/" target="_blank">Selfhosted.apps directory</a></h3>
+        <p>Searchable directory of self-hosted apps with category filters, screenshots, and demos.</p>
+        <div class="meta">
+          <span class="tag">Directory</span>
+        </div>
+      </div>
+      <div class="card">
+        <h3><a href="https://github.com/awesome-selfhosted/awesome-selfhosted" target="_blank">Awesome Selfhosted (GitHub)</a></h3>
+        <p>Source data for the awesome-selfhosted list. Good for offline browsing or contribution.</p>
+        <div class="meta">
+          <span class="tag">GitHub</span>
+        </div>
+      </div>
+      <div class="card">
+        <h3><a href="https://www.vimm.net/" target="_blank">Vimm's Lair</a></h3>
+        <p>Long-running preservation archive for console ROMs, manuals, and emulator links across many classic systems. Used here as a reference structure.</p>
+        <div class="meta">
+          <span class="tag">Reference</span>
+          <span class="tag">Emulation</span>
+        </div>
+      </div>
+      <div class="card">
+        <h3><a href="https://wiki.documentfoundation.org/Feature_Comparison:_LibreOffice_-_Microsoft_Office" target="_blank">LibreOffice vs Microsoft Office</a></h3>
+        <p>Official feature parity breakdown across Writer, Calc, and Impress against Microsoft Office.</p>
+        <div class="meta">
+          <span class="tag">Comparison</span>
+          <span class="tag">Office</span>
+        </div>
+      </div>
+      <div class="card">
+        <h3><a href="https://www.awwwards.com/" target="_blank">Awwwards</a></h3>
+        <p>Design inspiration and awards for front-end work. Useful for benchmarking site/UI ideas.</p>
+        <div class="meta">
+          <span class="tag">Inspiration</span>
+        </div>
+      </div>
+      <div class="card">
+        <h3><a href="https://lunar.fyi/" target="_blank">Lunar</a></h3>
+        <p>Multi-feature monitor control app. Mentioned in multiple “useful tools” lists for display management.</p>
+        <div class="meta">
+          <span class="tag">Hardware</span>
+        </div>
+      </div>
+      <div class="card">
+        <h3><a href="https://excalidraw.com/" target="_blank">Excalidraw</a></h3>
+        <p>Free hand-drawn-style whiteboard for architecture notes, quick diagrams, or brainstorming.</p>
+        <div class="meta">
+          <span class="tag">Whiteboard</span>
+          <span class="tag">Web app</span>
+        </div>
+      </div>
+      <div class="card">
+        <h3><a href="https://photopea.com/" target="_blank">Photopea</a></h3>
+        <p>Free browser-based photo editor. PSD support and strong Photoshop-like features without install.</p>
+        <div class="meta">
+          <span class="tag">Image</span>
+          <span class="tag">Web</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="pentesting">
+    <h2><span class="section-icon">🛡️</span> Pentesting & Gadget Firmware</h2>
+    <p class="desc">Firmware and hardware tools for security research. Use only on systems you own or have written permission to test.</p>
+    <div class="grid">
+      <div class="card">
+        <h3><a href="https://github.com/justcallmekoko/ESP32Marauder" target="_blank">ESP32 Marauder</a></h3>
+        <p>WiFi/Bluetooth suite for ESP32 devices. Captures, enumerates, and transmits frames; strong community and companion apps.</p>
+        <div class="meta">
+          <span class="tag">Firmware</span>
+          <span class="tag">ESP32</span>
+          <span class="tag">Security</span>
+        </div>
+      </div>
+      <div class="card">
+        <h3><a href="https://lab.flipper.net/apps/esp32_wifi_marauder" target="_blank">Flipper Zero WiFi Marauder App</a></h3>
+        <p>Companion app that controls the Marauder firmware from a Flipper Zero with a WiFi dev board attached.</p>
+        <div class="meta">
+          <span class="tag">Flipper Zero</span>
+          <span class="tag">Firmware</span>
+        </div>
+      </div>
+      <div class="card">
+        <h3><a href="https://github.com/threat9/routersploit" target="_blank">RouterSploit</a></h3>
+        <p>Exploitation framework for embedded devices/routers. Useful for authorized pentests of network gear.</p>
+        <div class="meta">
+          <span class="tag">Framework</span>
+          <span class="tag">Embedded</span>
+        </div>
+      </div>
+      <div class="card">
+        <h3><a href="https://github.com/enaqx/awesome-pentest" target="_blank">Awesome Pentest</a></h3>
+        <p>Curated list of penetration testing tools, books, CTF helpers, cloud attack utilities, and more.</p>
+        <div class="meta">
+          <span class="tag">Reference</span>
+          <span class="tag">CC BY 4.0</span>
+        </div>
+      </div>
+      <div class="card">
+        <h3><a href="https://github.com/V33RU/awesome-connected-things-sec" target="_blank">Awesome Connected Things Security</a></h3>
+        <p>IoT and embedded security references: firmware reversing, hardware hacking, wireless/RF, and research papers.</p>
+        <div class="meta">
+          <span class="tag">IoT</span>
+          <span class="tag">Research</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="emulation">
+    <h2><span class="section-icon">🎮</span> Emulation & ROM Resources</h2>
+    <p class="desc">References for emulator software and archived game collections. Where possible, prioritize legal/preservation sources.
+    </p>
+    <div class="grid">
+      <div class="card">
+        <h3><a href="https://archive.org/details/software" target="_blank">Internet Archive — Software Library</a></h3>
+        <p>Large public-domain and shareware software archive. Many titles are legal to download and preserve.</p>
+        <div class="meta">
+          <span class="tag">Legal / Preservation</span>
+        </div>
+      </div>
+      <div class="card">
+        <h3><a href="https://archive.org/details/consolevideogames" target="_blank">Internet Archive — Console Video Games</a></h3>
+        <p>Curated console game sets. Check each item’s rights field; many are abandonware or open releases.</p>
+        <div class="meta">
+          <span class="tag">Legal / Preservation</span>
+        </div>
+      </div>
+      <div class="card">
+        <h3><a href="https://www.vimm.net/" target="_blank">Vimm's Lair</a></h3>
+        <p>Established preservation-style ROM site for classic consoles. Used as a structural reference here.</p>
+        <div class="meta">
+          <span class="tag">Reference</span>
+        </div>
+      </div>
+      <div class="card">
+        <h3><a href="https://emulation.gametechwiki.com/index.php/ROM_%26_ISO_sites" target="_blank">ROM & ISO Sites — Emulation Wiki</a></h3>
+        <p>Comparison table of sites including registration, rate limiting, rating, and notes.</p>
+        <div class="meta">
+          <span class="tag">Reference</span>
+          <span class="tag">Comparison</span>
+        </div>
+      </div>
+      <div class="card">
+        <h3><a href="https://www.retropie.org.uk/" target="_blank">RetroPie</a></h3>
+        <p>Raspberry Pi retro-gaming distro and docs. Great for legal ROM placement and emulator configuration.</p>
+        <div class="meta">
+          <span class="tag">Distro</span>
+          <span class="tag">Hardware</span>
+        </div>
+      </div>
+      <div class="card">
+        <h3><a href="https://www.romsgames.net/" target="_blank">ROMsgames.net</a></h3>
+        <p>Large ROM catalog for many handheld and console generations. Listed as a research reference.</p>
+        <div class="meta">
+          <span class="tag">Reference</span>
+        </div>
+      </div>
+    </div>
+    <p style="font-size: 13px; color: var(--muted); margin-top: 12px;">
+      Reminder: emulator software is generally legal to obtain and use; distributing copyrighted ROMs without permission is not. Use downloads only for titles you own or that are clearly in the public domain.
+    </p>
+  </section>
+
+  <section id="linux">
+    <h2><span class="section-icon">🐧</span> Linux Distributions</h2>
+    <p class="desc">Recommended distros with official download links. Picked from multiple 2025/2026 best-of lists and current DistroWatch releases.</p>
+    <div class="grid">
+      <div class="card">
+        <h3><a href="https://ubuntu.com/download" target="_blank">Ubuntu</a></h3>
+        <p>Widely supported, beginner-friendly desktop/server distro. LTS releases every two years; strong hardware compatibility.</p>
+        <div class="meta"><span class="tag">Beginner</span><span class="tag">Desktop</span><span class="tag">Server</span></div>
+      </div>
+      <div class="card">
+        <h3><a href="https://linuxmint.com/download.php" target="_blank">Linux Mint</a></h3>
+        <p>Ubuntu-based with Cinnamon/MATE/Xfce editions. Comfortable Windows-like UX; multimedia codecs included.</p>
+        <div class="meta"><span class="tag">Beginner</span><span class="tag">Desktop</span></div>
+      </div>
+      <div class="card">
+        <h3><a href="https://pop.system76.com/" target="_blank">Pop!_OS</a></h3>
+        <p>System76’s Ubuntu-based distro with tiling WM, gaming drivers, and easy disk encryption out of the box.</p>
+        <div class="meta"><span class="tag">Beginner</span><span class="tag">Gaming</span></div>
+      </div>
+      <div class="card">
+        <h3><a href="https://getfedora.org/" target="_blank">Fedora Workstation</a></h3>
+        <p>Cutting-edge free software stack; GNOME desktop sponsored by Red Hat. Good for power users and developers.</p>
+        <div class="meta"><span class="tag">Power User</span><span class="tag">Dev</span></div>
+      </div>
+      <div class="card">
+        <h3><a href="https://archlinux.org/download/" target="_blank">Arch Linux</a></h3>
+        <p>Rolling-release DIY distro. Great learning experience; you build what you want from a minimal base.</p>
+        <div class="meta"><span class="tag">Advanced</span><span class="tag">Rolling</span></div>
+      </div>
+      <div class="card">
+        <h3><a href="https://endeavouros.com/" target="_blank">EndeavourOS</a></h3>
+        <p>Arch-based but with a calm, guided installer. Good balance between Arch flexibility and usability.</p>
+        <div class="meta"><span class="tag">Intermediate</span><span class="tag">Arch</span></div>
+      </div>
+      <div class="card">
+        <h3><a href="https://www.debian.org/CD/http-ftp/" target="_blank">Debian</a></h3>
+        <p>Stable, predictable rock-solid base. Huge package repo; foundations for many other distros.</p>
+        <div class="meta"><span class="tag">Stable</span><span class="tag">Server</span><span class="tag">Desktop</span></div>
+      </div>
+      <div class="card">
+        <h3><a href="https://www.zorin.com/os/download/" target="_blank">Zorin OS</a></h3>
+        <p>Windows-like desktop experience for switchers. Layouts can mimic Windows/macOS. Clean installers.</p>
+        <div class="meta"><span class="tag">Beginner</span><span class="tag">Desktop</span></div>
+      </div>
+      <div class="card">
+        <h3><a href="https://tails.net/install/" target="_blank">Tails</a></h3>
+        <p>Privacy-focused live distro. Routes traffic via Tor and leaves no trace on the host machine.</p>
+        <div class="meta"><span class="tag">Privacy</span><span class="tag">Live</span></div>
+      </div>
+      <div class="card">
+        <h3><a href="https://www.kali.org/get-kali/" target="_blank">Kali Linux</a></h3>
+        <p>Pen testing focused distro with hundreds of security tools. Use for authorized testing only.</p>
+        <div class="meta"><span class="tag">Pentesting</span><span class="tag">Security</span></div>
+      </div>
+      <div class="card">
+        <h3><a href="https://www.raspberrypi.com/software/" target="_blank">Raspberry Pi OS</a></h3>
+        <p>Official RaspberryPi OS (formerly Raspbian). Perfect for SBC projects and retro-gaming boxes.</p>
+        <div class="meta"><span class="tag">SBC</span><span class="tag">Hardware</span></div>
+      </div>
+      <div class="card">
+        <h3><a href="https://www.distrowatch.com/" target="_blank">DistroWatch</a></h3>
+        <p>Comprehensive directory, ranking, and news for Linux/BSD distributions. Great for discovery.</p>
+        <div class="meta"><span class="tag">Reference</span><span class="tag">News</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="notices">
+    <h2><span class="section-icon">⚠️</span> Important Notes</h2>
+    <div class="card">
+      <h3>Legal & Safety</h3>
+      <p style="font-size: 13px; color: var(--muted);">
+        Emulators and firmware tools are generally legal to download and use for personal research.
+        Copyrighted ROMs, BIOS files, and commercial software generally are not.
+        Pentesting tools should only be used on systems you own or on systems for which you have explicit written authorization.
+        This links page is for personal reference and educational use.
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    Built locally — intended for future deployment on dustinjaeger.net • Last updated: June 2026
+  </div>
+</footer>
+
+</body>
+</html>

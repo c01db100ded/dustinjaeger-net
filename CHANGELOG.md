@@ -1,5 +1,8 @@
 # CHANGELOG — dustinjaeger.net
 
+## 2026-06-15 — links-page cleanup
+- Removed redundant Vimm's Lair card; kept links page structure tidy
+
 ## 2026-06-14 — links-page cleanup
 - Removed local-build wording from links page
 - Added curated links, software alternatives, pentesting/firmware resources, emulation references, and Linux distro links

@@ -1,5 +1,8 @@
 # CHANGELOG — dustinjaeger.net
 
+## 2026-06-16 — links-page update
+- Added "Last 30 Days — New Links" section to links-page.html for a rolling 30-day FIFO list of recent additions
+
 ## 2026-06-15 — links-page cleanup
 - Removed redundant Vimm's Lair card; kept links page structure tidy
 

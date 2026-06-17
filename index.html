@@ -55,6 +55,12 @@
     .nav-links a { font-size: 0.9rem; color: #aaa; }
     .nav-links a:hover { color: #64ffda; }
 
+    @media (max-width: 640px) {
+      nav .container { flex-wrap: wrap; }
+      .nav-links { flex-wrap: wrap; gap: 0.5rem 0.75rem; justify-content: center; width: 100%; margin-top: 0.5rem; }
+      .nav-links a { font-size: 0.8rem; }
+    }
+
     /* ── Hero ─────────────────────────────────────── */
     .hero {
       min-height: 100vh;

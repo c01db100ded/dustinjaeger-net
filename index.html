@@ -47,17 +47,16 @@
       border-bottom: 1px solid rgba(100,255,218,0.08);
       padding: 1rem 0;
     }
-    nav .container { display: flex; justify-content: space-between; align-items: center; }
-    .logo { display: flex; align-items: center; gap: 0.5rem; font-size: 1.2rem; font-weight: 700; color: #64ffda; letter-spacing: -0.5px; }
+    nav .container { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; }
+    .logo { display: inline-flex; align-items: center; gap: 0.5rem; font-size: 1.2rem; font-weight: 700; color: #64ffda; letter-spacing: -0.5px; }
     .logo img { height: 32px; width: 32px; border-radius: 6px; }
     .logo span { color: #e0e0e0; }
-    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links { display: flex; gap: 2rem; list-style: none; flex-wrap: wrap; justify-content: center; }
     .nav-links a { font-size: 0.9rem; color: #aaa; }
     .nav-links a:hover { color: #64ffda; }
 
     @media (max-width: 640px) {
-      nav .container { flex-wrap: wrap; }
-      .nav-links { flex-wrap: wrap; gap: 0.5rem 0.75rem; justify-content: center; width: 100%; margin-top: 0.5rem; }
+      .nav-links { flex-wrap: wrap; gap: 0.5rem 0.75rem; justify-content: center; }
       .nav-links a { font-size: 0.8rem; }
     }
 

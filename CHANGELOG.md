@@ -1,5 +1,8 @@
 # CHANGELOG — dustinjaeger.net
 
+## 2026-06-18 — links-page update
+- Added LobeHub and MCP Servers (Reference) to the AI & Automation section; added both to the rolling last-30-days list
+
 ## 2026-06-16 — links-page update
 - Added "Last 30 Days — New Links" section to links-page.html for a rolling 30-day FIFO list of recent additions
 

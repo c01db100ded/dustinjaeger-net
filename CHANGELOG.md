@@ -1,5 +1,8 @@
 # CHANGELOG — dustinjaeger.net
 
+## 2026-06-20 — links-page update
+- Added Awesome Hermes Agent, Agent Skills Standard, and MCP Documentation to AI & Automation section; added to last-30-days list
+
 ## 2026-06-18 — links-page update
 - Added LobeHub and MCP Servers (Reference) to the AI & Automation section; added both to the rolling last-30-days list
 

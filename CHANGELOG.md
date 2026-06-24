@@ -1,5 +1,8 @@
 # CHANGELOG — dustinjaeger.net
 
+## 2026-06-23 — links-page update
+- Added 7 Hermes ecosystem links (Composio skills, Optional Skills Catalog, Creating Skills Guide, Community Projects, Telegram/Slack integrations, Hermes Workspace) to AI & Automation section and rolling 30-day list
+
 ## 2026-06-21 — links-page update
 - Added Bundled Skills Catalog to AI & Automation section; added to last-30-days list
 

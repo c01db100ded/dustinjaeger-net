@@ -1,5 +1,15 @@
 # CHANGELOG — dustinjaeger.net
 
+## 2026-06-26 — index.html redesign (taste-skill)
+- Complete visual redesign of index.html using taste-skill principles
+- Variable fonts: Space Grotesk (display) + JetBrains Mono (code/data)
+- Semantic color tokens (dark mode first, single accent #22d3aa)
+- Asymmetric skills grid — featured card spans 2 cols, no more 3 equal cards
+- CSS Grid for macro layout, respects prefers-reduced-motion
+- 100dvh hero with staggered entrance animations
+- Savings badges with distinct green, gradient top-border hover on project cards
+- Space Grotesk + JetBrains Mono via Google Fonts (self-hosted in production)
+
 ## 2026-06-23 — links-page update
 - Added 7 Hermes ecosystem links (Composio skills, Optional Skills Catalog, Creating Skills Guide, Community Projects, Telegram/Slack integrations, Hermes Workspace) to AI & Automation section and rolling 30-day list
 

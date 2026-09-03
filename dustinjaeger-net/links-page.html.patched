@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dustin Jaeger — Curated Links & Tools</title>
+  <meta name="description" content="Curated links and tools: pentesting resources, gadget firmware, emulation, homebrew, Linux, and AI.">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧰</text></svg>">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: #0a0a0f;
+      color: #e0e0e0;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    a { color: #ff9d42; text-decoration: none; transition: color 0.2s; }
+    a:hover { color: #ffbb80; }
+    .container { max-width: 960px; margin: 0 auto; padding: 0 1.5rem; }
+
+    .bg-grid {
+      position: fixed; inset: 0; z-index: -1;
+      background-image:
+        linear-gradient(rgba(255,157,66,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,157,66,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      animation: gridScroll 20s linear infinite;
+    }
+    @keyframes gridScroll {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(60px, 60px); }
+    }
+
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(10,10,15,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255,157,66,0.12);
+      padding: 0.9rem 0;
+    }
+    nav .container {
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .logo { display: flex; align-items: center; gap: 0.5rem; font-size: 1.05rem; font-weight: 700; color: #ff9d42; letter-spacing: -0.4px; }
+    .logo span { color: #e0e0e0; font-weight: 400; }
+    .nav-links { display: flex; gap: 1.6rem; list-style: none; flex-wrap: wrap; }
+    .nav-links a { font-size: 0.85rem; color: #aaa; }
+    .nav-links a:hover { color: #ff9d42; }
+
+    main { padding: 7rem 0 4rem; }
+    section { padding: 3.5rem 0; }
+    .section-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #ff9d42;
+      margin-bottom: 0.4rem;
+    }
+    .section-title {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 1.6rem;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .section-desc { color: #9aa0a6; font-size: 0.92rem; margin-bottom: 1.5rem; max-width: 720px; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1rem;
+    }
+    .card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 14px;
+      padding: 1.25rem;
+      transition: all 0.25s ease;
+    }
+    .card:hover {
+      border-color: rgba(255,157,66,0.35);
+      background: rgba(255,157,66,0.05);
+      transform: translateY(-2px);
+    }
+    .card h3 { font-size: 1rem; color: #fff; margin-bottom: 0.35rem; }
+    .card p { color: #b8bcc4; font-size: 0.92rem; line-height: 1.55; }
+    .card .meta { margin-top: 0.9rem; display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .tag {
+      font-size: 0.72rem;
+      padding: 0.15rem 0.6rem;
+      border-radius: 999px;
+      background: rgba(255,157,66,0.1);
+      color: rgba(255,157,66,0.95);
+      border: 1px solid rgba(255,157,66,0.18);
+    }
+    .recent-list { list-style: none; margin-top: 0.75rem; }
+    .recent-list li { margin-bottom: 0.6rem; font-size: 0.93rem; color: #cfd1d6; }
+    .recent-date { display: inline-block; min-width: 6.5rem; color: #ff9d42; font-weight: 600; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    th, td { text-align: left; padding: 0.75rem 0.9rem; border-bottom: 1px solid rgba(255,255,255,0.06); vertical-align: top; }
+    th { font-weight: 600; color: #9aa0a6; background: rgba(255,255,255,0.03); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.8px; }
+    tr:last-child td { border-bottom: none; }
+    .compare-paid { color: #f4a6a6; }
+    .compare-free { color: #7ee787; }
+    .section-icon { font-size: 18px; }
+    footer {
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 1.2rem 1.5rem;
+      color: #777;
+      font-size: 0.8rem;
+    }
+    .reveal { opacity: 0; transform: translateY(10px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    @media (max-width: 640px) {
+      .nav-links { gap: 0.9rem; }
+      .section-title { font-size: 1.35rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-grid"></div>
+
+<header>
+  <div class="container">
+    <div class="logo">DJ <span>Links</span></div>
+  </div>
+</header>
+
+<nav>
+  <div class="container nav-links">
+    <a href="#recent">Last 30 Days — New Links</a>
+    <a href="#software-alternatives">Software Alternatives</a>
+    <a href="#great-links">Curated Links</a>
+    <a href="#pentesting">Pentesting & Gadgets</a>
+    <a href="#xbox360">Xbox 360</a>
+    <a href="#ai">AI & Automation</a>
+    <a href="#emulation">Emulation</a>
+    <a href="#linux">Linux</a>
+    <a href="#youtube-help">YouTube Channel Help</a>
+    <a href="#alphagram">Alphagram Games</a>
+  </div>
+</nav>
+
+<main>
+
+  <section id="alphagram">
+    <h2><span class="section-icon">🎮</span> Alphagram Games</h2>
+    <p class="desc">Interactive letter-placement games. Test your vocabulary and pattern recognition.</p>
+    <div class="grid">
+      <div class="card">
+        <h3><a href="https://c01db100ded.github.io/alphagram/FiveInSix.html" target="_blank">FiveInSix</a></h3>
+        <p>Place five letters into six slots. Precision and timing matter.</p>
+        <div class="meta"><span class="tag">Vocabulary</span><span class="tag">Precision</span></div>
+      </div>
+      <div class="card">
+        <h3><a href="https://c01db100ded.github.io/alphagram/SixinSeven.html" target="_blank">SixInSeven</a></h3>
+        <p>Fit six letters into seven slots. One extra space—use it wisely.</p>
+        <div class="meta"><span class="tag">Pattern Recognition</span><span class="tag">Strategy</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="recent">
+    <h2><span class="section-icon">🕰️</span> Last 30 Days — New Links</h2>
+    <p class="desc">Rolling recent additions. Newest first; older entries fall off after ~30 days, so this list stays current.</p>
+    <ul class="recent-list">
+      <li><span class="recent-date">2026-06-23</span><a href="https://composio.dev/content/best-hermes-skills" target="_blank">Best Hermes Agent Skills — Composio</a> — Curated 10 essential skills: Obra Superpowers, Composio Universal CLI, Obsidian, Defuddle, Humanizer, Claudeception, Playwright, Reflexion, SEO/GEO, Taste-Skill.</li>
+      <li><span class="recent-date">2026-06-23</span><a href="https://hermes-agent.nousresearch.com/docs/reference/optional-skills-catalog" target="_blank">Optional Skills Catalog</a> — Official reference for optional skills (Autonomous AI Agents, Blockchain, Creative, DevOps, Email, Finance, ML/Ops). Install via <code>hermes skills install official/&lt;category&gt;/&lt;skill&gt;</code>.</li>
+      <li><span class="recent-date">2026-06-23</span><a href="https://hermes-agent.nousresearch.com/docs/developer-guide/creating-skills" target="_blank">Creating Skills Guide</a> — Official dev guide: Skill vs Tool decision matrix, SKILL.md frontmatter spec, platform-specific skills, conditional activation, environment variable declarations.</li>
+      <li><span class="recent-date">2026-06-23</span><a href="https://get-hermes.ai/community/" target="_blank">Hermes Ecosystem — Community Projects</a> — Official community directory with 34+ curated projects across interfaces, skills, agent personas, MCP servers, and guides.</li>
+      <li><span class="recent-date">2026-06-23</span><a href="https://hermes-agent.nousresearch.com/docs/user-guide/messaging/telegram" target="_blank">Hermes Telegram Integration</a> — Full-featured Telegram bot setup: BotFather, privacy mode, groups, file attachments, webhook mode, Docker volumes.</li>
+      <li><span class="recent-date">2026-06-23</span><a href="https://hermes-agent.nousresearch.com/docs/user-guide/messaging/slack" target="_blank">Hermes Slack Integration</a> — Socket Mode setup (no public URL): manifest generation, OAuth scopes, event subscriptions, app-level tokens.</li>
+      <li><span class="recent-date">2026-06-23</span><a href="https://hermes-workspace.com/" target="_blank">Hermes Workspace (Web)</a> — Landing page for the native web workspace with chat, terminal, memory, skills, MCP, and multi-agent ops.</li>
+      <li><span class="recent-date">2026-06-22</span><a href="https://github.com/outsourc-e/hermes-workspace" target="_blank">Hermes Workspace</a> — Native web workspace for Hermes Agent: chat, terminal, memory browser, skills manager, and MCP server dashboard. 5.8k+ stars, v2 zero-fork architecture.</li>
+      <li><span class="recent-date">2026-06-21</span><a href="https://hermes-agent.nousresearch.com/docs/reference/skills-catalog" target="_blank">Bundled Skills Catalog</a> — Official reference for all 50+ skills shipped with Hermes Agent across Autonomous AI Agents, Creative, DevOps, Email, GitHub, ML/Ops, Research, Smart Home, and more.</li>
+      <li><span class="recent-date">2026-06-20</span><a href="https://github.com/0xNyk/awesome-hermes-agent" target="_blank">Awesome Hermes Agent</a> — Curated list of skills, tools, integrations, and resources for Hermes workflows; 4.1k+ stars community repo.</li>
+      <li><span class="recent-date">2026-06-20</span><a href="https://agentskills.io/" target="_blank">Agent Skills Standard</a> — Open standard for portable agent skills, compatible with Hermes and 30+ clients.</li>
+      <li><span class="recent-date">2026-06-20</span><a href="https://modelcontextprotocol.io/docs/getting-started/intro" target="_blank">MCP Documentation</a> — Official docs for Model Context Protocol, the "USB-C for AI" standard.</li>
+      <li><span class="recent-date">2026-06-18</span><a href="https://lobehub.com/" target="_blank">LobeHub</a> — Agent marketplace with 332K+ skills and 68K+ MCP servers. Hermes can install skills from its public catalog for agent workflows.</li>
+      <li><span class="recent-date">2026-06-18</span><a href="https://github.com/modelcontextprotocol/servers" target="_blank">MCP Servers (Reference)</a> — Official reference implementations for Model Context Protocol, the standard connecting AI agents to external tools.</li>
+      <li><span class="recent-date">2026-06-16</span><a href="https://www.distrowatch.com/" target="_blank">DistroWatch</a> — Broad Linux/BSD distro discovery and news; useful for keeping the distro index current.</li>
+      <li><span class="recent-date">2026-06-16</span><a href="https://www.raspberrypi.com/software/" target="_blank">Raspberry Pi OS</a> — Official distro from Raspberry Pi Ltd. Useful if you want a maintained, hardware-optimized image for Pi-based projects.</li>
+    </ul>
+  </section>
+
+  <section id="software-alternatives">
+    <h2><span class="section-icon">⚡</span> Paid Software Open-Source Alternatives</h2>
+    <p class="desc">Common replacements with feature comparisons. "Paid" indicates the original is typically commercial; "Free" indicates the alternative is free/open-source.</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Category</th>
+          <th>Paid / Proprietary</th>
+          <th>Open-Source / Free Alternative</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Office Suite</td>
+          <td class="compare-paid">Microsoft Office</td>
+          <td class="compare-free"><a href="https://www.libreoffice.org/" target="_blank">LibreOffice</a></td>
+          <td>Writer, Calc, Impress compatible with DOCX/XLSX/PPTX.</td>
+        </tr>
+        <tr>
+          <td>Word Processor</td>

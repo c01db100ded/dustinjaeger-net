@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SixInSeven</title>
+<style>
+  :root { --fg:#e6e6e6; --muted:#9a9a9a; --accent:#7c9cff; --bg:#14161c; --card:#1e212b; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--fg);
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    min-height: 100vh; user-select: none;
+  }
+  h1 { font-weight: 700; letter-spacing: .5px; margin: 8px 0 4px; }
+  .sub { color: var(--muted); font-size: 13px; margin-bottom: 16px; text-align: center; }
+  #legend { color: var(--muted); font-size: 12px; height: 18px; margin-bottom: 10px; }
+
+  #game-area { display: flex; align-items: center; gap: 24px; }
+  #board { display: grid; gap: 8px; }
+  .row { display: grid; gap: 8px; }
+  .tile {
+    width: 56px; height: 56px; border: 2px solid #3a3f4b; display: flex;
+    align-items: center; justify-content: center; font-size: 26px; font-weight: 700;
+    text-transform: uppercase; background: var(--card);
+  }
+  .tile.filled { border-color: #6b7280; animation: pop .1s ease; }
+  @keyframes pop { from { transform: scale(.9);} to { transform: scale(1);} }
+  .tile.status-correct { background: var(--accent); border-color: var(--accent); }
+  .tile.status-present { background: #b5651a; border-color: #b5651a; }
+  .tile.status-absent  { background: #3a3f4b; border-color: #3a3f4b; opacity:.6; }
+
+  .letter-col { display: flex; flex-direction: column; gap: 4px; }
+  .letter-col key {
+    width: 32px; height: 28px; background: var(--card); border: 1px solid #3a3f4b;
+    border-radius: 4px; display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 600;
+  }
+  .letter-col key.status-correct { background: var(--accent); border-color: var(--accent); }
+  .letter-col key.status-present { background: #b5651a; border-color: #b5651a; }
+  .letter-col key.status-absent  { background: #2a2d35; border-color: #2a2d35; color: #555; }
+
+  #msg { min-height: 24px; color: var(--muted); margin-top: 14px; font-size: 15px; }
+  #restart {
+    margin-top: 12px; padding: 8px 20px; background: var(--card); border: 1px solid #3a3f4b;
+    border-radius: 6px; color: var(--fg); font-size: 14px; font-weight: 600; cursor: pointer;
+  }
+  #restart:hover { background: #3a3f4b; }
+</style>
+</head>
+<body>
+  <h1>SixInSeven</h1>
+  <div class="sub">Guess the 6-letter word · 7 tries</div>
+  <div id="legend">🟦 right place &nbsp; 🟧 wrong spot &nbsp; ⬛ not in word</div>
+
+  <div id="game-area">
+    <div id="left-letters" class="letter-col"></div>
+    <div id="board"></div>
+    <div id="right-letters" class="letter-col"></div>
+  </div>
+
+  <div id="msg"></div>
+  <button id="restart" onclick="restartGame()">↻ Restart</button>
+
+<script>
+const WORDS = ["CRANES","BRAINS","CHAIRS","GLASSES","MONEYS","WORLDS","LIGHTS","STONES",
+  "QUICKS","SMILES","GRAPEY","OCEANS","TIGERS","PIANOS","CLOUDS","BLANKS","FRESHLY",
+  "HEARTS","KNIVES","LEMONS","BREADS","FLAMES","GLOBES","PLANTS","TRACKS"];
+let solution = WORDS[Math.floor(Math.random()*WORDS.length)];
+const ROWS = 7, COLS = 6;
+
+let current = "";
+let currentRow = 0;
+let over = false;
+let absentLetters = new Set();
+
+function restartGame() {
+  solution = WORDS[Math.floor(Math.random()*WORDS.length)];
+  document.getElementById("board").innerHTML = "";
+  leftLetters.innerHTML = "";
+  rightLetters.innerHTML = "";
+  msgEl.textContent = "";
+  current = "";
+  currentRow = 0;
+  over = false;
+  absentLetters = new Set();
+  initBoard();
+}
+
+const boardEl = document.getElementById("board");
+const leftLetters = document.getElementById("left-letters");
+const rightLetters = document.getElementById("right-letters");
+const msgEl = document.getElementById("msg");
+
+// Letter columns (A-L left, M-Z right)
+const leftKeys = "ABCDEFGHIJLK".split("");
+const rightKeys = "MNOPQRSTUVWXYZ".split("");
+
+function buildCol(keys, container) {
+  for (const k of keys) {
+    const el = document.createElement("key");
+    el.textContent = k;
+    el.dataset.key = k.toLowerCase();
+    container.appendChild(el);
+  }
+}
+
+function initBoard() {
+  for (let r = 0; r < ROWS; r++) {
+    const row = document.createElement("div");
+    row.className = "row";
+    row.style.gridTemplateColumns = `repeat(${COLS}, 56px)`;
+    for (let c = 0; c < COLS; c++) {
+      const t = document.createElement("div");
+      t.className = "tile";
+      t.dataset.r = r; t.dataset.c = c;
+      row.appendChild(t);
+    }
+    boardEl.appendChild(row);
+  }
+  buildCol(leftKeys, leftLetters);
+  buildCol(rightKeys, rightLetters);
+}
+initBoard();
+
+function getLetterKey(ch) {
+  return document.querySelector(`key[data-key="${ch.toLowerCase()}"]`);
+}
+
+function updateKeyboard(letter, status) {
+  const keyEl = getLetterKey(letter);
+  if (!keyEl) return;
+  const priority = { correct: 3, present: 2, absent: 1 };
+  const currentStatus = keyEl.classList.contains("status-correct") ? "correct"
+    : keyEl.classList.contains("status-present") ? "present"
+    : keyEl.classList.contains("status-absent") ? "absent" : null;
+  if (!currentStatus || priority[status] > priority[currentStatus]) {
+    keyEl.classList.remove("status-correct", "status-present", "status-absent");
+    keyEl.classList.add("status-" + status);
+  }
+  if (status === "absent") absentLetters.add(letter.toLowerCase());
+}
+
+function handleKey(k) {
+  if (over) return;
+  const kl = k.toLowerCase();
+  if (kl === "enter") { checkGuess(); return; }
+  if (kl === "Backspace" || kl === "backspace") { current = current.slice(0, -1); updateRow(); return; }
+  if (kl === "capslock") return;
+  if (!/[a-z]/.test(kl)) return;
+  current += kl;
+  updateRow();
+  if (current.length === COLS) checkGuess();
+}
+
+function updateRow() {
+  const row = boardEl.children[currentRow];
+  [...row.children].forEach((t, c) => {
+    t.textContent = c < current.length ? current[c] : "";
+    if (c < current.length) t.classList.add("filled");
+  });
+}
+
+function scoreGuess(guess, solution) {
+  guess = guess.toUpperCase();
+  solution = solution.toUpperCase();
+  const result = new Array(COLS).fill("absent");
+  const solCounts = {};
+  for (const ch of solution) solCounts[ch] = (solCounts[ch] || 0) + 1;
+    for (let i = 0; i < COLS; i++) {
+      const ch = guess[i];
+      if (ch === solution[i]) { 
+        result[i] = "correct"; 
+        solCounts[ch]--; 
+      }
+    }
+  for (let i = 0; i < COLS; i++) {
+    if (result[i] !== "absent") continue;
+    const ch = guess[i];
+    if (solCounts[ch] > 0) { 
+      result[i] = "present"; 
+      solCounts[ch]--; 
+    }
+  }
+  return result;
+}
+
+function checkGuess() {
+  if (current.length !== COLS) return;
+  const score = scoreGuess(current, solution);
+  score.forEach((s, i) => {
+    const t = boardEl.children[currentRow].children[i];
+    t.classList.add("filled", "status-" + s);
+    updateKeyboard(current[i], s);
+  });
+  const win = current.toUpperCase() === solution;
+  if (!win) {
+    // Defensive reset: guarantee clean state transition even if something fails upstream
+    current = "";
+    currentRow++;
+    if (currentRow >= ROWS) {
+      over = true;
+      msgEl.textContent = "💀 The word was " + solution + ".";
+    } else {
+      // Force visual cleanup of the new row before accepting input again
+      const newRow = boardEl.children[currentRow];
+      [...newRow.children].forEach(t => t.classList.remove("filled"));
+    }
+  } else {
+    over = true;
+    msgEl.textContent = "🎉 Solved!";
+  }
+}
+
+document.addEventListener("keydown", (e) => handleKey(e.key));
+</script>
+</body>
+</html>

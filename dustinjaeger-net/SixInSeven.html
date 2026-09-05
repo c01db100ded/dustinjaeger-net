@@ -2,63 +2,162 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=no" />
 <title>SixInSeven</title>
 <style>
   :root { --fg:#e6e6e6; --muted:#9a9a9a; --accent:#7c9cff; --bg:#14161c; --card:#1e212b; }
-  * { box-sizing: border-box; }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   body {
     margin: 0; background: var(--bg); color: var(--fg);
     font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
-    min-height: 100vh; user-select: none;
+    min-height: 100vh; user-select: none; touch-action: manipulation;
   }
   h1 { font-weight: 700; letter-spacing: .5px; margin: 8px 0 4px; }
   .sub { color: var(--muted); font-size: 13px; margin-bottom: 16px; text-align: center; }
-  #legend { color: var(--muted); font-size: 12px; height: 18px; margin-bottom: 10px; }
-
-  #game-area { display: flex; align-items: center; gap: 24px; }
-  #board { display: grid; gap: 8px; }
-  .row { display: grid; gap: 8px; }
+  #legend { color: var(--muted); font-size: 12px; height: 18px; margin-bottom: 10px; user-select: none; }
+  
+  #game-area {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 16px;
+    max-width: min(95vw, 820px);
+  }
+  #board { display: grid; gap: 8px; user-select: none; -webkit-user-select: none; }
+  .row { display: grid; gap: 8px; touch-action: manipulation; }
+  
+  /* Touch-friendly tiles */
   .tile {
-    width: 56px; height: 56px; border: 2px solid #3a3f4b; display: flex;
-    align-items: center; justify-content: center; font-size: 26px; font-weight: 700;
-    text-transform: uppercase; background: var(--card);
+    width: 56px;
+    height: 56px;
+    min-width: 42px;
+    border: 2px solid #3a3f4b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(18px, 5.7vw, 26px);
+    font-weight: 700;
+    text-transform: uppercase;
+    background: var(--card);
+    border-radius: 4px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
   }
-  .tile.filled { border-color: #6b7280; animation: pop .1s ease; }
+  .tile.filled { 
+    border-color: #6b7280; 
+    animation: pop .1s ease; 
+    transition: transform 0.1s, background-color 0.3s;
+  }
   @keyframes pop { from { transform: scale(.9);} to { transform: scale(1);} }
-  .tile.status-correct { background: var(--accent); border-color: var(--accent); }
-  .tile.status-present { background: #b5651a; border-color: #b5651a; }
-  .tile.status-absent  { background: #3a3f4b; border-color: #3a3f4b; opacity:.6; }
+  .tile.status-correct { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .tile.status-present { background: #b5651a; border-color: #b5651a; color: #fff; }
+  .tile.status-absent  { background: #3a3f4b; border-color: #3a3f4b; opacity:.6;
+    cursor: default; -webkit-tap-highlight-color: transparent;
+  }
+  
+  /* Touch-friendly letter keys */
+  .letter-col {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    user-select: none; -webkit-user-select: none;
+  }
 
-  .letter-col { display: flex; flex-direction: column; gap: 4px; }
+  /* Backspace key at bottom of left column */
+  .letter-col .backspace-key {
+      width: clamp(32px, 10vw, 56px);
+      height: clamp(48px, 14vw, 64px); /* larger for easy tapping */
+      min-width: 36px;
+      background: #3a3f4b; /* darker to distinguish from letter keys */
+      border: 2px solid #5c6070;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: clamp(14px, 3.8vw, 18px);
+      font-weight: 700;
+      color: #e6e6e6;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      transition: transform 0.1s, background-color 0.3s;
+  }
+  .letter-col .backspace-key:hover { opacity: 0.9; }
+  .letter-col .backspace-key:active { transform: scale(0.95); }
+
   .letter-col key {
-    width: 32px; height: 28px; background: var(--card); border: 1px solid #3a3f4b;
-    border-radius: 4px; display: flex; align-items: center; justify-content: center;
-    font-size: 13px; font-weight: 600;
+      width: clamp(32px, 10vw, 56px);
+      height: clamp(28px, 9.3vw, 42px); /* responsive to viewport */
+      min-width: 36px; /* minimum tap target size per WCAG */
+      background: var(--card);
+      border: 1px solid #3a3f4b;
+      border-radius: 8px; /* rounded for touch feedback */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: clamp(12px, 3.5vw, 16px); /* responsive letter size */
+      font-weight: 700;
+      cursor: pointer; /* indicates clickable on touch devices */
+      -webkit-tap-highlight-color: transparent;
+      transition: transform 0.1s, background-color 0.3s;
   }
-  .letter-col key.status-correct { background: var(--accent); border-color: var(--accent); }
-  .letter-col key.status-present { background: #b5651a; border-color: #b5651a; }
-  .letter-col key.status-absent  { background: #2a2d35; border-color: #2a2d35; color: #555; }
+  .letter-col key:hover { opacity: 0.95; } /* desktop hover feedback */
 
-  #msg { min-height: 24px; color: var(--muted); margin-top: 14px; font-size: 15px; }
-  #restart {
-    margin-top: 12px; padding: 8px 20px; background: var(--card); border: 1px solid #3a3f4b;
-    border-radius: 6px; color: var(--fg); font-size: 14px; font-weight: 600; cursor: pointer;
+  .letter-col key.status-correct { background: var(--accent); border-color: var(--accent); color: #fff;
+    cursor: default; -webkit-tap-highlight-color: transparent; }
+  .letter-col key.status-present { background: #b5651a; border-color: #b5651a; color: #fff;
+    cursor: default; -webkit-tap-highlight-color: transparent; }
+  .letter-col key.status-absent  {
+    background: var(--card); 
+    border-color: #3a3f4b; 
+    opacity:.7;
+    color: #666;
+    cursor: default; -webkit-tap-highlight-color: transparent;
   }
-  #restart:hover { background: #3a3f4b; }
+  .letter-col key.status-absent:hover { opacity: 0.85; } /* still give hover feedback */
+  
+  #msg {
+    min-height: 24px;
+    color: var(--muted);
+    margin-top: 14px;
+    font-size: clamp(13px, 4vw, 16px); /* responsive message size */
+    text-align: center;
+    padding: 8px 12px;
+    background: rgba(0,0,0,0.3);
+    border-radius: 6px;
+  }
+  #restart {
+    margin-top: 14px; /* more breathing room for touch */
+    padding: clamp(10px, 5vw, 14px) clamp(28px, 12vw, 36px);
+    background: var(--card); 
+    border: 1px solid #3a3f4b;
+    border-radius: 8px; /* rounded corners for touch */
+    color: var(--fg); 
+    font-size: clamp(12px, 3.5vw, 16px);
+    font-weight: 700;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent; /* no highlight on tap */
+    transition: transform 0.1s, background-color 0.3s;
+    user-select: none; -webkit-user-select: none;
+  }
+  #restart:hover { background: #3a3f4b; transform: translateY(-2px); }
+  #restart:active { transform: scale(0.98) translateY(1px); } /* touch press feedback */
 </style>
 </head>
 <body>
   <h1>SixInSeven</h1>
   <div class="sub">Guess the 6-letter word · 7 tries</div>
   <div id="legend">🟦 right place &nbsp; 🟧 wrong spot &nbsp; ⬛ not in word</div>
-
+  
   <div id="game-area">
     <div id="left-letters" class="letter-col"></div>
     <div id="board"></div>
     <div id="right-letters" class="letter-col"></div>
   </div>
+
+<div style="display:flex;justify-content:center;margin-top:8px">
+  <button id="backspace-btn" onclick="handleBackspace()">⌫ Backspace</button>
+</div>
 
   <div id="msg"></div>
   <button id="restart" onclick="restartGame()">↻ Restart</button>
@@ -98,10 +197,21 @@ const leftKeys = "ABCDEFGHIJLK".split("");
 const rightKeys = "MNOPQRSTUVWXYZ".split("");
 
 function buildCol(keys, container) {
+  // Add backspace key at the bottom of left column only
+  if (container.id === 'left-letters') {
+    const bs = document.createElement('div');
+    bs.className = 'backspace-key';
+    bs.textContent = '⌫';
+    bs.addEventListener('click', handleBackspace);
+    container.appendChild(bs);
+  }
+
   for (const k of keys) {
     const el = document.createElement("key");
     el.textContent = k;
     el.dataset.key = k.toLowerCase();
+    // Attach click/touch handlers to each letter key
+    el.addEventListener('click', () => handleKey(k));
     container.appendChild(el);
   }
 }
@@ -110,11 +220,12 @@ function initBoard() {
   for (let r = 0; r < ROWS; r++) {
     const row = document.createElement("div");
     row.className = "row";
-    row.style.gridTemplateColumns = `repeat(${COLS}, 56px)`;
+    row.style.gridTemplateColumns = `repeat(${COLS}, minmax(42px, 1fr))`;
     for (let c = 0; c < COLS; c++) {
       const t = document.createElement("div");
       t.className = "tile";
-      t.dataset.r = r; t.dataset.c = c;
+      // Attach click/touch handler to each tile
+      t.addEventListener('click', () => handleTileClick(t));
       row.appendChild(t);
     }
     boardEl.appendChild(row);
@@ -131,34 +242,67 @@ function getLetterKey(ch) {
 function updateKeyboard(letter, status) {
   const keyEl = getLetterKey(letter);
   if (!keyEl) return;
+
+  // Absent keys stay gray once marked (priority system below handles it).
   const priority = { correct: 3, present: 2, absent: 1 };
   const currentStatus = keyEl.classList.contains("status-correct") ? "correct"
     : keyEl.classList.contains("status-present") ? "present"
     : keyEl.classList.contains("status-absent") ? "absent" : null;
   if (!currentStatus || priority[status] > priority[currentStatus]) {
-    keyEl.classList.remove("status-correct", "status-present", "status-absent");
-    keyEl.classList.add("status-" + status);
+    // Remove old status classes
+    const removeClass = (cls) => { 
+      keyEl.classList.remove(cls); 
+      if (keyEl.dataset.key === cls) delete keyEl.dataset.status; 
+    };
+    ['correct', 'present', 'absent'].forEach(removeClass);
+    // Add new status
+    const addClass = (cls) => { 
+      keyEl.classList.add(cls); 
+      if (!keyEl.dataset.key || cls !== keyEl.dataset.key) keyEl.dataset.status = cls; 
+    };
+    addClass("status-" + status);
   }
-  if (status === "absent") absentLetters.add(letter.toLowerCase());
 }
 
-function handleKey(k) {
+function handleKey(k, fromTouch = false) {
   if (over) return;
+  
+  // Only accept single letters a-z A-Z — reject multi-char strings like "Backspace", "Enter"
   const kl = k.toLowerCase();
-  if (kl === "enter") { checkGuess(); return; }
-  if (kl === "Backspace" || kl === "backspace") { current = current.slice(0, -1); updateRow(); return; }
-  if (kl === "capslock") return;
-  if (!/[a-z]/.test(kl)) return;
+  if (!/^[a-z]$/.test(kl)) return; // ignore non-letter keys
+
   current += kl;
   updateRow();
   if (current.length === COLS) checkGuess();
+}
+
+function handleTileClick(tileEl) {
+  // Find which column this tile is in relative to the current row being edited
+  const currentBoardRow = boardEl.children[currentRow];
+  let colIndex = -1;
+  for (let c = 0; c < COLS && colIndex === -1; c++) {
+    if (currentBoardRow.contains(tileEl)) {
+      colIndex = c;
+      break;
+    }
+  }
+
+  // Get the letter from this tile's position in the current guess
+  const charAtPos = current[colIndex] || '';
+
+  if (!charAtPos) return; // empty slot, can't click it yet (nothing to do)
+
+  // Clicking a filled tile deletes that character instead of re-typing it
+  handleBackspace();
 }
 
 function updateRow() {
   const row = boardEl.children[currentRow];
   [...row.children].forEach((t, c) => {
     t.textContent = c < current.length ? current[c] : "";
-    if (c < current.length) t.classList.add("filled");
+    if (c < current.length && !t.classList.contains('status-absent')) {
+      t.classList.add("filled");
+    }
   });
 }
 
@@ -191,8 +335,11 @@ function checkGuess() {
   const score = scoreGuess(current, solution);
   score.forEach((s, i) => {
     const t = boardEl.children[currentRow].children[i];
-    t.classList.add("filled", "status-" + s);
-    updateKeyboard(current[i], s);
+    // Only add status classes to non-absent tiles
+    if (!t.classList.contains('status-absent')) {
+      t.classList.add("filled", "status-" + s);
+      updateKeyboard(current[i], s);
+    }
   });
   const win = current.toUpperCase() === solution;
   if (!win) {
@@ -213,7 +360,18 @@ function checkGuess() {
   }
 }
 
-document.addEventListener("keydown", (e) => handleKey(e.key));
+// Attach keyboard listener for desktop users (still works)
+document.addEventListener("keydown", (e) => {
+  if (!over && /[a-z]/.test(e.key)) { // only letters
+    handleKey(e.key, false);
+  }
+});
+
+function handleBackspace() {
+  if (over || current.length === 0) return;
+  current = current.slice(0, -1);
+  updateRow();
+}
 </script>
 </body>
 </html>

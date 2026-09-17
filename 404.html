@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Endpoint Not Found | Dustin Jaeger</title>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --text-color: #c9d1d9;
+            --accent-color: #58a6ff;
+            --error-color: #f85149;
+            --btn-bg: #238636;
+            --btn-hover: #2ea043;
+            --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            --font-mono: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-sans);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .terminal {
+            background-color: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 40px;
+            max-width: 700px;
+            width: 100%;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+            text-align: left;
+        }
+
+        h1 {
+            color: var(--error-color);
+            font-family: var(--font-mono);
+            margin-top: 0;
+            font-size: 2rem;
+            border-bottom: 1px solid #30363d;
+            padding-bottom: 15px;
+        }
+
+        p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        /* Scrolling Log Window */
+        .logs-window {
+            background-color: #0d1117;
+            padding: 0 15px;
+            border-radius: 6px;
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            color: #8b949e;
+            margin-bottom: 30px;
+            height: 200px;
+            overflow: hidden;
+            position: relative;
+            /* Fade effect at the top and bottom of the terminal window */
+            -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
+            mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
+        }
+
+        .logs-scroll {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 20px 0;
+            /* Increased animation duration from 45s to 90s for a slower crawl */
+            animation: scroll-up 90s linear infinite;
+        }
+
+        /* Pause scrolling if the user hovers over the logs */
+        .logs-window:hover .logs-scroll {
+            animation-play-state: paused;
+        }
+
+        @keyframes scroll-up {
+            0% { transform: translateY(200px); }
+            100% { transform: translateY(-100%); }
+        }
+
+        .log-entry {
+            line-height: 1.4;
+        }
+
+        .timestamp {
+            color: #79c0ff;
+        }
+
+        .error-code {
+            color: #ffa657;
+        }
+
+        .btn-container {
+            text-align: center;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--btn-bg);
+            color: #ffffff;
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-family: var(--font-mono);
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: background-color 0.2s;
+        }
+
+        .btn:hover {
+            background-color: var(--btn-hover);
+        }
+
+        .blinking-cursor {
+            font-weight: bold;
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="terminal">
+        <h1>404: Endpoint_Not_Managed</h1>
+        <p>Connection refused. The page you are looking for has either been consolidated to save energy, migrated to a new array, or accidentally unplugged by the cleaning crew.</p>
+        
+        <div class="logs-window">
+            <div class="logs-scroll">
+                <div class="log-entry"><span class="timestamp">[SYSTEM]</span> <span class="error-code">ERR_DNS_ROUTING:</span> Resolution failed. It was probably DNS. It's always DNS.</div>
+                <div class="log-entry"><span class="timestamp">[SYSTEM]</span> <span class="error-code">ERR_LAYER_8:</span> Unhandled exception detected between keyboard and chair.</div>
+                <div class="log-entry"><span class="timestamp">[SYSTEM]</span> <span class="error-code">ERR_CAFFEINE_CRIT:</span> Admin requires more coffee to complete this request.</div>
+                <div class="log-entry"><span class="timestamp">[SYSTEM]</span> <span class="error-code">ERR_OUT_OF_MEMORY:</span> Chrome successfully opened a third tab.</div>
+                <div class="log-entry"><span class="timestamp">[SYSTEM]</span> <span class="error-code">ERR_SSL_EXPIRED:</span> Someone ignored the 30-day, 14-day, and 1-day certificate warnings.</div>
+                <div class="log-entry"><span class="timestamp">[SYSTEM]</span> <span class="error-code">ERR_BACKUP_FAIL:</span> Backups succeed. Restores fail. Schrödinger's backup state detected.</div>
+                <div class="log-entry"><span class="timestamp">[SYSTEM]</span> <span class="error-code">ERR_DEV_IN_PROD:</span> Someone tested in production. Rollback initiated.</div>
+                <div class="log-entry"><span class="timestamp">[SYSTEM]</span> <span class="error-code">ERR_TICKET_CLOSED:</span> "High priority" ticket closed as "Working as intended."</div>
+                <div class="log-entry"><span class="timestamp">[SYSTEM]</span> <span class="error-code">ERR_CLOUD_MIGRATE:</span> Reminder: "The Cloud" is just someone else's broken computer.</div>
+                <div class="log-entry"><span class="timestamp">[SYSTEM]</span> <span class="error-code">ERR_CABLE_MGT:</span> Spaghetti detected in the server rack. Routing lost.</div>
+                <div class="log-entry"><span class="timestamp">[SYSTEM]</span> <span class="error-code">ERR_UPTIME_BRAG:</span> Server hasn't rebooted in 1,432 days. Too afraid to touch it.</div>
+                <div class="log-entry"><span class="timestamp">[SYSTEM]</span> <span class="error-code">ERR_PATCH_TUESDAY:</span> Updates applied successfully. Everything is broken.</div>
+                <div class="log-entry"><span class="timestamp">[SYSTEM]</span> <span class="error-code">ERR_PASSWORD_EXP:</span> Password expired 5 minutes ago. User locked out.</div>
+                <div class="log-entry"><span class="timestamp">[SYSTEM]</span> <span class="error-code">ERR_AD_TRUST:</span> Trust relationship between workstation and primary domain has failed.</div>
+                <div class="log-entry"><span class="timestamp">[SYSTEM]</span> <span class="error-code">ERR_PRINTER_FIRE:</span> LP0 on fire. Why is the printer always angry?</div>
+                <div class="log-entry"><span class="timestamp">[SYSTEM]</span> <span class="error-code">ERR_SUDO_REPORT:</span> This incident will be reported. (To whom? Nobody knows.)</div>
+                <div class="log-entry"><span class="timestamp">[SYSTEM]</span> <span class="error-code">ERR_LEGACY_CODE:</span> Script written in 1998 refuses to die. Do not delete.</div>
+                <div class="log-entry"><span class="timestamp">[SYSTEM]</span> <span class="error-code">ERR_UNDEFINED:</span> It works on my machine...</div>
+                <div class="log-entry"><span class="timestamp">[SYSTEM]</span> <span class="error-code">ERR_REBOOT_FIX:</span> Have you tried turning it off and on again?</div>
+                <div class="log-entry"><span class="timestamp">[SYSTEM]</span> <span class="error-code">ERR_PORT_BLOCK:</span> Firewall dropped the packet because it looked suspicious.</div>
+                <div class="log-entry"><span class="timestamp">[SYSTEM]</span> <span class="error-code">ERR_RACK_UNLOCKED:</span> The intern touched the core switch again.</div>
+                <div class="log-entry"><span class="timestamp">[SYSTEM]</span> <span class="error-code">ERR_GHOST_MACHINE:</span> Spontaneous reboot due to cosmic rays.</div>
+                <div class="log-entry"><span class="timestamp">[SYSTEM]</span> <span class="error-code">ERR_BGP_ROUTE:</span> BGP path hijacked. Traffic is currently in a black hole.</div>
+                <div class="log-entry"><span class="timestamp">[SYSTEM]</span> <span class="error-code">ERR_FIRMWARE_RMA:</span> Bricked during flash. Box it up.</div>
+                <div class="log-entry"><span class="timestamp">[SYSTEM]</span> <span class="error-code">ERR_VLAN_HOPPING:</span> Packet lost somewhere in VLAN 404.</div>
+                <div class="log-entry"><span class="timestamp">[SYSTEM]</span> <span class="error-code">ERR_VENDOR_HOLD:</span> Put on hold by vendor support for 4 hours. Gave up.</div>
+                <div class="log-entry"><span class="timestamp">[SYSTEM]</span> <span class="error-code">ERR_MAC_SPOOF:</span> MAC spoofing detected. Very sus.</div>
+                <div class="log-entry"><span class="timestamp">[SYSTEM]</span> <span class="error-code">ERR_COFFEE_SPILL:</span> Liquid detected in keyboard. Keys sticky.</div>
+            </div>
+        </div>
+
+        <div class="btn-container">
+            <a href="/" class="btn">Go Home <span class="blinking-cursor">_</span></a>
+        </div>
+    </div>
+</body>
+</html>

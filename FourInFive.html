@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=no" />
+<title>FourInFive</title>
+<style>
+  :root { --fg:#e6e6e6; --muted:#9a9a9a; --accent:#ff4d4d; --bg:#14161c; --card:#1e212b; }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body {
+    margin: 0; background: var(--bg); color: var(--fg);
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    min-height: 100vh; user-select: none; touch-action: manipulation;
+  }
+  h1 { font-weight: 700; letter-spacing: .5px; margin: 8px 0 4px; color: var(--accent); }
+  .sub { color: var(--muted); font-size: 13px; margin-bottom: 16px; text-align: center; }
+  #legend { color: var(--muted); font-size: 12px; height: 18px; margin-bottom: 10px; user-select: none; }
+
+  #board { display: grid; gap: 8px; user-select: none; -webkit-user-select: none; }
+  .row { display: grid; gap: 8px; touch-action: manipulation; }
+
+  /* Touch-friendly tiles */
+  .tile {
+    width: 56px; height: 56px; min-width: 42px;
+    border: 2px solid #3a3f4b;
+    display: flex; align-items: center; justify-content: center;
+    font-size: clamp(18px, 5.7vw, 26px);
+    font-weight: 700; text-transform: uppercase;
+    background: var(--card); border-radius: 4px; cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .tile.filled { border-color: #6b7280; animation: pop .1s ease; transition: transform 0.1s, background-color 0.3s; }
+  @keyframes pop { from { transform: scale(.9);} to { transform: scale(1);} }
+  .tile.status-correct { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .tile.status-present { background: #b5651a; border-color: #b5651a; color: #fff; }
+  .tile.status-absent  { background: #3a3f4b; border-color: #3a3f4b; opacity:.6; cursor: default; -webkit-tap-highlight-color: transparent; }
+
+  /* Letter columns */
+  .letter-col { display: flex; flex-direction: column; gap: 4px; user-select: none; -webkit-user-select: none; }
+  .letter-col key {
+    width: clamp(32px, 10vw, 56px); height: clamp(28px, 9.3vw, 42px); min-width: 36px;
+    background: var(--card); border: 1px solid #3a3f4b; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: clamp(12px, 3.5vw, 16px); font-weight: 700; cursor: pointer;
+    -webkit-tap-highlight-color: transparent; transition: transform 0.1s, background-color 0.3s;
+  }
+  .letter-col key:hover { opacity: 0.95; }
+  .letter-col key.status-correct { background: var(--accent); border-color: var(--accent); color: #fff; cursor: default; -webkit-tap-highlight-color: transparent; }
+  .letter-col key.status-present { background: #b5651a; border-color: #b5651a; color: #fff; cursor: default; -webkit-tap-highlight-color: transparent; }
+  .letter-col key.status-absent  { background: var(--card); border-color: #3a3f4b; opacity:.7; color: #666; cursor: default; -webkit-tap-highlight-color: transparent; }
+
+  /* Backspace key */
+  .backspace-key {
+    width: clamp(32px, 10vw, 56px); height: clamp(48px, 14vw, 64px); min-width: 36px;
+    background: #3a3f4b; border: 2px solid #5c6070; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: clamp(14px, 3.8vw, 18px); font-weight: 700; color: #e6e6e6; cursor: pointer;
+    -webkit-tap-highlight-color: transparent; transition: transform 0.1s, background-color 0.3s;
+  }
+  .backspace-key:hover { opacity: 0.9; }
+  .backspace-key:active { transform: scale(0.95); }
+
+  #game-area { display: flex; align-items: center; gap: 24px; padding: 16px; max-width: min(95vw, 820px); }
+
+  #msg {
+    min-height: 24px; color: var(--muted); margin-top: 14px; font-size: clamp(13px, 4vw, 16px);
+    text-align: center; padding: 8px 12px; background: rgba(0,0,0,0.3); border-radius: 6px;
+  }
+  #restart {
+    margin-top: 14px; padding: clamp(10px, 5vw, 14px) clamp(28px, 12vw, 36px);
+    background: var(--card); border: 1px solid #3a3f4b; border-radius: 8px;
+    color: var(--fg); font-size: clamp(12px, 3.5vw, 16px); font-weight: 700; cursor: pointer;
+    -webkit-tap-highlight-color: transparent; transition: transform 0.1s, background-color 0.3s; user-select: none; -webkit-user-select: none;
+  }
+  #restart:hover { background: #3a3f4b; transform: translateY(-2px); }
+  #restart:active { transform: scale(0.98) translateY(1px); }
+</style>
+</head>
+<body>
+  <h1>FourInFive</h1>
+  <div class="sub">Guess the four-letter word · 5 tries</div>
+  <div id="legend">🟥 right place &nbsp; 🟧 wrong spot &nbsp; ⬛ not in word</div>
+
+  <div id="game-area">
+    <div id="left-letters" class="letter-col"></div>
+    <div id="board"></div>
+    <div id="right-letters" class="letter-col"></div>
+  </div>
+
+<div style="display:flex;justify-content:center;margin-top:8px">
+  <button id="backspace-btn" onclick="handleBackspace()">⌫ Backspace</button>
+</div>
+
+  <div id="msg"></div>
+  <button id="restart" onclick="restartGame()">↻ Restart</button>
+
+<script>
+const WORDS = [
+  "FUCK","SHIT","TITS","DICK","WANK",
+  "JIZZ","SLUT","CRAP","DONG","PORN",
+  "BUTT","HOLE","SEXY","NUTS","BALL",
+  "GONK","FART","PUKE",
+  // easter eggs — not profane but funny in context
+  "POOP","TOOT","BOOB","THIC","FEET",
+  "PUTO","ARSE","ANUS","TWIT"
+];
+
+let solution = WORDS[Math.floor(Math.random()*WORDS.length)];
+const ROWS = 5, COLS = 4;
+
+let current = "";
+let currentRow = 0;
+let over = false;
+
+function restartGame() {
+  solution = WORDS[Math.floor(Math.random()*WORDS.length)];
+  document.getElementById("board").innerHTML = "";
+  leftLetters.innerHTML = "";
+  rightLetters.innerHTML = "";
+  msgEl.textContent = "";
+  current = "";
+  currentRow = 0;
+  over = false;
+  initBoard();
+}
+
+const boardEl = document.getElementById("board");
+const leftLetters = document.getElementById("left-letters");
+const rightLetters = document.getElementById("right-letters");
+const msgEl = document.getElementById("msg");
+
+// Letter columns (A-L left, M-Z right)
+const leftKeys = "ABCDEFGHIJKL".split("");
+const rightKeys = "MNOPQRSTUVWXYZ".split("");
+
+function buildCol(keys, container) {
+  if (container.id === 'left-letters') {
+    const bs = document.createElement('div');
+    bs.className = 'backspace-key';
+    bs.textContent = '⌫';
+    bs.addEventListener('click', handleBackspace);
+    container.appendChild(bs);
+  }
+  for (const k of keys) {
+    const el = document.createElement("key");
+    el.textContent = k;
+    el.dataset.key = k.toLowerCase();
+    el.addEventListener('click', () => handleKey(k));
+    container.appendChild(el);
+  }
+}
+
+function initBoard() {
+  for (let r = 0; r < ROWS; r++) {
+    const row = document.createElement("div");
+    row.className = "row";
+    row.style.gridTemplateColumns = `repeat(${COLS}, minmax(42px, 1fr))`;
+    for (let c = 0; c < COLS; c++) {
+      const t = document.createElement("div");
+      t.className = "tile";
+      t.addEventListener('click', () => handleTileClick(t));
+      row.appendChild(t);
+    }
+    boardEl.appendChild(row);
+  }
+  buildCol(leftKeys, leftLetters);
+  buildCol(rightKeys, rightLetters);
+}
+initBoard();
+
+function getLetterKey(ch) {
+  return document.querySelector(`key[data-key="${ch.toLowerCase()}"]`);
+}
+
+function updateKeyboard(letter, status) {
+  const keyEl = getLetterKey(letter);
+  if (!keyEl) return;
+  const priority = { correct: 3, present: 2, absent: 1 };
+  const currentStatus = keyEl.classList.contains("status-correct") ? "correct"
+    : keyEl.classList.contains("status-present") ? "present"
+    : keyEl.classList.contains("status-absent") ? "absent" : null;
+  if (!currentStatus || priority[status] > priority[currentStatus]) {
+    ['status-correct','status-present','status-absent'].forEach(cls => keyEl.classList.remove(cls));
+    keyEl.classList.add("status-" + status);
+  }
+}
+
+function handleKey(k) {
+  if (over) return;
+  const kl = k.toLowerCase();
+  if (!/^[a-z]$/.test(kl)) return;
+  current += kl;
+  updateRow();
+  if (current.length === COLS) checkGuess();
+}
+
+function handleTileClick(tileEl) {
+  const currentBoardRow = boardEl.children[currentRow];
+  let colIndex = -1;
+  for (let c = 0; c < COLS && colIndex === -1; c++) {
+    if (currentBoardRow.contains(tileEl)) { colIndex = c; break; }
+  }
+  const charAtPos = current[colIndex] || '';
+  if (!charAtPos) return;
+  handleBackspace();
+}
+
+function updateRow() {
+  const row = boardEl.children[currentRow];
+  [...row.children].forEach((t, c) => {
+    t.textContent = c < current.length ? current[c] : "";
+    if (c < current.length && !t.classList.contains('status-absent')) {
+      t.classList.add("filled");
+    }
+  });
+}
+
+function scoreGuess(guess, solution) {
+  guess = guess.toUpperCase();
+  solution = solution.toUpperCase();
+  const result = new Array(COLS).fill("absent");
+  const solCounts = {};
+  for (const ch of solution) solCounts[ch] = (solCounts[ch] || 0) + 1;
+  for (let i = 0; i < COLS; i++) {
+    if (guess[i] === solution[i]) { result[i] = "correct"; solCounts[guess[i]]--; }
+  }
+  for (let i = 0; i < COLS; i++) {
+    if (result[i] !== "absent") continue;
+    if (solCounts[guess[i]] > 0) { result[i] = "present"; solCounts[guess[i]]--; }
+  }
+  return result;
+}
+
+function checkGuess() {
+  if (current.length !== COLS) return;
+  const score = scoreGuess(current, solution);
+  score.forEach((s, i) => {
+    const t = boardEl.children[currentRow].children[i];
+    if (!t.classList.contains('status-absent')) {
+      t.classList.add("filled", "status-" + s);
+      updateKeyboard(current[i], s);
+    }
+  });
+  const win = current.toUpperCase() === solution;
+  if (!win) {
+    current = "";
+    currentRow++;
+    if (currentRow >= ROWS) {
+      over = true;
+      msgEl.textContent = "💀 The word was " + solution + ".";
+    } else {
+      const newRow = boardEl.children[currentRow];
+      [...newRow.children].forEach(t => t.classList.remove("filled"));
+    }
+  } else {
+    over = true;
+    msgEl.textContent = "🎉 Solved!";
+  }
+}
+
+document.addEventListener("keydown", (e) => {
+  if (!over && /[a-z]/.test(e.key)) handleKey(e.key);
+});
+
+function handleBackspace() {
+  if (over || current.length === 0) return;
+  current = current.slice(0, -1);
+  updateRow();
+}
+</script>
+</body>
+</html>

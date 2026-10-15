@@ -78,6 +78,9 @@
 </style>
 </head>
 <body>
+  <div style="margin-bottom:12px;">
+    <a href="index.html" style="color:var(--muted);text-decoration:none;font-size:13px;display:inline-flex;align-items:center;gap:6px;">← Back to dustinjaeger.net</a>
+  </div>
   <h1>FourInFive</h1>
   <div class="sub">Guess the four-letter word · 5 tries</div>
   <div id="legend">🟥 right place &nbsp; 🟧 wrong spot &nbsp; ⬛ not in word</div>
@@ -97,14 +100,20 @@
 
 <script>
 const WORDS = [
-  "FUCK","SHIT","TITS","DICK","WANK",
-  "JIZZ","SLUT","CRAP","DONG","PORN",
-  "BUTT","HOLE","SEXY","NUTS","BALL",
-  "GONK","FART","PUKE",
-  // easter eggs — not profane but funny in context
-  "POOP","TOOT","BOOB","THIC","FEET",
-  "PUTO","ARSE","ANUS","TWIT","PORK","NIPS","SPIT",
-  "CLIT","BITE","COCK","CLAM"
+  "ARCH", "AUTO", "BAND", "BASE", "BETA", "BIOS", "BITS", "BLUE",
+  "BOLT", "BOOT", "BYTE", "CARD", "CHIP", "CLIP", "CODE", "COLD",
+  "CORE", "DATA", "DESK", "DIAL", "DISK", "DOCK", "DROP", "FAST",
+  "FILE", "FIND", "FIRE", "FLOW", "FORM", "GAME", "GATE", "GEAR",
+  "GLOW", "GOLD", "GRID", "HARD", "HASH", "HEAT", "HELP", "HERO",
+  "HOST", "ICON", "INFO", "JAVA", "JOIN", "JUMP", "KERN", "LAMP",
+  "LINE", "LINK", "LIVE", "LOAD", "LOCK", "LOGS", "LOOP", "MAIN",
+  "MEGA", "MESH", "MINT", "MODE", "NAME", "NEON", "NODE", "OPEN",
+  "PACK", "PAGE", "PATH", "PEAK", "PEER", "PING", "PIPE", "PLAN",
+  "PLUG", "PORT", "POST", "PUSH", "RACK", "RAID", "READ", "RISC",
+  "ROOT", "ROUT", "RUST", "SAFE", "SAVE", "SCAN", "SEND", "SITE",
+  "SLOT", "SNAP", "SYNC", "TASK", "TEAM", "TECH", "TEST", "TIME",
+  "TOOL", "UNIT", "USER", "VIEW", "VIRT", "WARN", "WAVE", "WIFI",
+  "WIND", "WIRE", "WORD", "WORK", "ZERO", "ZONE"
 ];
 
 let solution = WORDS[Math.floor(Math.random()*WORDS.length)];

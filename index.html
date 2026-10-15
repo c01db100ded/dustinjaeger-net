@@ -16,6 +16,7 @@
     :root {
       /* Semantic color tokens — dark mode first */
       --color-bg: #08080a;
+      --color-bg-rgb: 8, 8, 10;
       --color-bg-elevated: #0f0f13;
       --color-surface: #141418;
       --color-surface-elevated: #1a1a20;
@@ -92,6 +93,7 @@
     @media (prefers-color-scheme: light) {
       :root {
         --color-bg: #fafafa;
+        --color-bg-rgb: 250, 250, 250;
         --color-bg-elevated: #ffffff;
         --color-surface: #f4f4f5;
         --color-surface-elevated: #ffffff;
@@ -191,7 +193,8 @@
       position: fixed;
       top: 0; left: 0; right: 0;
       z-index: 100;
-      background: rgba(var(--color-bg), 0.8);
+      background: rgba(var(--color-bg-rgb), 0.85);
+      -webkit-backdrop-filter: blur(16px);
       backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--color-border);
       padding: var(--space-4) 0;
@@ -200,9 +203,10 @@
     
     nav .container {
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
+      justify-content: space-between;
       align-items: center;
-      gap: var(--space-3);
+      position: relative;
     }
     
     .logo {
@@ -226,13 +230,54 @@
     }
     
     .logo span { color: var(--color-fg); font-weight: 400; }
+
+    /* ── Nav Toggle (Mobile Hamburger) ────────────────────────── */
+    .nav-toggle {
+      display: none;
+      background: transparent;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: 0;
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+      color: var(--color-fg);
+      align-items: center;
+      justify-content: center;
+      transition: all var(--motion-fast) var(--ease-out);
+    }
+
+    .nav-toggle:hover {
+      border-color: var(--color-accent);
+      color: var(--color-accent);
+    }
+
+    .nav-toggle svg {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      fill: none;
+    }
+
+    .nav-toggle .icon-close {
+      display: none;
+    }
+
+    .nav-toggle.open .icon-menu {
+      display: none;
+    }
+
+    .nav-toggle.open .icon-close {
+      display: block;
+    }
     
     .nav-links {
       display: flex;
-      gap: var(--space-6);
+      gap: var(--space-5);
       list-style: none;
-      flex-wrap: wrap;
-      justify-content: center;
+      align-items: center;
     }
     
     .nav-links a {
@@ -262,14 +307,134 @@
       transform: scaleX(1);
       transform-origin: left;
     }
+
+    .nav-links a.nav-cta {
+      border: 1px solid var(--color-border-strong);
+      padding: var(--space-1) var(--space-4);
+      border-radius: var(--radius-full);
+      color: var(--color-accent);
+    }
+
+    .nav-links a.nav-cta:hover {
+      border-color: var(--color-accent);
+      background: var(--color-accent-dim);
+    }
+
+    .nav-links a.nav-cta::after {
+      display: none;
+    }
     
-    @media (max-width: 640px) {
-      .nav-links { gap: var(--space-3); }
-      .nav-links a { font-size: var(--text-xs); }
+    @media (max-width: 860px) {
+      .nav-toggle {
+        display: inline-flex;
+      }
+
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: calc(100% + var(--space-3));
+        left: var(--space-4);
+        right: var(--space-4);
+        background: var(--color-surface-elevated);
+        border: 1px solid var(--color-border-strong);
+        border-radius: var(--radius-lg);
+        padding: var(--space-3);
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--space-1);
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        z-index: 250;
+      }
+
+      .nav-links.open {
+        display: flex;
+        animation: drawerSlide var(--motion-base) var(--ease-out);
+      }
+
+      .nav-links li {
+        width: 100%;
+      }
+
+      .nav-links a,
+      .nav-dropdown-btn {
+        width: 100%;
+        padding: var(--space-3) var(--space-4);
+        border-radius: var(--radius-md);
+        font-size: var(--text-base);
+        color: var(--color-fg);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .nav-links a:hover,
+      .nav-dropdown-btn:hover {
+        background: var(--color-accent-dim);
+        color: var(--color-accent);
+      }
+
+      .nav-links a::after {
+        display: none;
+      }
+
+      .nav-links a.nav-cta {
+        border-radius: var(--radius-md);
+        justify-content: center;
+        margin-top: var(--space-2);
+      }
+
+      .nav-dropdown {
+        width: 100%;
+      }
+
+      .dropdown-menu {
+        position: static;
+        transform: none;
+        box-shadow: none;
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        margin: var(--space-1) 0 var(--space-2) var(--space-2);
+        padding: var(--space-1) 0;
+        min-width: 0;
+      }
+
+      .dropdown-menu li a {
+        padding: var(--space-2) var(--space-4);
+        font-size: var(--text-sm);
+        color: var(--color-fg-muted);
+      }
+    }
+
+    @keyframes drawerSlide {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
     }
     
     /* ── Nav Dropdown ─────────────────────────────────────────── */
     .nav-dropdown { position: relative; }
+    
+    .nav-dropdown-btn {
+      background: transparent;
+      border: none;
+      font-family: inherit;
+      font-size: var(--text-sm);
+      color: var(--color-fg-muted);
+      font-weight: 500;
+      padding: var(--space-1) 0;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: color var(--motion-fast) var(--ease-out);
+    }
+    
+    .nav-dropdown-btn:hover,
+    .nav-dropdown.open .nav-dropdown-btn {
+      color: var(--color-accent);
+    }
     
     .dropdown-menu {
       display: none;
@@ -308,7 +473,7 @@
       min-height: 100dvh;
       display: grid;
       place-items: center;
-      padding: calc(6rem + var(--space-8)) var(--space-5) var(--space-16);
+      padding: calc(4.5rem + var(--space-6)) var(--space-5) var(--space-16);
       text-align: center;
     }
     
@@ -462,6 +627,7 @@
     /* ── Sections ──────────────────────────────────────────────── */
     section {
       padding: var(--space-20) 0;
+      scroll-margin-top: 4.5rem;
     }
     
     .section-header {
@@ -630,7 +796,7 @@
       width: 12px;
       height: 12px;
       background: var(--color-accent);
-      border: 3px: 3px solid var(--color-bg);
+      border: 3px solid var(--color-bg);
       border-radius: 50%;
       transform: translateX(-50%);
       box-shadow: 0 0 0 2px var(--color-accent);
@@ -846,24 +1012,36 @@
   <nav>
     <div class="container">
       <a href="#top" class="logo" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">
-        <img src="assets/dragon-icon.png" alt="" style="height:36px;width:36px;border-radius:10px;" />
+        <img src="assets/dragon-icon.png" alt="Dustin Jaeger" style="height:36px;width:36px;border-radius:10px;" />
         dustin<span>j</span>aeger
       </a>
-      <ul class="nav-links">
-        <li><a href="https://github.com/c01db100ded" target="_blank" rel="noopener">My Projects</a></li>
-        <li class="nav-dropdown">
-          <a href="#games" onclick="event.preventDefault();this.parentElement.classList.toggle('open')">Games ▾</a>
-          <ul class="dropdown-menu">
-            <li><a href="FiveInSix.html">Five in Six</a></li>
-            <li><a href="SixInSeven.html">Six in Seven</a></li>
-          </ul>
-        </li>
+      <button type="button" class="nav-toggle" id="nav-toggle-btn" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="nav-menu">
+        <svg class="icon-menu" viewBox="0 0 24 24" aria-hidden="true">
+          <line x1="4" y1="7" x2="20" y2="7"></line>
+          <line x1="4" y1="12" x2="20" y2="12"></line>
+          <line x1="4" y1="17" x2="20" y2="17"></line>
+        </svg>
+        <svg class="icon-close" viewBox="0 0 24 24" aria-hidden="true">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+      <ul class="nav-links" id="nav-menu">
         <li><a href="#about">About</a></li>
         <li><a href="#skills">Skills</a></li>
-        <li><a href="links-page.html" target="_blank" rel="noopener">Links</a></li>
         <li><a href="#experience">Experience</a></li>
         <li><a href="#achievements">Impact</a></li>
-        <li><a href="#contact">Contact</a></li>
+        <li><a href="links-page.html">Links</a></li>
+        <li class="nav-dropdown">
+          <button type="button" class="nav-dropdown-btn" id="games-dropdown-btn" aria-expanded="false" aria-haspopup="true">Games ▾</button>
+          <ul class="dropdown-menu" id="games-dropdown-menu" role="menu" aria-labelledby="games-dropdown-btn">
+            <li role="none"><a role="menuitem" href="FourInFive.html">Four in Five</a></li>
+            <li role="none"><a role="menuitem" href="FiveInSix.html">Five in Six</a></li>
+            <li role="none"><a role="menuitem" href="SixInSeven.html">Six in Seven</a></li>
+          </ul>
+        </li>
+        <li><a href="https://github.com/c01db100ded" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="#contact" class="nav-cta">Contact</a></li>
       </ul>
     </div>
   </nav>
@@ -1199,6 +1377,73 @@
       document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
     })();
     
+    // Nav Dropdown (click-outside & keyboard accessibility)
+    // Nav Elements
+    const navToggle = document.getElementById('nav-toggle-btn');
+    const navLinks = document.getElementById('nav-menu');
+    const dropdown = document.querySelector('.nav-dropdown');
+    const dropdownBtn = document.getElementById('games-dropdown-btn');
+
+    function closeNav() {
+      if (navLinks && navToggle) {
+        navLinks.classList.remove('open');
+        navToggle.classList.remove('open');
+        navToggle.setAttribute('aria-expanded', 'false');
+      }
+      if (dropdown && dropdownBtn) {
+        dropdown.classList.remove('open');
+        dropdownBtn.setAttribute('aria-expanded', 'false');
+      }
+    }
+
+    // Mobile Hamburger Toggle
+    if (navToggle && navLinks) {
+      navToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = navLinks.classList.toggle('open');
+        navToggle.classList.toggle('open', isOpen);
+        navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      });
+
+      // Close mobile drawer when clicking a navigation link
+      navLinks.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+          closeNav();
+        });
+      });
+    }
+
+    // Nav Dropdown (Games)
+    if (dropdown && dropdownBtn) {
+      dropdownBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = dropdown.classList.toggle('open');
+        dropdownBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      });
+    }
+
+    // Dismiss open menus on outside click
+    document.addEventListener('click', (e) => {
+      const nav = document.querySelector('nav');
+      if (nav && !nav.contains(e.target)) {
+        closeNav();
+      }
+    });
+
+    // Dismiss on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeNav();
+      }
+    });
+
+    // Close mobile drawer on desktop resize
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 860) {
+        closeNav();
+      }
+    });
+
     // Smooth scroll for anchor links (enhancement)
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', function(e) {

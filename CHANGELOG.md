@@ -1,5 +1,30 @@
 # CHANGELOG — dustinjaeger.net
 
+## 2026-10-14 — links page upgrade (Phase 3)
+- Added live client-side fuzzy search bar across all 80+ tools and software alternatives
+- Added interactive category filter pills (Alternatives, Curated, Pentesting, Xbox 360, AI, Emulation, Linux, YouTube)
+- Added dynamic results counter and empty state with one-click search reset
+- Aligned links page typography and brand color tokens with main portfolio (Space Grotesk, JetBrains Mono, #22d3aa teal accent)
+- Updated footer attribution and maintenance date
+
+## 2026-10-14 — navigation & mobile UX overhaul (Phase 2)
+- Replaced multi-row wrapped mobile navigation with responsive animated hamburger drawer
+- Converted desktop nav to sleek, single horizontal row with left-aligned logo and right-aligned links
+- Reorganized nav hierarchy for technical leadership narrative (About → Skills → Experience → Impact → Links → Games → GitHub → Contact)
+- Added scroll-margin-top offset to all sections so anchor targets aren't obscured by fixed navbar
+- Added branded logo and return link ("← Portfolio") to links-page.html navigation
+- Removed stale assistant copy from links-page.html AI section
+
+## 2026-10-14 — site quality & bugfix pass (Phase 1)
+- Fixed nav background alpha transparency bug in index.html (added --color-bg-rgb token)
+- Fixed timeline dot border syntax typo (border: 3px: 3px)
+- Enhanced nav dropdown with semantic button, ARIA attributes, click-outside dismissal, and Escape key navigation
+- Added FourInFive to the Games dropdown navigation alongside FiveInSix and SixInSeven
+- Sanitized FourInFive word list with clean technology and common vocabulary terms
+- Added return navigation link ("← Back to dustinjaeger.net") across FourInFive, FiveInSix, and SixInSeven
+- Optimized assets/dragon-icon.png from 309 KB down to 12.6 KB (96% size reduction)
+- Added .gitignore for repository hygiene
+
 ## 2026-06-26 — index.html redesign (taste-skill)
 - Complete visual redesign of index.html using taste-skill principles
 - Variable fonts: Space Grotesk (display) + JetBrains Mono (code/data)

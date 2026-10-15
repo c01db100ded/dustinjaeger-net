@@ -5,6 +5,8 @@
 - Implemented timeout tracking and cancellation (`clearAllGameTimeouts()`) to cleanly abort pending flip/bounce/modal animations upon restart
 - Added automatic focus blurring on modal buttons and virtual keyboard keys to prevent physical Enter from re-firing the "Play Again" button while submitting a guess
 - Prevented browser default key behaviors on Enter/Backspace and blocked keyboard input while modal backdrop is active
+- Added "Reset Statistics" button in the Statistics modal across all three games with confirmation prompt and live zero-reset
+- Added URL parameter support (`?reset=all` or `?reset=1`) to conveniently reset player stats via direct link with automatic toast feedback
 
 ## 2026-10-14 — word puzzle games upgrade (Option 3 Wordle Engine)
 - Transformed FourInFive, FiveInSix, and SixInSeven into feature-complete, modern Wordle clones

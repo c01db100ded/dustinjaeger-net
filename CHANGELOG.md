@@ -1,5 +1,11 @@
 # CHANGELOG — dustinjaeger.net
 
+## 2026-10-15 — word puzzle games reset & timer leak fix
+- Fixed Play Again bug across FourInFive, FiveInSix, and SixInSeven where starting a new game could retain previous row inputs or skip to row 2
+- Implemented timeout tracking and cancellation (`clearAllGameTimeouts()`) to cleanly abort pending flip/bounce/modal animations upon restart
+- Added automatic focus blurring on modal buttons and virtual keyboard keys to prevent physical Enter from re-firing the "Play Again" button while submitting a guess
+- Prevented browser default key behaviors on Enter/Backspace and blocked keyboard input while modal backdrop is active
+
 ## 2026-10-14 — word puzzle games upgrade (Option 3 Wordle Engine)
 - Transformed FourInFive, FiveInSix, and SixInSeven into feature-complete, modern Wordle clones
 - Ergonomic 3-row QWERTY touch keyboard at bottom with real-time key status colors (absent, present, correct)

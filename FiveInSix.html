@@ -765,10 +765,30 @@
     let isGameOver = false;
     let isRevealing = false;
     let winningRow = -1;
+    let activeTimeouts = [];
+
+    function setGameTimeout(fn, ms) {
+      const id = setTimeout(() => {
+        activeTimeouts = activeTimeouts.filter(t => t !== id);
+        fn();
+      }, ms);
+      activeTimeouts.push(id);
+      return id;
+    }
+
+    function clearAllGameTimeouts() {
+      activeTimeouts.forEach(id => clearTimeout(id));
+      activeTimeouts = [];
+    }
 
     const boardEl = document.getElementById("board");
 
     function initGame() {
+      clearAllGameTimeouts();
+      if (document.activeElement && document.activeElement.blur) {
+        document.activeElement.blur();
+      }
+
       solution = SOLUTIONS[Math.floor(Math.random() * SOLUTIONS.length)];
       currentRow = 0;
       currentGuess = "";
@@ -800,9 +820,17 @@
       document.querySelectorAll(".key").forEach(k => {
         k.classList.remove("status-correct", "status-present", "status-absent");
       });
+
+      // Ensure no buttons keep focus
+      document.querySelectorAll("button").forEach(b => {
+        b.tabIndex = -1;
+      });
     }
 
     function restartGame() {
+      if (document.activeElement && document.activeElement.blur) {
+        document.activeElement.blur();
+      }
       closeModal('stats-modal');
       closeModal('help-modal');
       initGame();
@@ -811,6 +839,7 @@
 
     function handleKey(letter) {
       if (isGameOver || isRevealing) return;
+      if (document.querySelector(".modal-backdrop.open")) return;
       if (currentGuess.length < COLS) {
         currentGuess += letter.toUpperCase();
         updateBoardRow();
@@ -819,11 +848,13 @@
 
     function handleBackspace() {
       if (isGameOver || isRevealing || currentGuess.length === 0) return;
+      if (document.querySelector(".modal-backdrop.open")) return;
       currentGuess = currentGuess.slice(0, -1);
       updateBoardRow();
     }
 
     function updateBoardRow() {
+      if (!boardEl.children[currentRow]) return;
       const rowTiles = boardEl.children[currentRow].children;
       for (let c = 0; c < COLS; c++) {
         const tile = rowTiles[c];
@@ -876,15 +907,17 @@
     }
 
     function shakeCurrentRow() {
+      if (!boardEl.children[currentRow]) return;
       const rowEl = boardEl.children[currentRow];
       rowEl.classList.remove("shake");
       void rowEl.offsetWidth; // trigger reflow
       rowEl.classList.add("shake");
-      setTimeout(() => rowEl.classList.remove("shake"), 500);
+      setGameTimeout(() => rowEl.classList.remove("shake"), 500);
     }
 
     function submitGuess() {
       if (isGameOver || isRevealing) return;
+      if (document.querySelector(".modal-backdrop.open")) return;
 
       if (currentGuess.length < COLS) {
         shakeCurrentRow();
@@ -906,9 +939,9 @@
 
       for (let i = 0; i < COLS; i++) {
         const tile = rowTiles[i];
-        setTimeout(() => {
+        setGameTimeout(() => {
           tile.classList.add("flip");
-          setTimeout(() => {
+          setGameTimeout(() => {
             tile.classList.remove("filled");
             tile.classList.add(`status-${score[i]}`);
             updateKeyboardKey(guess[i], score[i]);
@@ -918,19 +951,20 @@
 
       const totalFlipDuration = (COLS - 1) * flipDelay + 500;
 
-      setTimeout(() => {
+      setGameTimeout(() => {
         isRevealing = false;
         const won = (guess === solution);
 
         if (won) {
           isGameOver = true;
           winningRow = currentRow;
+          currentGuess = "";
           recordGameStats(true, currentRow + 1);
 
           // Bounce row
           for (let i = 0; i < COLS; i++) {
-            setTimeout(() => {
-              rowTiles[i].classList.add("bounce");
+            setGameTimeout(() => {
+              if (rowTiles[i]) rowTiles[i].classList.add("bounce");
             }, i * 90);
           }
 
@@ -938,12 +972,13 @@
           const praise = praises[Math.min(currentRow, praises.length - 1)];
           showToast(praise, 2200);
 
-          setTimeout(() => openStatsModal(), 1600);
+          setGameTimeout(() => openStatsModal(), 1600);
         } else if (currentRow + 1 >= ROWS) {
           isGameOver = true;
+          currentGuess = "";
           recordGameStats(false, 0);
           showToast("Word was: " + solution, 3500);
-          setTimeout(() => openStatsModal(), 2200);
+          setGameTimeout(() => openStatsModal(), 2200);
         } else {
           currentRow++;
           currentGuess = "";
@@ -987,6 +1022,9 @@
     }
 
     function openStatsModal() {
+      if (document.activeElement && document.activeElement.blur) {
+        document.activeElement.blur();
+      }
       const stats = getStats();
       document.getElementById("stat-played").textContent = stats.gamesPlayed;
       const winPct = stats.gamesPlayed > 0 ? Math.round((stats.gamesWon / stats.gamesPlayed) * 100) : 0;
@@ -1020,10 +1058,16 @@
     }
 
     function openModal(id) {
+      if (document.activeElement && document.activeElement.blur) {
+        document.activeElement.blur();
+      }
       document.getElementById(id).classList.add("open");
     }
 
     function closeModal(id) {
+      if (document.activeElement && document.activeElement.blur) {
+        document.activeElement.blur();
+      }
       document.getElementById(id).classList.remove("open");
     }
 
@@ -1038,6 +1082,7 @@
 
       const limit = (winningRow >= 0) ? winningRow + 1 : ROWS;
       for (let r = 0; r < limit; r++) {
+        if (!boardEl.children[r]) continue;
         const tiles = boardEl.children[r].children;
         for (let c = 0; c < COLS; c++) {
           const t = tiles[c];
@@ -1092,11 +1137,24 @@
     // KEYBOARD EVENT LISTENERS
     document.addEventListener("keydown", (e) => {
       if (e.ctrlKey || e.altKey || e.metaKey) return;
+
+      const isModalOpen = document.querySelector(".modal-backdrop.open");
+      if (isModalOpen) {
+        if (e.key === "Escape") {
+          closeModal("stats-modal");
+          closeModal("help-modal");
+        }
+        return;
+      }
+
       if (e.key === "Enter") {
+        e.preventDefault();
         submitGuess();
       } else if (e.key === "Backspace" || e.key === "Delete") {
+        e.preventDefault();
         handleBackspace();
       } else if (/^[a-zA-Z]$/.test(e.key)) {
+        e.preventDefault();
         handleKey(e.key.toUpperCase());
       }
     });
@@ -1105,6 +1163,9 @@
     document.getElementById("keyboard").addEventListener("click", (e) => {
       const btn = e.target.closest(".key");
       if (!btn) return;
+      if (document.activeElement && document.activeElement.blur) {
+        document.activeElement.blur();
+      }
       const key = btn.dataset.key;
       if (key === "ENTER") {
         submitGuess();
@@ -1123,7 +1184,9 @@
     // Close modals on backdrop click
     document.querySelectorAll(".modal-backdrop").forEach(backdrop => {
       backdrop.addEventListener("click", (e) => {
-        if (e.target === backdrop) backdrop.classList.remove("open");
+        if (e.target === backdrop) {
+          closeModal(backdrop.id);
+        }
       });
     });
 

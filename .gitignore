@@ -9,3 +9,6 @@ Thumbs.db
 
 # Backups
 assets/*original*
+backups/
+.backups/
+*.backup

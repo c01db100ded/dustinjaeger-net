@@ -1,6 +1,18 @@
 # CHANGELOG — dustinjaeger.net
 
-## 2026-10-14 — links page upgrade (Phase 3)
+## 2026-10-14 — word puzzle games upgrade (Option 3 Wordle Engine)
+- Transformed FourInFive, FiveInSix, and SixInSeven into feature-complete, modern Wordle clones
+- Ergonomic 3-row QWERTY touch keyboard at bottom with real-time key status colors (absent, present, correct)
+- Manual Enter submission with two-pass duplicate letter scoring algorithm
+- Shake animation and toast alerts for incomplete guesses or words not in dictionary
+- Staggered 3D tile-flip reveal animations and victory bounce animation on winning row
+- LocalStorage persistence for lifetime stats: games played, win rate, win streak, max streak, and guess distribution bar graph
+- Spoiler-free Emoji Share button (📋 Share Result) with automatic clipboard copy
+- In-game game switcher pills (4 Letters, 5 Letters, 6 Letters) for quick mode switching
+- Modal system for How To Play guide and Game Statistics
+- Expanded, clean dictionaries: 902 solutions + 1,546 valid guesses for 4-letter; 1,151 solutions + 3,530 valid guesses for 5-letter; 1,234 solutions + 6,140 valid guesses for 6-letter
+- Created safe local backups in `backups/` (FourInFive.html, FiveInSix.html, SixInSeven.html)
+
 - Added live client-side fuzzy search bar across all 80+ tools and software alternatives
 - Added interactive category filter pills (Alternatives, Curated, Pentesting, Xbox 360, AI, Emulation, Linux, YouTube)
 - Added dynamic results counter and empty state with one-click search reset

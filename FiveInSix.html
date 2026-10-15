@@ -1,381 +1,1134 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=no" />
-<title>FiveInSix</title>
-<style>
-  :root { --fg:#e6e6e6; --muted:#9a9a9a; --accent:#7c9cff; --bg:#14161c; --card:#1e212b; }
-  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  body {
-    margin: 0; background: var(--bg); color: var(--fg);
-    font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    min-height: 100vh; user-select: none; touch-action: manipulation;
-  }
-  h1 { font-weight: 700; letter-spacing: .5px; margin: 8px 0 4px; }
-  .sub { color: var(--muted); font-size: 13px; margin-bottom: 16px; text-align: center; }
-  #legend { color: var(--muted); font-size: 12px; height: 18px; margin-bottom: 10px; user-select: none; }
-  
-  #game-area {
-    display: flex;
-    align-items: center;
-    gap: 24px;
-    padding: 16px;
-    max-width: min(95vw, 780px);
-  }
-  #board { display: grid; gap: 8px; user-select: none; -webkit-user-select: none; }
-  .row { display: grid; gap: 8px; touch-action: manipulation; }
-  
-  /* Touch-friendly tiles */
-  .tile {
-    width: 56px;
-    height: 56px;
-    min-width: 42px; /* prevents tiny tap targets on small screens */
-    border: 2px solid #3a3f4b;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: clamp(18px, 5.6vw, 26px); /* responsive text size */
-    font-weight: 700;
-    text-transform: uppercase;
-    background: var(--card);
-    border-radius: 4px; /* subtle rounded corners for touch feedback */
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-  }
-  .tile.filled { 
-    border-color: #6b7280; 
-    animation: pop .1s ease; 
-    transition: transform 0.1s, background-color 0.3s;
-  }
-  @keyframes pop { from { transform: scale(.9);} to { transform: scale(1);} }
-  .tile.status-correct { background: var(--accent); border-color: var(--accent); color: #fff; }
-  .tile.status-present { background: #b5651a; border-color: #b5651a; color: #fff; }
-  .tile.status-absent  { background: #3a3f4b; border-color: #3a3f4b; opacity:.6;
-    cursor: default; -webkit-tap-highlight-color: transparent;
-  }
-  
-  /* Touch-friendly letter keys */
-  .letter-col {
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>FiveInSix — Word Puzzle | Dustin Jaeger</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0f1218;
+      --card: #181b24;
+      --card-border: #2e3444;
+      --key-bg: #272d3b;
+      --key-hover: #353d50;
+      --key-active: #444e66;
+      --fg: #f3f4f6;
+      --muted: #9ca3af;
+      --accent: #10b981;
+      --color-correct: #10b981;
+      --color-present: #eab308;
+      --color-absent: #2d3340;
+      --font-main: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--font-main);
+      min-height: 100vh;
+      min-height: 100dvh;
       display: flex;
       flex-direction: column;
-      gap: 4px;
-      user-select: none; -webkit-user-select: none;
-  }
+      align-items: center;
+      justify-content: space-between;
+      overflow-x: hidden;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+      padding: 10px 12px 14px;
+    }
 
-  /* Backspace key at bottom of left column */
-  .letter-col .backspace-key {
-      width: clamp(32px, 10vw, 56px);
-      height: clamp(48px, 14vw, 64px); /* larger for easy tapping */
-      min-width: 36px;
-      background: #3a3f4b; /* darker to distinguish from letter keys */
-      border: 2px solid #5c6070;
-      border-radius: 12px;
+    /* HEADER */
+    header.game-header {
+      width: 100%;
+      max-width: 520px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .top-bar {
+      width: 100%;
       display: flex;
       align-items: center;
-      justify-content: center;
-      font-size: clamp(14px, 3.8vw, 18px);
-      font-weight: 700;
-      color: #e6e6e6;
-      cursor: pointer;
-      -webkit-tap-highlight-color: transparent;
-      transition: transform 0.1s, background-color 0.3s;
-  }
-  .letter-col .backspace-key:hover { opacity: 0.9; }
-  .letter-col .backspace-key:active { transform: scale(0.95); }
+      justify-content: space-between;
+      padding-bottom: 4px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
 
-  .letter-col key {
-      width: clamp(32px, 10vw, 56px);
-      height: clamp(28px, 9.3vw, 42px); /* responsive to viewport */
-      min-width: 36px; /* minimum tap target size per WCAG */
+    .back-link {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 13px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.15s;
+    }
+    .back-link:hover {
+      color: var(--fg);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .icon-btn {
       background: var(--card);
-      border: 1px solid #3a3f4b;
-      border-radius: 8px; /* rounded for touch feedback */
+      border: 1px solid var(--card-border);
+      color: var(--fg);
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: clamp(12px, 3.5vw, 16px); /* responsive letter size */
+      cursor: pointer;
+      font-size: 15px;
+      font-family: var(--font-main);
       font-weight: 700;
-      cursor: pointer; /* indicates clickable on touch devices */
-      -webkit-tap-highlight-color: transparent;
-      transition: transform 0.1s, background-color 0.3s;
-  }
-  .letter-col key:hover { opacity: 0.95; } /* desktop hover feedback */
-  .letter-col key.active { transform: scale(0.98); } /* touch press feedback */
-  
-  .letter-col key.status-correct { background: var(--accent); border-color: var(--accent); color: #fff;
-    cursor: default; -webkit-tap-highlight-color: transparent; }
-  .letter-col key.status-present { background: #b5651a; border-color: #b5651a; color: #fff;
-    cursor: default; -webkit-tap-highlight-color: transparent; }
-  .letter-col key.status-absent  {
-    background: var(--card); 
-    border-color: #3a3f4b; 
-    opacity:.7;
-    color: #666;
-    cursor: default; -webkit-tap-highlight-color: transparent;
-  }
-  .letter-col key.status-absent:hover { opacity: 0.85; } /* still give hover feedback */
-  
-  #msg {
-    min-height: 24px;
-    color: var(--muted);
-    margin-top: 14px;
-    font-size: clamp(13px, 4vw, 16px); /* responsive message size */
-    text-align: center;
-    padding: 8px 12px;
-    background: rgba(0,0,0,0.3);
-    border-radius: 6px;
-  }
-  #restart {
-    margin-top: 14px; /* more breathing room for touch */
-    padding: clamp(10px, 5vw, 14px) clamp(28px, 12vw, 36px);
-    background: var(--card); 
-    border: 1px solid #3a3f4b;
-    border-radius: 8px; /* rounded corners for touch */
-    color: var(--fg); 
-    font-size: clamp(12px, 3.5vw, 16px);
-    font-weight: 700;
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent; /* no highlight on tap */
-    transition: transform 0.1s, background-color 0.3s;
-    user-select: none; -webkit-user-select: none;
-  }
-  #restart:hover { background: #3a3f4b; transform: translateY(-2px); }
-  #restart:active { transform: scale(0.98) translateY(1px); } /* touch press feedback */
-</style>
+      transition: all 0.15s ease;
+    }
+    .icon-btn:hover {
+      background: var(--key-hover);
+      border-color: #4b5563;
+      transform: translateY(-1px);
+    }
+    .icon-btn:active {
+      transform: scale(0.95);
+    }
+
+    .game-title-wrap {
+      text-align: center;
+    }
+
+    h1.game-title {
+      font-size: clamp(24px, 5.5vw, 32px);
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: var(--accent);
+      line-height: 1.1;
+    }
+
+    .game-subtitle {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 2px;
+    }
+
+    /* DIFFICULTY SELECTOR PILLS */
+    .game-selector {
+      display: inline-flex;
+      background: rgba(24, 27, 36, 0.9);
+      padding: 3px;
+      border-radius: 20px;
+      border: 1px solid var(--card-border);
+      gap: 3px;
+      margin-top: 2px;
+    }
+
+    .mode-pill {
+      padding: 4px 12px;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--muted);
+      text-decoration: none;
+      border-radius: 16px;
+      transition: all 0.15s ease;
+    }
+    .mode-pill:hover {
+      color: var(--fg);
+    }
+    .mode-pill.active {
+      background: var(--accent);
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    /* LEGEND */
+    .legend-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      font-size: 11.5px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .legend-box {
+      width: 11px;
+      height: 11px;
+      border-radius: 3px;
+      display: inline-block;
+    }
+    .legend-box.correct { background: var(--color-correct); }
+    .legend-box.present { background: var(--color-present); }
+    .legend-box.absent  { background: var(--color-absent); }
+
+    /* BOARD */
+    main.board-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-grow: 1;
+      padding: 8px 0;
+      width: 100%;
+    }
+
+    .board {
+      display: grid;
+      grid-template-rows: repeat(6, 1fr);
+      gap: clamp(4px, 1.2vh, 8px);
+      user-select: none;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: clamp(4px, 1.2vw, 8px);
+    }
+
+    .tile {
+      width: clamp(44px, 12vw, 58px);
+      height: clamp(44px, 12vw, 58px);
+      border: 2px solid var(--card-border);
+      border-radius: 6px;
+      background: var(--card);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: clamp(18px, 4.8vw, 28px);
+      font-weight: 700;
+      text-transform: uppercase;
+      perspective: 1000px;
+      transition: border-color 0.15s ease;
+    }
+
+    .tile.filled {
+      border-color: #64748b;
+      animation: pop 0.1s ease;
+    }
+
+    @keyframes pop {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.12); }
+      100% { transform: scale(1); }
+    }
+
+    .tile.flip {
+      animation: flipTile 0.5s ease forwards;
+    }
+
+    @keyframes flipTile {
+      0% { transform: rotateX(0deg); }
+      50% { transform: rotateX(90deg); }
+      100% { transform: rotateX(0deg); }
+    }
+
+    .tile.status-correct {
+      background: var(--color-correct);
+      border-color: var(--color-correct);
+      color: #ffffff;
+    }
+    .tile.status-present {
+      background: var(--color-present);
+      border-color: var(--color-present);
+      color: #ffffff;
+    }
+    .tile.status-absent {
+      background: var(--color-absent);
+      border-color: var(--color-absent);
+      color: #94a3b8;
+    }
+
+    .row.shake {
+      animation: shake 0.5s ease-in-out;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      15%, 45%, 75% { transform: translateX(-6px); }
+      30%, 60%, 90% { transform: translateX(6px); }
+    }
+
+    .tile.bounce {
+      animation: winBounce 0.6s ease;
+    }
+
+    @keyframes winBounce {
+      0%, 20% { transform: translateY(0); }
+      40% { transform: translateY(-20px); }
+      50% { transform: translateY(0); }
+      60% { transform: translateY(-9px); }
+      80%, 100% { transform: translateY(0); }
+    }
+
+    /* KEYBOARD */
+    .keyboard {
+      width: 100%;
+      max-width: 500px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      user-select: none;
+    }
+
+    .keyboard-row {
+      display: flex;
+      justify-content: center;
+      gap: 5px;
+      touch-action: manipulation;
+    }
+
+    .key {
+      flex: 1;
+      height: clamp(48px, 6.2vh, 56px);
+      background: var(--key-bg);
+      border: none;
+      border-radius: 6px;
+      color: var(--fg);
+      font-family: var(--font-main);
+      font-size: clamp(13px, 3.8vw, 17px);
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.15s, transform 0.08s;
+      outline: none;
+    }
+
+    .key:hover {
+      background: var(--key-hover);
+    }
+    .key:active {
+      transform: scale(0.93);
+      background: var(--key-active);
+    }
+
+    .key.special {
+      flex: 1.5;
+      font-size: clamp(11.5px, 2.8vw, 13.5px);
+      padding: 0 4px;
+    }
+
+    .key.status-correct {
+      background: var(--color-correct) !important;
+      color: #ffffff !important;
+    }
+    .key.status-present {
+      background: var(--color-present) !important;
+      color: #ffffff !important;
+    }
+    .key.status-absent {
+      background: #191c24 !important;
+      opacity: 0.42;
+      color: #6b7280 !important;
+    }
+
+    /* TOAST */
+    .toast-container {
+      position: fixed;
+      top: 10%;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      pointer-events: none;
+    }
+
+    .toast {
+      background: #f8fafc;
+      color: #0f172a;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 9px 18px;
+      border-radius: 8px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      animation: fadeIn 0.15s ease;
+      transition: opacity 0.25s, transform 0.25s;
+    }
+    .toast.fade-out {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* MODAL */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+      padding: 16px;
+    }
+    .modal-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-card {
+      background: #181b24;
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      width: 100%;
+      max-width: 440px;
+      padding: 24px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+      position: relative;
+      transform: scale(0.94);
+      transition: transform 0.2s ease;
+    }
+    .modal-backdrop.open .modal-card {
+      transform: scale(1);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: transparent;
+      border: none;
+      color: var(--muted);
+      font-size: 20px;
+      cursor: pointer;
+      padding: 4px;
+      line-height: 1;
+    }
+    .modal-close:hover { color: var(--fg); }
+
+    .modal-title {
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      text-align: center;
+      margin-bottom: 18px;
+      color: var(--fg);
+    }
+
+    /* STATS DISPLAY */
+    .stats-row {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+    }
+    .stat-val {
+      font-size: 28px;
+      font-weight: 800;
+      font-family: var(--font-mono);
+      color: var(--fg);
+    }
+    .stat-label {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-top: 2px;
+    }}
+
+    .dist-title {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--muted);
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .dist-graph {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 22px;
+    }
+    .dist-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-family: var(--font-mono);
+    }
+    .dist-num {
+      width: 14px;
+      text-align: right;
+      color: var(--muted);
+    }
+    .dist-bar-wrap {
+      flex-grow: 1;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 4px;
+      overflow: hidden;
+      display: flex;
+    }
+    .dist-bar {
+      background: #374151;
+      min-width: 22px;
+      height: 20px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 6px;
+      font-weight: 700;
+      color: #ffffff;
+      transition: width 0.4s ease;
+    }
+    .dist-bar.highlight {
+      background: var(--accent);
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+    }
+    .modal-btn {
+      flex: 1;
+      padding: 12px;
+      border-radius: 8px;
+      font-family: var(--font-main);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: none;
+      transition: all 0.15s ease;
+    }
+    .modal-btn-primary {
+      background: var(--accent);
+      color: #ffffff;
+    }
+    .modal-btn-primary:hover {
+      filter: brightness(1.1);
+      transform: translateY(-1px);
+    }
+    .modal-btn-secondary {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      color: var(--fg);
+    }
+    .modal-btn-secondary:hover {
+      background: var(--key-hover);
+      transform: translateY(-1px);
+    }
+
+    /* HOW TO PLAY HELP MODAL */
+    .help-text {
+      font-size: 13.5px;
+      line-height: 1.55;
+      color: #d1d5db;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .help-example-row {
+      display: flex;
+      gap: 6px;
+      margin: 6px 0;
+    }
+    .help-tile {
+      width: 36px;
+      height: 36px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 16px;
+      color: #fff;
+    }
+
+    @media (max-height: 680px) {
+      body { padding: 6px 8px 8px; }
+      h1.game-title { font-size: 20px; }
+      .game-subtitle { display: none; }
+      .key { height: clamp(40px, 5.5vh, 46px); }
+    }
+  </style>
 </head>
 <body>
-  <div style="margin-bottom:12px;">
-    <a href="index.html" style="color:var(--muted);text-decoration:none;font-size:13px;display:inline-flex;align-items:center;gap:6px;">← Back to dustinjaeger.net</a>
+
+  <!-- TOAST CONTAINER -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- HEADER -->
+  <header class="game-header">
+    <div class="top-bar">
+      <a href="index.html" class="back-link">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        dustinjaeger.net
+      </a>
+      <div class="header-actions">
+        <button class="icon-btn" id="btn-help" title="How to Play" aria-label="How to Play">?</button>
+        <button class="icon-btn" id="btn-stats" title="Statistics" aria-label="Statistics">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="18" y="3" width="4" height="18"/><rect x="10" y="8" width="4" height="13"/><rect x="2" y="13" width="4" height="8"/></svg>
+        </button>
+        <button class="icon-btn" id="btn-restart" title="New Game" aria-label="New Game">↻</button>
+      </div>
+    </div>
+
+    <div class="game-title-wrap">
+      <h1 class="game-title">FiveInSix</h1>
+      <p class="game-subtitle">Guess the 5-letter word in 6 tries</p>
+    </div>
+
+    <nav class="game-selector">
+      <a href="FourInFive.html" class="mode-pill ">4 Letters</a>
+      <a href="FiveInSix.html" class="mode-pill active">5 Letters</a>
+      <a href="SixInSeven.html" class="mode-pill ">6 Letters</a>
+    </nav>
+
+    <div class="legend-bar">
+      <span class="legend-item"><span class="legend-box correct"></span> Right place</span>
+      <span class="legend-item"><span class="legend-box present"></span> Wrong spot</span>
+      <span class="legend-item"><span class="legend-box absent"></span> Not in word</span>
+    </div>
+  </header>
+
+  <!-- BOARD -->
+  <main class="board-wrapper">
+    <div id="board" class="board"></div>
+  </main>
+
+  <!-- QWERTY KEYBOARD -->
+  <div id="keyboard" class="keyboard">
+    <div class="keyboard-row">
+      <button class="key" data-key="Q">Q</button>
+      <button class="key" data-key="W">W</button>
+      <button class="key" data-key="E">E</button>
+      <button class="key" data-key="R">R</button>
+      <button class="key" data-key="T">T</button>
+      <button class="key" data-key="Y">Y</button>
+      <button class="key" data-key="U">U</button>
+      <button class="key" data-key="I">I</button>
+      <button class="key" data-key="O">O</button>
+      <button class="key" data-key="P">P</button>
+    </div>
+    <div class="keyboard-row">
+      <button class="key" data-key="A">A</button>
+      <button class="key" data-key="S">S</button>
+      <button class="key" data-key="D">D</button>
+      <button class="key" data-key="F">F</button>
+      <button class="key" data-key="G">G</button>
+      <button class="key" data-key="H">H</button>
+      <button class="key" data-key="J">J</button>
+      <button class="key" data-key="K">K</button>
+      <button class="key" data-key="L">L</button>
+    </div>
+    <div class="keyboard-row">
+      <button class="key special" data-key="ENTER">ENTER</button>
+      <button class="key" data-key="Z">Z</button>
+      <button class="key" data-key="X">X</button>
+      <button class="key" data-key="C">C</button>
+      <button class="key" data-key="V">V</button>
+      <button class="key" data-key="B">B</button>
+      <button class="key" data-key="N">N</button>
+      <button class="key" data-key="M">M</button>
+      <button class="key special" data-key="BACKSPACE">⌫</button>
+    </div>
   </div>
-  <h1>FiveInSix</h1>
-  <div class="sub">Guess the 5-letter word · 6 tries</div>
-  <div id="legend">🟦 right place &nbsp; 🟧 wrong spot &nbsp; ⬛ not in word</div>
-  
-  <div id="game-area">
-    <div id="left-letters" class="letter-col"></div>
-    <div id="board"></div>
-    <div id="right-letters" class="letter-col"></div>
-</div>
 
-<div style="display:flex;justify-content:center;margin-top:8px">
-  <button id="backspace-btn" onclick="handleBackspace()">⌫ Backspace</button>
-</div>
-  
-  <div id="msg"></div>
-  <button id="restart" onclick="restartGame()">↻ Restart</button>
+  <!-- STATS MODAL -->
+  <div id="stats-modal" class="modal-backdrop">
+    <div class="modal-card">
+      <button class="modal-close" onclick="closeModal('stats-modal')">✕</button>
+      <h2 class="modal-title">Statistics</h2>
+      
+      <div class="stats-row">
+        <div class="stat-item">
+          <span class="stat-val" id="stat-played">0</span>
+          <span class="stat-label">Played</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-val" id="stat-win-pct">0%</span>
+          <span class="stat-label">Win %</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-val" id="stat-streak">0</span>
+          <span class="stat-label">Current Streak</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-val" id="stat-max-streak">0</span>
+          <span class="stat-label">Max Streak</span>
+        </div>
+      </div>
 
-<script>
-const WORDS = ["CRANE","BRAIN","CHAIR","GLASS","MONEY","WORLD","LIGHT","STONE",
-  "QUICK","SMILE","GRAPE","OCEAN","TIGER","PIANO","CLOUD","BLANK","FRESH",
-  "HEART","KNIFE","LEMON","BREAD","FLAME","GLOBE","PLANT","TRACK"];
-let solution = WORDS[Math.floor(Math.random()*WORDS.length)];
-const ROWS = 6, COLS = 5;
+      <div class="dist-title">Guess Distribution</div>
+      <div id="dist-graph" class="dist-graph"></div>
 
-let current = "";
-let currentRow = 0;
-let over = false;
-let absentLetters = new Set();
+      <div class="modal-actions">
+        <button class="modal-btn modal-btn-secondary" onclick="restartGame()">↻ Play Again</button>
+        <button class="modal-btn modal-btn-primary" id="btn-share" onclick="shareResult()">📋 Share Result</button>
+      </div>
+    </div>
+  </div>
 
-function restartGame() {
-  solution = WORDS[Math.floor(Math.random()*WORDS.length)];
-  document.getElementById("board").innerHTML = "";
-  leftLetters.innerHTML = "";
-  rightLetters.innerHTML = "";
-  msgEl.textContent = "";
-  current = "";
-  currentRow = 0;
-  over = false;
-  absentLetters = new Set();
-  initBoard();
-}
+  <!-- HELP MODAL -->
+  <div id="help-modal" class="modal-backdrop">
+    <div class="modal-card">
+      <button class="modal-close" onclick="closeModal('help-modal')">✕</button>
+      <h2 class="modal-title">How To Play</h2>
+      <div class="help-text">
+        <p>Guess the <strong>5-letter word</strong> in <strong>6 tries</strong>.</p>
+        <p>Each guess must be a valid 5-letter word. Hit the <strong>Enter</strong> button to submit.</p>
+        <p>After each guess, the color of the tiles will reveal how close your guess was:</p>
+        
+        <div>
+          <div class="help-example-row">
+            <div class="help-tile" style="background:var(--color-correct)">C</div><div class="help-tile" style="background:var(--card);border:2px solid var(--card-border);color:var(--fg)">R</div><div class="help-tile" style="background:var(--card);border:2px solid var(--card-border);color:var(--fg)">A</div><div class="help-tile" style="background:var(--card);border:2px solid var(--card-border);color:var(--fg)">N</div><div class="help-tile" style="background:var(--card);border:2px solid var(--card-border);color:var(--fg)">E</div>
+          </div>
+          <p style="font-size:12.5px;color:var(--muted)"><strong>C</strong> is in the word and in the correct spot.</p>
+        </div>
 
-const boardEl = document.getElementById("board");
-const leftLetters = document.getElementById("left-letters");
-const rightLetters = document.getElementById("right-letters");
-const msgEl = document.getElementById("msg");
+        <div>
+          <div class="help-example-row">
+            <div class="help-tile" style="background:var(--card);border:2px solid var(--card-border);color:var(--fg)">C</div><div class="help-tile" style="background:var(--color-present)">R</div><div class="help-tile" style="background:var(--card);border:2px solid var(--card-border);color:var(--fg)">A</div><div class="help-tile" style="background:var(--card);border:2px solid var(--card-border);color:var(--fg)">N</div><div class="help-tile" style="background:var(--card);border:2px solid var(--card-border);color:var(--fg)">E</div>
+          </div>
+          <p style="font-size:12.5px;color:var(--muted)"><strong>R</strong> is in the word but in the wrong spot.</p>
+        </div>
 
-// Letter columns (A-M left, N-Z right)
-const leftKeys = "ABCDEFGHIJKLM".split("");
-const rightKeys = "NOPQRSTUVWXYZ".split("");
+        <div>
+          <div class="help-example-row">
+            <div class="help-tile" style="background:var(--card);border:2px solid var(--card-border);color:var(--fg)">C</div><div class="help-tile" style="background:var(--card);border:2px solid var(--card-border);color:var(--fg)">R</div><div class="help-tile" style="background:var(--card);border:2px solid var(--card-border);color:var(--fg)">A</div><div class="help-tile" style="background:var(--color-absent);color:#94a3b8">N</div><div class="help-tile" style="background:var(--card);border:2px solid var(--card-border);color:var(--fg)">E</div>
+          </div>
+          <p style="font-size:12.5px;color:var(--muted)"><strong>N</strong> is not in the word in any spot.</p>
+        </div>
+      </div>
+      <div style="margin-top:18px;">
+        <button class="modal-btn modal-btn-primary" style="width:100%" onclick="closeModal('help-modal')">Got it!</button>
+      </div>
+    </div>
+  </div>
 
-function buildCol(keys, container) {
-  // Add backspace key at the bottom of left column only
-  if (container.id === 'left-letters') {
-    const bs = document.createElement('div');
-    bs.className = 'backspace-key';
-    bs.textContent = '⌫';
-    bs.addEventListener('click', handleBackspace);
-    container.appendChild(bs);
-  }
+  <script>
+    const ROWS = 6;
+    const COLS = 5;
+    const GAME_NAME = "FiveInSix";
+    const STORAGE_KEY = "fiveinsix_stats";
+    const CORRECT_EMOJI = "🟩";
+    const PRESENT_EMOJI = "🟨";
+    const ABSENT_EMOJI = "⬛";
 
-  for (const k of keys) {
-    const el = document.createElement("key");
-    el.textContent = k;
-    el.dataset.key = k.toLowerCase();
-    // Attach click/touch handlers to each letter key
-    el.addEventListener('click', () => handleKey(k));
-    container.appendChild(el);
-  }
-}
+    // Curated high-frequency recognizable solution words
+    const SOLUTIONS = ["ABOUT", "ABOVE", "ABUSE", "ACIDS", "ACRES", "ACTOR", "ACUTE", "ADDED", "ADMIN", "ADMIT", "ADOBE", "ADOPT", "ADULT", "AFTER", "AGAIN", "AGENT", "AGING", "AGREE", "AHEAD", "AIMED", "ALARM", "ALBUM", "ALERT", "ALIAS", "ALIEN", "ALIGN", "ALIKE", "ALIVE", "ALLOW", "ALLOY", "ALONE", "ALONG", "ALPHA", "ALTER", "AMBER", "AMEND", "AMINO", "AMONG", "ANGEL", "ANGER", "ANGLE", "ANGRY", "ANIME", "ANNEX", "APART", "APPLE", "APPLY", "ARBOR", "AREAS", "ARENA", "ARGUE", "ARISE", "ARMED", "ARMOR", "ARRAY", "ARROW", "ASIDE", "ASKED", "ASSET", "ATLAS", "AUDIO", "AUDIT", "AUTOS", "AVOID", "AWARD", "AWARE", "AWFUL", "BABES", "BACON", "BADGE", "BADLY", "BAKER", "BANDS", "BANKS", "BASED", "BASES", "BASIC", "BASIN", "BASIS", "BATCH", "BATHS", "BEACH", "BEADS", "BEANS", "BEARS", "BEAST", "BEATS", "BEGAN", "BEGIN", "BEGUN", "BEING", "BELLE", "BELLY", "BELOW", "BELTS", "BENCH", "BERRY", "BIBLE", "BIKES", "BILLS", "BILLY", "BINGO", "BIRDS", "BIRTH", "BLACK", "BLADE", "BLAME", "BLANK", "BLAST", "BLEND", "BLESS", "BLIND", "BLINK", "BLOCK", "BLOGS", "BLOND", "BLOOD", "BLOOM", "BLUES", "BOARD", "BOATS", "BOBBY", "BONDS", "BONES", "BONUS", "BOOKS", "BOOST", "BOOTH", "BOOTS", "BOOTY", "BORED", "BOUND", "BOXED", "BOXES", "BRAIN", "BRAKE", "BRAND", "BRASS", "BRAVE", "BREAD", "BREAK", "BREED", "BRICK", "BRIDE", "BRIEF", "BRING", "BROAD", "BROKE", "BROOK", "BROWN", "BRUSH", "BUCKS", "BUDDY", "BUILD", "BUILT", "BUNCH", "BUNNY", "BURNS", "BURST", "BUSES", "BUTTS", "BUYER", "BYTES", "CABIN", "CABLE", "CACHE", "CAKES", "CALLS", "CAMEL", "CAMPS", "CANAL", "CANDY", "CANON", "CARDS", "CARGO", "CAROL", "CARRY", "CASES", "CATCH", "CAUSE", "CEDAR", "CELLS", "CENTS", "CHAIN", "CHAIR", "CHAOS", "CHARM", "CHART", "CHASE", "CHEAP", "CHEAT", "CHECK", "CHESS", "CHEST", "CHICK", "CHIEF", "CHILD", "CHILE", "CHINA", "CHIPS", "CHOIR", "CHOSE", "CHUCK", "CITED", "CIVIC", "CIVIL", "CLAIM", "CLASS", "CLEAN", "CLEAR", "CLERK", "CLICK", "CLIFF", "CLIMB", "CLIPS", "CLOCK", "CLONE", "CLOSE", "CLOTH", "CLOUD", "CLUBS", "COACH", "COAST", "CODES", "COINS", "COLON", "COLOR", "COMBO", "COMES", "COMIC", "CONDO", "CORAL", "CORPS", "COSTS", "COULD", "COUNT", "COURT", "COVER", "CRACK", "CRAFT", "CRAPS", "CRASH", "CRAZY", "CREAM", "CREEK", "CREST", "CRIME", "CROPS", "CROSS", "CROWD", "CROWN", "CRUDE", "CUBIC", "CURVE", "CYCLE", "DADDY", "DAILY", "DAIRY", "DAISY", "DANCE", "DATED", "DATES", "DEALS", "DEALT", "DEATH", "DEBUG", "DEBUT", "DECOR", "DELAY", "DELTA", "DENSE", "DEPOT", "DEPTH", "DERBY", "DEVIL", "DIARY", "DIFFS", "DIGIT", "DIRTY", "DISCO", "DISCS", "DISKS", "DODGE", "DOING", "DOLLS", "DONOR", "DOORS", "DOUBT", "DOZEN", "DRAFT", "DRAIN", "DRAMA", "DRAWN", "DRAWS", "DREAM", "DRESS", "DRIED", "DRILL", "DRINK", "DRIVE", "DROPS", "DROVE", "DRUGS", "DRUMS", "DRUNK", "DRYER", "DYING", "EAGLE", "EARLY", "EARTH", "EBONY", "EDGES", "EIGHT", "ELDER", "ELECT", "ELITE", "EMAIL", "EMPTY", "ENDED", "ENEMY", "ENJOY", "ENTER", "ENTRY", "EQUAL", "ERROR", "ESSAY", "EUROS", "EVENT", "EVERY", "EXACT", "EXAMS", "EXCEL", "EXIST", "EXTRA", "FACED", "FACES", "FACTS", "FAILS", "FAIRY", "FAITH", "FALLS", "FALSE", "FANCY", "FARES", "FARMS", "FATAL", "FATTY", "FAULT", "FAVOR", "FEARS", "FEEDS", "FEELS", "FENCE", "FERRY", "FEVER", "FEWER", "FIBER", "FIELD", "FIFTH", "FIFTY", "FIGHT", "FILED", "FILES", "FILMS", "FINAL", "FINDS", "FIRED", "FIRES", "FIRMS", "FIRST", "FIXED", "FIXES", "FLAGS", "FLAME", "FLASH", "FLEET", "FLESH", "FLOAT", "FLOOD", "FLOOR", "FLOUR", "FLOWS", "FLUID", "FLUSH", "FLYER", "FOCAL", "FOCUS", "FOLKS", "FONTS", "FOODS", "FORCE", "FORGE", "FORMS", "FORTH", "FORTY", "FORUM", "FOUND", "FRAME", "FRANK", "FRAUD", "FRESH", "FRONT", "FROST", "FRUIT", "FULLY", "FUNDS", "FUNKY", "FUNNY", "FUZZY", "GAINS", "GAMES", "GAMMA", "GATES", "GAUGE", "GENES", "GENRE", "GHOST", "GIANT", "GIFTS", "GIRLS", "GIVEN", "GIVES", "GLASS", "GLOBE", "GLORY", "GNOME", "GOALS", "GOING", "GONNA", "GOODS", "GOTTA", "GRACE", "GRADE", "GRAIN", "GRAMS", "GRAND", "GRANT", "GRAPH", "GRASS", "GRAVE", "GREAT", "GREEN", "GRILL", "GROSS", "GROUP", "GROVE", "GROWN", "GROWS", "GUARD", "GUESS", "GUEST", "GUIDE", "GUILD", "HAIRY", "HANDS", "HANDY", "HAPPY", "HARRY", "HAVEN", "HEADS", "HEARD", "HEART", "HEATH", "HEAVY", "HELLO", "HELPS", "HENCE", "HERBS", "HIGHS", "HILLS", "HINTS", "HIRED", "HOBBY", "HOLDS", "HOLES", "HOLLY", "HOMES", "HONEY", "HONOR", "HOPED", "HOPES", "HORSE", "HOSTS", "HOTEL", "HOURS", "HOUSE", "HUMAN", "HUMOR", "ICONS", "IDEAL", "IDEAS", "IMAGE", "INBOX", "INDEX", "INNER", "INPUT", "INTEL", "INTER", "INTRO", "ISSUE", "ITEMS", "IVORY", "JAPAN", "JEANS", "JEWEL", "JIMMY", "JOHNS", "JOINS", "JOINT", "JOKES", "JUDGE", "JUICE", "KARMA", "KEEPS", "KILLS", "KINDA", "KINDS", "KINGS", "KITTY", "KNIFE", "KNOCK", "KNOWN", "KNOWS", "LABEL", "LABOR", "LADEN", "LAKES", "LAMPS", "LANCE", "LANDS", "LANES", "LARGE", "LASER", "LATER", "LATEX", "LAUGH", "LAYER", "LEADS", "LEARN", "LEASE", "LEAST", "LEAVE", "LEGAL", "LEMON", "LEVEL", "LIGHT", "LIKED", "LIKES", "LIMIT", "LINED", "LINES", "LINKS", "LIONS", "LISTS", "LIVED", "LIVER", "LIVES", "LOADS", "LOANS", "LOBBY", "LOCAL", "LOCKS", "LODGE", "LOGIC", "LOGIN", "LOGOS", "LOOKS", "LOOPS", "LOOSE", "LOTUS", "LOVED", "LOVER", "LOVES", "LOWER", "LUCKY", "LUNCH", "LYING", "LYRIC", "MACRO", "MAGIC", "MAILS", "MAJOR", "MAKER", "MAKES", "MALES", "MAMBO", "MANGA", "MANOR", "MAPLE", "MARCH", "MARIA", "MARKS", "MARSH", "MASON", "MATCH", "MAYBE", "MAYOR", "MEALS", "MEANS", "MEANT", "MEDAL", "MEDIA", "MEETS", "MENUS", "MERCY", "MERGE", "MERIT", "MERRY", "METAL", "METER", "METRO", "MIGHT", "MILES", "MILLS", "MINDS", "MINES", "MINOR", "MINUS", "MIXED", "MIXER", "MODEL", "MODEM", "MODES", "MONEY", "MONTH", "MORAL", "MOTEL", "MOTOR", "MOUNT", "MOUSE", "MOUTH", "MOVED", "MOVES", "MOVIE", "MULTI", "MUSIC", "NAILS", "NAKED", "NAMED", "NAMES", "NASTY", "NAVAL", "NEEDS", "NERVE", "NEVER", "NEWER", "NEWLY", "NIGHT", "NOBLE", "NODES", "NOISE", "NORTH", "NOTED", "NOTES", "NOVEL", "NURSE", "NYLON", "OASIS", "OCCUR", "OCEAN", "OFFER", "OFTEN", "OLDER", "OLIVE", "OMEGA", "ONION", "OPENS", "OPERA", "ORBIT", "ORDER", "ORGAN", "OTHER", "OUGHT", "OUTER", "OWNED", "OWNER", "OXIDE", "OZONE", "PACKS", "PAGES", "PAINT", "PAIRS", "PANEL", "PANIC", "PANTS", "PAPER", "PARKS", "PARTS", "PARTY", "PASTA", "PASTE", "PATCH", "PATHS", "PATIO", "PEACE", "PEARL", "PEERS", "PENNY", "PETER", "PHASE", "PHONE", "PHOTO", "PIANO", "PICKS", "PIECE", "PILLS", "PILOT", "PIPES", "PITCH", "PIXEL", "PIZZA", "PLACE", "PLAIN", "PLANE", "PLANS", "PLANT", "PLATE", "PLAYS", "PLAZA", "PLOTS", "POEMS", "POINT", "POKER", "POLAR", "POLLS", "POOLS", "PORTS", "POSTS", "POUND", "POWER", "PRESS", "PRICE", "PRIDE", "PRIME", "PRINT", "PRIOR", "PRIZE", "PROBE", "PROMO", "PROOF", "PROUD", "PROVE", "PROXY", "PULSE", "PUMPS", "PUNCH", "PUPPY", "PURSE", "QUEEN", "QUERY", "QUEST", "QUEUE", "QUICK", "QUIET", "QUILT", "QUITE", "QUOTE", "RACES", "RACKS", "RADAR", "RADIO", "RAISE", "RALLY", "RANCH", "RANDY", "RANGE", "RANKS", "RAPID", "RATED", "RATES", "RATIO", "REACH", "READS", "READY", "REALM", "REBEL", "REFER", "REHAB", "RELAX", "RELAY", "RENEW", "REPLY", "RESET", "RIDER", "RIDES", "RIDGE", "RIGHT", "RINGS", "RISKS", "RIVER", "ROADS", "ROBIN", "ROBOT", "ROCKS", "ROCKY", "ROGER", "ROLES", "ROLLS", "ROMAN", "ROOMS", "ROOTS", "ROSES", "ROUGE", "ROUGH", "ROUND", "ROUTE", "ROVER", "ROYAL", "RUGBY", "RULED", "RULES", "RURAL", "SAFER", "SAINT", "SALAD", "SALES", "SALLY", "SALON", "SAMBA", "SANDY", "SATIN", "SAUCE", "SAVED", "SAVER", "SAVES", "SCALE", "SCARY", "SCENE", "SCOOP", "SCOPE", "SCORE", "SCOUT", "SCREW", "SCUBA", "SEATS", "SEEDS", "SEEKS", "SEEMS", "SELLS", "SENDS", "SENSE", "SERUM", "SERVE", "SETUP", "SEVEN", "SHADE", "SHAFT", "SHAKE", "SHALL", "SHAME", "SHAPE", "SHARE", "SHARK", "SHARP", "SHEEP", "SHEER", "SHEET", "SHELF", "SHELL", "SHIFT", "SHINE", "SHIPS", "SHIRT", "SHOCK", "SHOES", "SHOOT", "SHOPS", "SHORE", "SHORT", "SHOTS", "SHOWN", "SHOWS", "SIDES", "SIGHT", "SIGMA", "SIGNS", "SILLY", "SINCE", "SITES", "SIXTH", "SIZED", "SIZES", "SKILL", "SKINS", "SKIRT", "SLAVE", "SLEEP", "SLIDE", "SLOPE", "SLOTS", "SMALL", "SMART", "SMELL", "SMILE", "SMITH", "SMOKE", "SNAKE", "SOCKS", "SOLAR", "SOLID", "SOLVE", "SONGS", "SONIC", "SORRY", "SORTS", "SOULS", "SOUND", "SOUTH", "SPACE", "SPANK", "SPARE", "SPEAK", "SPECS", "SPEED", "SPELL", "SPEND", "SPENT", "SPERM", "SPICE", "SPIES", "SPINE", "SPLIT", "SPOKE", "SPORT", "SPOTS", "SPRAY", "SQUAD", "STACK", "STAFF", "STAGE", "STAKE", "STAMP", "STAND", "STARS", "START", "STATE", "STATS", "STAYS", "STEAL", "STEAM", "STEEL", "STEPS", "STICK", "STILL", "STOCK", "STONE", "STOOD", "STOPS", "STORE", "STORM", "STORY", "STRAP", "STRIP", "STUCK", "STUDY", "STUFF", "STYLE", "SUGAR", "SUITE", "SUITS", "SUNNY", "SUPER", "SURGE", "SWEET", "SWIFT", "SWING", "SWORD", "TABLE", "TAKEN", "TAKES", "TALES", "TALKS", "TANKS", "TAPES", "TASKS", "TASTE", "TAXES", "TEACH", "TEAMS", "TEARS", "TEENS", "TEETH", "TELLS", "TERMS", "TERRY", "TESTS", "TEXTS", "THANK", "THEFT", "THEIR", "THEME", "THERE", "THESE", "THETA", "THICK", "THING", "THINK", "THIRD", "THONG", "THOSE", "THREE", "THROW", "THUMB", "TIGER", "TIGHT", "TILES", "TIMER", "TIMES", "TIRED", "TIRES", "TITLE", "TODAY", "TOKEN", "TONER", "TONES", "TOOLS", "TOOTH", "TOPIC", "TOTAL", "TOUCH", "TOUGH", "TOURS", "TOWER", "TOWNS", "TOXIC", "TRACE", "TRACK", "TRACT", "TRADE", "TRAIL", "TRAIN", "TRANS", "TRASH", "TREAT", "TREES", "TREND", "TRIAL", "TRIBE", "TRICK", "TRIED", "TRIES", "TRIPS", "TROUT", "TRUCK", "TRULY", "TRUNK", "TRUST", "TRUTH", "TUBES", "TUMOR", "TUNER", "TUNES", "TURNS", "TWICE", "TWINS", "TWIST", "TYPES", "ULTRA", "UNCLE", "UNDER", "UNION", "UNITS", "UNITY", "UNTIL", "UPPER", "UPSET", "URBAN", "USAGE", "USERS", "USING", "USUAL", "VALID", "VALUE", "VALVE", "VAULT", "VENUE", "VERSE", "VIDEO", "VIEWS", "VILLA", "VINYL", "VIRAL", "VIRUS", "VISIT", "VISTA", "VITAL", "VOCAL", "VOICE", "VOTED", "VOTES", "WAGES", "WAGON", "WALES", "WALKS", "WALLS", "WANNA", "WANTS", "WASTE", "WATCH", "WATER", "WATTS", "WAVES", "WEEKS", "WEIRD", "WELLS", "WELSH", "WHALE", "WHATS", "WHEAT", "WHEEL", "WHERE", "WHICH", "WHILE", "WHITE", "WHOLE", "WHOSE", "WIDER", "WIDTH", "WINDS", "WINES", "WINGS", "WIRED", "WIRES", "WITCH", "WIVES", "WOMAN", "WOMEN", "WOODS", "WORDS", "WORKS", "WORLD", "WORRY", "WORSE", "WORST", "WORTH", "WOULD", "WOUND", "WRIST", "WRITE", "WRONG", "WROTE", "YACHT", "YAHOO", "YARDS", "YEARS", "YEAST", "YIELD", "YOUNG", "YOURS", "YOUTH", "ZONES"];
 
-function initBoard() {
-  for (let r = 0; r < ROWS; r++) {
-    const row = document.createElement("div");
-    row.className = "row";
-    row.style.gridTemplateColumns = `repeat(${COLS}, minmax(42px, 1fr))`;
-    for (let c = 0; c < COLS; c++) {
-      const t = document.createElement("div");
-      t.className = "tile";
-      // Attach click/touch handler to each tile
-      t.addEventListener('click', () => handleTileClick(t));
-      row.appendChild(t);
+    // Dictionary of all allowable valid guess words
+    const EXTRA_WORDS = "ABACI ABACK ABAFT ABASE ABASH ABATE ABBEY ABBOT ABBÉS ABEAM ABETS ABHOR ABIDE ABLER ABODE ABORT ABUTS ABUZZ ABYSS ACHED ACHES ACHOO ACING ACMES ACORN ACRID ACTED ADAGE ADAPT ADDER ADDLE ADEPT ADIEU ADIÓS ADMAN ADMEN ADORE ADORN ADZES AEGIS AEONS AERIE AFFIX AFIRE AFOOT AFOUL AGAPE AGATE AGAVE AGILE AGISM AGLOW AGONY AIDED AIDES AILED AIRED AISLE ALDER ALGAE ALIBI ALINE ALLAY ALLEY ALLOT ALOES ALOFT ALOHA ALOOF ALOUD ALTAR ALTHO ALTOS ALUMS AMASS AMAZE AMBLE AMEBA AMEER AMIGO AMIRS AMISS AMITY AMOUR AMPLE AMPLY AMPUL AMUCK AMUSE ANGST ANION ANISE ANKHS ANKLE ANNOY ANNUL ANODE ANONS ANTED ANTES ANTIC ANTIS ANVIL AORTA APACE APHID APING APPAL APRON APSES APTER APTLY AQUAE AQUAS ARCED ARDOR ARGON ARGOT ARIAS AROMA AROSE ARSON ARTSY ASCOT ASHED ASHEN ASHES ASKEW ASPEN ASPIC ASSAY ASSES ASSOC ASTER ASTIR ATOLL ATOMS ATONE ATRIA ATTAR ATTIC AUGER AUGHT AUGUR AUNTS AURAE AURAL AURAS AVAIL AVAST AVERS AVERT AVIAN AVOWS AWAIT AWAKE AWASH AWING AWOKE AXIAL AXING AXIOM AXLES AXONS AZURE BAAED BABEL BACKS BAGEL BAGGY BAILS BAITS BAIZE BAKED BAKES BALDS BALED BALES BALKS BALKY BALLS BALMS BALMY BALSA BANAL BANDY BANES BANGS BANJO BANNS BARBS BARDS BARED BARER BARES BARFS BARGE BARKS BARNS BARON BASAL BASER BASIL BASKS BASSI BASSO BASTE BATED BATES BATHE BATIK BATON BATTY BAUDS BAWDY BAWLS BAYED BAYOU BEADY BEAKS BEAMS BEARD BEAUS BEAUX BEBOP BECKS BEECH BEEFS BEEFY BEEPS BEERS BEETS BEFIT BEFOG BEGAT BEGET BEGOT BEIGE BELAY BELCH BELIE BELLS BENDS BENTS BERET BERGS BERMS BERTH BERYL BESET BESOM BESOT BESTS BETAS BEVEL BICEP BIDDY BIDED BIDES BIDET BIERS BIFFS BIGHT BIGOT BIKED BIKER BILGE BILKS BIMBO BINDS BINGE BIPED BIRCH BISON BITCH BITES BLABS BLAND BLARE BLASÉ BLATS BLAZE BLEAK BLEAT BLEED BLEEP BLENT BLEST BLIMP BLING BLIPS BLISS BLITZ BLOAT BLOBS BLOCS BLOTS BLOWN BLOWS BLUED BLUER BLUFF BLUNT BLURB BLURS BLURT BLUSH BOARS BOAST BODED BODES BOGEY BOGGY BOGIE BOGON BOGUS BOILS BOINK BOLAS BOLES BOLLS BOLTS BOMBS BONED BONER BONEY BONGO BONGS BONNY BOOBS BOOBY BOOED BOOMS BOONS BOORS BOOZE BOOZY BORAX BORER BORES BORNE BORON BOSOM BOSSY BOSUN BOTCH BOUGH BOUTS BOWED BOWEL BOWER BOWLS BOXEN BOXER BOZOS BRACE BRACT BRADS BRAGS BRAID BRASH BRATS BRAVO BRAWL BRAWN BRAYS BREWS BRIAR BRIBE BRIER BRIGS BRIMS BRINE BRINK BRINY BRISK BROIL BROOD BROOM BROTH BROWS BRUIN BRUNT BRUSK BRUTE BUDGE BUFFS BUGGY BUGLE BULBS BULGE BULGY BULKS BULKY BULLS BULLY BUMPS BUMPY BUNGS BUNKS BUNTS BUOYS BURGS BURKA BURLY BURNT BURPS BURRO BURRS BUSBY BUSED BUSHY BUSTS BUTCH BUTTE BUXOM BYLAW BYWAY CABAL CABBY CACAO CACTI CADDY CADET CADGE CADRE CAFÉS CAGED CAGES CAGEY CAIRN CAKED CALFS CALIF CALKS CALMS CALVE CALYX CAMEO CAMPY CANED CANES CANNY CANOE CANTO CANTS CAPED CAPER CAPES CAPON CARAT CARBS CARED CARES CARET CAROM CARPI CARPS CARTS CARVE CASED CASKS CASTE CASTS CATER CATTY CAULK CAVED CAVES CAVIL CAWED CEASE CEDED CEDES CELLI CELLO CHADS CHAFE CHAFF CHALK CHAMP CHANT CHAPS CHAPT CHARS CHARY CHASM CHATS CHEEK CHEEP CHEER CHEFS CHEWS CHEWY CHIDE CHILI CHILL CHIME CHIMP CHINK CHINO CHINS CHIRP CHITS CHIVE CHOCK CHOKE CHOMP CHOPS CHORD CHORE CHOWS CHUGS CHUMP CHUMS CHUNK CHURL CHURN CHUTE CIDER CIGAR CILIA CINCH CIRCA CITES CIVET CLACK CLAMP CLAMS CLANG CLANK CLANS CLAPS CLASH CLASP CLAWS CLEAT CLEFS CLEFT CLEWS CLIME CLING CLINK CLIPT CLITS CLOAK CLODS CLOGS CLOMP CLOPS CLOTS CLOUT CLOVE CLOWN CLOYS CLUCK CLUED CLUES CLUMP CLUNG CLUNK CLVII CLXII CLXIV CLXIX CLXVI COALS COATS COBRA COCCI COCKS COCKY COCOA CODAS CODED CODEX COEDS COIFS COILS COKED COKES COLAS COLDS COLIC COLTS COMAS COMBS COMER COMET COMFY COMMA COMPO CONCH CONES CONGA CONIC CONKS CONTD COOED COOKS COOKY COOLS COONS COOPS COOTS COPED COPES COPRA COPSE CORDS CORED CORES CORKS CORMS CORNS CORNY COTES COUCH COUGH COUPE COUPS COVEN COVES COVET COVEY COWED COWER COWLS COYER COYLY COZEN CRABS CRAGS CRAMP CRAMS CRANE CRANK CRAPE CRASS CRATE CRAVE CRAWL CRAWS CRAYS CRAZE CREAK CREDO CREED CREEL CREEP CREPE CREPT CRESS CREWS CRIBS CRICK CRIED CRIER CRIES CRIMP CRISP CROAK CROCI CROCK CRONE CRONY CROOK CROON CROUP CROWS CRUEL CRUET CRUFT CRUMB CRUSH CRUST CRYPT CUBED CUBES CUBIT CUFFS CUING CULLS CULTS CUMIN CUNTS CUPID CURBS CURDS CURED CURER CURES CURIE CURIO CURLS CURLY CURRY CURSE CURST CURVY CUSHY CUSPS CUTER CUTUP CYNIC CYSTS CZARS DACHA DADOS DAFFY DALES DALLY DAMES DAMNS DAMPS DANDY DARED DARES DARNS DARTS DATUM DAUBS DAUNT DAVIT DAWNS DAZED DAZES DDING DEANS DEARS DEBAR DEBIT DEBTS DECAF DECAL DECAY DECKS DECOY DECRY DEEDS DEEMS DEEPS DEERS DEFER DEICE DEIFY DEIGN DEISM DEITY DELIS DELLS DELVE DEMON DEMOS DEMUR DENIM DENTS DESKS DETER DETOX DEUCE DHOTI DIALS DICED DICES DICEY DICKS DICKY DICTA DIETS DIKED DIKES DILLS DILLY DIMER DIMES DIMLY DINED DINER DINES DINGO DINGS DINGY DINKY DIODE DIRER DIRGE DIRKS DITCH DITTO DITTY DIVAN DIVAS DIVED DIVER DIVES DIVOT DIVVY DIZZY DJINN DOCKS DODGY DODOS DOERS DOFFS DOGGY DOGIE DOGMA DOILY DOLED DOLES DOLLY DOLTS DOMED DOMES DONUT DOOMS DOPED DOPES DOPEY DORKS DORKY DORMS DOSED DOSES DOTED DOTES DOTTY DOUGH DOUSE DOVES DOWDY DOWEL DOWNS DOWNY DOWRY DOWSE DOYEN DOZED DOZES DRABS DRAGS DRAKE DRAMS DRANK DRAPE DRAWL DRAYS DREAD DREGS DRIER DRIES DRIFT DRILY DRIPS DROID DROLL DRONE DROOL DROOP DROSS DROWN DRUBS DRUID DRYAD DRYLY DUCAL DUCAT DUCHY DUCKS DUCTS DUDED DUDES DUELS DUETS DUKES DULLS DULLY DUMMY DUMPS DUMPY DUNCE DUNES DUNGS DUNKS DUNNO DUPED DUPES DUSKY DUSTS DUSTY DUVET DWARF DWEEB DWELL DWELT DYERS DYKED DYKES EAGER EARLS EARNS EASED EASEL EASES EATEN EATER EAVES EBBED ECHOS EDEMA EDGED EDGER EDICT EDIFY EDITS EERIE EGGED EGRET EIDER EJECT EKING ELATE ELBOW ELEGY ELFIN ELIDE ELOPE ELUDE ELVES EMBED EMBER EMCEE EMEND EMERY EMIRS EMITS EMOJI EMOTE ENACT ENDOW ENDUE ENEMA ENNUI ENROL ENSUE ENURE ENVOY EPICS EPOCH EPOXY EQUIP ERASE ERECT ERODE ERRED ERUPT ESTER ETHER ETHIC ETHOS EVADE EVENS EVICT EVILS EVOKE EWERS EXALT EXECS EXERT EXILE EXITS EXPEL EXPOS EXTOL EXUDE EXULT EYING FABLE FACET FADED FADES FAGOT FAINT FAIRS FAKED FAKER FAKES FAKIR FAMED FANGS FANNY FARCE FARED FARTS FASTS FATED FATES FAUNA FAUNS FAWNS FAXED FAXES FAZED FAZES FEAST FEATS FECAL FECES FEIGN FEINT FELLS FELON FELTS FEMUR FENDS FERAL FERNS FESTS FETAL FETCH FETED FETID FETUS FEUDS FEZES FIATS FICHE FIEFS FIEND FIERY FIFES FILCH FILET FILLS FILLY FILMY FILTH FINCH FINED FINER FINES FINIS FINKS FINNY FIORD FIRTH FISHY FISTS FITLY FIVER FIVES FIXER FIZZY FJORD FLACK FLAIL FLAIR FLAKE FLAKY FLANK FLAPS FLARE FLASK FLATS FLAWS FLAYS FLEAS FLECK FLEES FLICK FLIED FLIER FLIES FLING FLINT FLIPS FLIRT FLITS FLOCK FLOES FLOGS FLOPS FLORA FLOSS FLOUT FLOWN FLUBS FLUES FLUFF FLUKE FLUKY FLUME FLUNG FLUNK FLUTE FLYBY FOALS FOAMS FOAMY FOGEY FOGGY FOILS FOIST FOLDS FOLIO FOLLY FONDU FOOLS FOOTS FORAY FORDS FORES FORGO FORKS FORTE FORTS FOULS FOUNT FOURS FOWLS FOXED FOXES FOYER FRACK FRAGS FRAIL FRANC FRATS FRAYS FREAK FREED FREER FREES FRETS FRIAR FRIED FRIER FRIES FRILL FRISK FRIZZ FROCK FROGS FROND FROTH FROWN FROZE FRUMP FRYER FUCKS FUDGE FUELS FUGUE FULLS FUMED FUMES FUNGI FUNKS FURLS FUROR FURRY FURZE FUSED FUSES FUSSY FUSTY FUTON FUZED FUZES FÊTES GABBY GABLE GAFFE GAFFS GAGED GAGES GAILY GAITS GALAS GALES GALLS GAMED GAMER GAMEY GAMIN GAMUT GANGS GAPED GAPES GARBS GASES GASPS GASSY GATED GAUDY GAUNT GAUZE GAUZY GAVEL GAWKS GAWKY GAYER GAYLY GAZED GAZER GAZES GEARS GECKO GEEKS GEEKY GEESE GELDS GELID GENIE GENII GENTS GENUS GEODE GERMS GETUP GHOUL GIBED GIBES GIDDY GILDS GILLS GILTS GIMME GIMPY GIPSY GIRDS GIRTH GIRTS GISMO GIZMO GLADE GLADS GLAND GLARE GLAZE GLEAM GLEAN GLENS GLIDE GLINT GLITZ GLOAT GLOBS GLOOM GLOSS GLOVE GLOWS GLUED GLUES GLUEY GLUTS GLYPH GNARL GNASH GNATS GNAWN GNAWS GOADS GOATS GODLY GOFER GOLDS GOLFS GOLLY GONAD GONER GONGS GONKS GONZO GOODY GOOEY GOOFS GOOFY GOOKS GOONS GOOSE GORED GORES GORGE GORPS GORSE GOUGE GOURD GOUTY GOWNS GRABS GRADS GRAFT GRAIL GRAPE GRASP GRATE GRAVY GRAYS GRAZE GREBE GREED GREET GREPS GREYS GRIDS GRIEF GRIME GRIMY GRIND GRINS GRIPE GRIPS GRIST GRITS GROAN GROIN GROKS GROOM GROPE GROUT GROWL GRUBS GRUEL GRUES GRUFF GRUNT GUANO GUAVA GUILE GUILT GUISE GULAG GULCH GULFS GULLS GULLY GULPS GUMBO GUMMY GUNNY GUPPY GURUS GUSHY GUSTO GUSTS GUSTY GUTSY GUYED GYBED GYBES GYPSY GYROS HABIT HACKS HAFTS HAIKU HAILS HAIRS HAKES HALED HALER HALES HALLS HALON HALOS HALTS HALVE HANGS HANKS HANKY HARDY HARED HAREM HARES HARKS HARMS HARPS HARPY HARSH HARTS HASPS HASTE HASTY HATCH HATED HATER HATES HAULS HAUNT HAVES HAVOC HAWED HAWKS HAYED HAZED HAZEL HAZES HEADY HEALS HEAPS HEARS HEATS HEAVE HEDGE HEEDS HEELS HEFTS HEFTY HEIRS HEIST HELIX HELMS HELOT HENNA HERDS HERON HEROS HERTZ HEWED HEWER HEXED HEXES HICKS HIDED HIDES HIKED HIKER HIKES HILLY HILTS HINDS HINGE HINGS HIPPO HIPPY HIRES HITCH HIVED HIVES HOAGY HOARD HOARY HOBOS HOCKS HOGAN HOIST HOKEY HOKUM HOLED HOMED HOMER HOMEY HOMIE HONED HONES HONKS HOOCH HOODS HOOEY HOOFS HOOKS HOOKY HOOPS HOOTS HORDE HORNS HORNY HORSY HOSED HOSES HOTLY HOUND HOVEL HOVER HOWDY HOWLS HUBBY HUFFS HUFFY HUGER HULAS HULKS HULLS HUMID HUMPS HUMUS HUNCH HUNKS HUNTS HURLS HURRY HURTS HUSKS HUSKY HUSSY HUTCH HYDRA HYENA HYING HYMEN HYMNS HYPED HYPER HYPES HYPOS IAMBS ICIER ICILY ICING IDIOM IDIOT IDLED IDLER IDLES IDOLS IDYLL IDYLS IGLOO IKONS ILLUS IMAMS IMBED IMBUE IMPEL IMPLY INANE INAPT INCED INCUR INDUE INEPT INERT INFER INFIX INGOT INKED INLAY INLET INSET INURE IOCTL IOTAS IRATE IRKED IRONS IRONY ISLES ISLET ITCHY IVIES JABOT JACKS JADED JADES JAILS JAMBS JAPED JAPES JAUNT JAWED JAZZY JEEPS JEERS JEHAD JELLO JELLS JELLY JERKS JERKY JESTS JETTY JIBED JIBES JIFFY JIHAD JILTS JINNI JINNS JIVED JIVES JOCKS JOIST JOKED JOKER JOLLY JOLTS JOULE JOUST JOWLS JOYED JUICY JULEP JUMBO JUMPS JUMPY JUNCO JUNKS JUNKY JUNTA JUROR KABOB KAPOK KAPUT KARAT KAYAK KAZOO KEBAB KEBOB KEELS KEENS KETCH KEYED KHAKI KHANS KICKS KICKY KIDDO KIDDY KILNS KILOS KILTS KINKS KINKY KIOSK KITED KITES KIWIS KLUGE KLUTZ KNACK KNAVE KNEAD KNEED KNEEL KNEES KNELL KNELT KNITS KNOBS KNOLL KNOTS KOALA KOANS KOOKS KOOKY KOPEK KRONE KRÓNA KUDOS KUDZU LABIA LACED LACES LACKS LADED LADES LADLE LAGER LAIRS LAITY LAMAS LAMBS LAMED LAMER LAMES LANKY LAPEL LAPSE LARCH LARDS LARGO LARKS LARVA LASED LASES LASSO LASTS LATCH LATHE LATHS LATTE LAUDS LAWNS LAXER LAXLY LAZED LAZES LEACH LEAFS LEAFY LEAKS LEAKY LEANS LEAPS LEAPT LEASH LEDGE LEECH LEEKS LEERS LEERY LEFTS LEFTY LEGGY LEGIT LEMMA LEMME LEMUR LENDS LEPER LETUP LEVEE LEVER LEXER LIARS LIBEL LICIT LICKS LIEGE LIENS LIFER LIFTS LIKEN LIKER LILAC LILTS LIMBO LIMBS LIMED LIMES LIMNS LIMOS LIMPS LINEN LINER LINGO LINTS LIPID LIRAS LISLE LISPS LITER LITHE LIVEN LIVID LLAMA LLANO LOAFS LOAMY LOATH LOBED LOBES LOCUS LODES LOFTS LOFTY LOGES LOGON LOINS LOLLS LONER LONGS LOOMS LOONS LOONY LOOPY LOOTS LOPED LOPES LORDS LORRY LOSER LOSES LOTTO LOUSE LOUSY LOUTS LOWED LOWLY LOXES LOYAL LUAUS LUBED LUBES LUCID LUCKS LUCRE LULLS LUMPS LUMPY LUNAR LUNGE LUNGS LUPIN LUPUS LURCH LURED LURES LURID LURKS LUSTS LUSTY LUTES LXVII LYMPH LYNCH LYRES MACAW MACED MACES MACHO MADAM MADLY MAGMA MAIDS MAIMS MAINS MAIZE MALLS MALTS MAMAS MAMMA MANES MANGE MANGO MANGY MANIA MANIC MANLY MANNA MANSE MARES MARRY MARTS MASKS MASTS MATED MATES MATTE MATTS MATZO MAULS MAUVE MAVEN MAVIN MAXED MAXES MAXIM MAZES MEALY MEATS MEATY MECCA MEDIC MELDS MELON MELTS MEMES MEMOS MENDS MEOWS MERES MESAS MESSY METED METES MEWED MEWLS MIAOW MICRA MIDDY MIDGE MIDST MIENS MIFFS MIKED MIKES MILCH MILER MILFS MILKS MILKY MIMED MIMES MIMIC MINCE MINED MINER MINIM MINIS MINKS MINTS MINTY MIRED MIRES MIRTH MISDO MISER MISTS MISTY MITER MITES MITTS MIXES MOANS MOATS MOCHA MOCKS MODAL MOGUL MOIRE MOIST MOLAR MOLDS MOLDY MOLES MOLLS MOLTS MOMMA MOMMY MONKS MOOCH MOODS MOODY MOOED MOONS MOORS MOOSE MOOTS MOPED MOPES MORAY MORES MORNS MORON MOSEY MOSSY MOTES MOTHS MOTIF MOTTO MOUND MOURN MOUSY MOVER MOWED MOWER MUCKS MUCKY MUCUS MUDDY MUFFS MUFTI MUGGY MULCH MULES MULLS MUMMY MUMPS MUNCH MUNGS MURAL MURKS MURKY MUSED MUSES MUSHY MUSKY MUSSY MUSTS MUSTY MUTED MUTER MUTES MUTTS MYNAH MYNAS MYRRH MYTHS MÊLÉE NABOB NACHO NACRE NADIR NAIAD NAIVE NANNY NAPES NAPPY NARCS NARKS NASAL NATAL NATTY NAVEL NAVES NEARS NEATH NECKS NEEDY NEIGH NERDS NERDY NERVY NESTS NEWEL NEWSY NEWTS NEXUS NICER NICHE NICKS NIECE NIFTY NIGGA NIMBI NINES NINJA NINNY NINTH NIPPY NITER NITES NIXED NIXES NOBLY NODAL NODDY NOELS NOISY NOMAD NONCE NOOKS NOOSE NORMS NOSED NOSES NOSEY NOTCH NOUNS NOVAE NOVAS NOWAY NUDER NUDES NUDGE NUKED NUKES NULLS NUMBS NUTTY NYMPH OAKEN OAKUM OARED OASES OATEN OATHS OBESE OBEYS OBITS OBOES OCHER OCHRE OCTAL OCTET ODDER ODDLY ODIUM ODORS OFFAL OFFED OGLED OGLES OGRES OILED OINKS OKAYS OKRAS OLDEN OLDIE OMENS OMITS ONSET OOZED OOZES OPALS OPINE OPIUM OPTED OPTIC ORALS ORATE OSIER OTTER OUNCE OUSTS OUTDO OUTED OUTGO OUTRÉ OVALS OVARY OVENS OVERS OVERT OVOID OVULE OWING OWLET OXBOW PACED PACES PACTS PADDY PADRE PAEAN PAGAN PAGED PAGER PAILS PAINS PALED PALER PALES PALLS PALMS PALMY PALSY PANDA PANES PANGS PANSY PANTY PAPAL PAPAS PAPAW PARCH PARED PARES PARKA PARRY PARSE PASHA PASSÉ PASTS PASTY PATES PATSY PATTY PAUSE PAVED PAVES PAWED PAWLS PAWNS PAYED PAYEE PAYER PEACH PEAKS PEALS PEARS PEASE PECAN PECKS PEDAL PEEKS PEELS PEEPS PEEVE PEKOE PELTS PENAL PENCE PENDS PENES PENIS PEONS PEONY PEPPY PERCH PERIL PERKS PERKY PERMS PESKY PESOS PESTS PETAL PETTY PEWEE PHAGE PHIAL PHISH PHLOX PHONY PHYLA PICKY PIERS PIETY PIGGY PIGMY PIING PIKED PIKER PIKES PILAF PILAU PILAW PILED PILES PIMPS PINCH PINED PINES PINGS PINKS PINKY PINTO PINTS PINUP PIOUS PIPED PIPER PIPIT PIQUE PITHY PITON PIVOT PIXIE PLAID PLAIT PLANK PLEAD PLEAS PLEAT PLIED PLIES PLODS PLONK PLOPS PLOWS PLOYS PLUCK PLUGS PLUMB PLUME PLUMP PLUMS PLUNK PLUSH POACH POCKS PODIA POESY POETS POISE POKED POKES POKEY POLED POLES POLIO POLKA POLYP PONDS PONES POOCH POOHS POOPS POPES POPPA POPPY PORCH PORED PORES PORNO POSED POSER POSES POSIT POSSE POTTY POUCH POURS POUTS POXES PRANK PRATE PRAWN PRAYS PREEN PREPS PREYS PRICK PRICY PRIED PRIES PRIGS PRIMP PRISM PRIVY PRODS PROFS PROMS PRONE PRONG PROPS PROSE PROSY PROWL PROWS PRUDE PRUNE PSALM PSHAW PSYCH PUBIC PUCKS PUDGY PUFFS PUFFY PUKED PUKES PULLS PULPS PULPY PUMAS PUNKS PUNTS PUPAE PUPAL PUPAS PUPIL PUREE PURER PURGE PURLS PURRS PUSHY PUSSY PUTTS PUTTY PWNED PYGMY PYLON PYRES PYXES QUACK QUADS QUAFF QUAIL QUAKE QUALM QUARK QUART QUASH QUASI QUAYS QUEER QUELL QUIDS QUILL QUINE QUIPS QUIRE QUIRK QUITS QUOIT QUOTA QUOTH RABBI RABID RACED RACER RADII RADON RAFTS RAGAS RAGED RAGES RAIDS RAILS RAINS RAINY RAJAH RAJAS RAKED RAKES RAMPS RANGY RANTS RAPED RAPES RARED RARER RARES RASPS RASPY RATTY RAVED RAVEL RAVEN RAVES RAWER RAYON RAZED RAZES RAZOR REACT REALS REAMS REAPS REARM REARS REBUS REBUT RECAP RECTA RECUR REDID REEDS REEDY REEFS REEKS REELS REEVE REFIT REGAL REIGN REINS RELIC REMIT RENAL RENDS RENTS REORG REPAY REPEL RERAN RERUN RESIN RESTS RETCH RETRY REUSE REVEL REVUE RHEAS RHEUM RHINO RHYME RICED RICES RICKS RIFER RIFFS RIFLE RIFTS RIGID RIGOR RILED RILES RILLS RIMED RIMES RINDS RINKS RINSE RIOTS RIPEN RIPER RISEN RISER RISES RISKY RITES RITZY RIVAL RIVEN RIVET ROACH ROAMS ROANS ROARS ROAST ROBED ROBES RODEO ROGUE ROILS ROMPS ROODS ROOFS ROOKS ROOMY ROOST ROPED ROPES ROSIN ROTOR ROUSE ROUTS ROUÉS ROVED ROVES ROWDY ROWED ROWEL ROWER RUBES RUBLE RUDDY RUDER RUFFS RUING RUINS RULER RUMBA RUMMY RUMOR RUMPS RUNES RUNGS RUNIC RUNNY RUNTS RUPEE RUSES RUSKS RUSTS RUSTY SABER SABLE SABRE SACKS SADES SADLY SAFES SAGAS SAGER SAGES SAHIB SAILS SAITH SALSA SALTS SALTY SALVE SALVO SAMES SANDS SANER SAPPY SAREE SARIS SASSY SATAY SATED SATES SATYR SAUCY SAUNA SAUTÉ SAVOR SAVVY SAWED SAXES SCABS SCADS SCAGS SCALD SCALP SCALY SCAMP SCAMS SCANS SCANT SCARE SCARF SCARS SCATS SCENT SCHWA SCION SCOFF SCOLD SCONE SCOOT SCORN SCOUR SCOWL SCOWS SCRAM SCRAP SCRIP SCROD SCROG SCRUB SCUDS SCUFF SCULL SCUMS SCURF SEALS SEAMS SEAMY SEARS SECTS SEDAN SEDGE SEEDY SEEPS SEERS SEGUE SEIZE SEMEN SEMIS SENNA SEPAL SEPIA SEPTA SERER SERFS SERGE SERVO SEVER SEWED SEWER SEXED SEXES SHACK SHADS SHADY SHAGS SHAHS SHAKY SHALE SHALT SHAMS SHANK SHARD SHAVE SHAWL SHEAF SHEAR SHEDS SHEEN SHEIK SHERD SHIED SHIES SHILL SHIMS SHINS SHINY SHIRE SHIRK SHIRR SHITS SHLEP SHOAL SHOED SHONE SHOOK SHOON SHOOS SHORN SHOUT SHOVE SHOWY SHRED SHREW SHRUB SHRUG SHTIK SHUCK SHUNS SHUNT SHUSH SHUTS SHYER SHYLY SIBYL SICKS SIDED SIDLE SIEGE SIEVE SIFTS SIGHS SILKS SILKY SILLS SILOS SILTS SINEW SINGE SINGS SINKS SINUS SIRED SIREN SIRES SIRUP SISAL SISES SISSY SITAR SITED SIXES SIXTY SIZER SKATE SKEET SKEIN SKEWS SKIDS SKIED SKIER SKIES SKIFF SKIMP SKIMS SKIPS SKITS SKULK SKULL SKUNK SKYED SLABS SLACK SLAGS SLAIN SLAKE SLAMS SLANG SLANT SLAPS SLASH SLATE SLATS SLAYS SLEDS SLEEK SLEET SLEPT SLEWS SLICE SLICK SLIER SLILY SLIME SLIMS SLIMY SLING SLINK SLIPS SLITS SLOBS SLOES SLOGS SLOOP SLOPS SLOSH SLOTH SLOWS SLUED SLUES SLUGS SLUMP SLUMS SLUNG SLUNK SLURP SLURS SLUSH SLUTS SLYER SLYLY SMACK SMASH SMEAR SMELT SMIRK SMITE SMOCK SMOKY SMOTE SMURF SMUTS SNACK SNAFU SNAGS SNAIL SNAKY SNAPS SNARE SNARF SNARK SNARL SNEAK SNEER SNIDE SNIFF SNIPE SNIPS SNITS SNOBS SNOOP SNOOT SNORE SNORT SNOTS SNOUT SNOWS SNOWY SNUBS SNUCK SNUFF SNUGS SOAKS SOAPS SOAPY SOARS SOBER SODAS SOFAS SOFTY SOGGY SOILS SOLED SOLES SOLOS SONAR SONNY SOOTH SOOTY SOPPY SORER SORES SORTA SOUGH SOUPS SOUPY SOURS SOUSE SOWED SOWER SPACY SPADE SPAKE SPAMS SPANS SPARK SPARS SPASM SPATE SPATS SPAWN SPAYS SPEAR SPECK SPELT SPEWS SPICY SPIED SPIEL SPIKE SPIKY SPILL SPILT SPINS SPINY SPIRE SPITE SPITS SPLAT SPLAY SPOIL SPOOF SPOOK SPOOL SPOON SPOOR SPORE SPOUT SPRAT SPREE SPRIG SPUDS SPUME SPUNK SPURN SPURS SPURT SQUAB SQUAT SQUAW SQUID STABS STAGS STAID STAIN STAIR STALE STALK STALL STANK STAPH STARE STARK STASH STAVE STDIO STEAD STEAK STEED STEEP STEER STEIN STEMS STENT STERN STEWS STIES STIFF STILE STILT STING STINK STINT STIRS STOAT STOIC STOKE STOLE STOMP STONY STOOL STOOP STORK STOUT STOVE STOWS STRAW STRAY STREP STREW STROP STRUM STRUT STUBS STUDS STUMP STUNG STUNK STUNS STUNT STYES STYLI SUAVE SUCKS SUDSY SUEDE SUING SULKS SULKY SULLY SUMAC SUMPS SUNUP SURER SURFS SURLY SUSHI SWABS SWAGS SWAIN SWAMI SWAMP SWANK SWANS SWAPS SWARD SWARM SWASH SWATH SWATS SWAYS SWEAR SWEAT SWEEP SWELL SWEPT SWIGS SWILL SWIMS SWINE SWIPE SWIRL SWISH SWOON SWOOP SWOPS SWORE SWORN SWUNG SYLPH SYNCH SYNCS SYNOD SYRUP SYSOP TABBY TABOO TABUS TACIT TACKS TACKY TACOS TAFFY TAILS TAINT TAKER TALLY TALON TAMED TAMER TAMES TAMPS TANGO TANGS TANGY TANSY TAPED TAPER TAPIR TARDY TARED TARES TAROS TAROT TARPS TARRY TARTS TASER TASTY TATTY TAUNT TAUPE TAWNY TAXED TAXIS TEAKS TEALS TEARY TEASE TEATS TECHS TEEMS TEENY TELEX TEMPI TEMPO TEMPS TEMPT TENDS TENET TENON TENOR TENSE TENTH TENTS TEPEE TEPID TERNS TERSE TESTY THAWS THEES THIEF THIGH THINE THINS THORN THOUS THREW THROB THROE THRUM THUDS THUGS THUMP THUNK THYME THYMI TIARA TIBIA TICKS TIDAL TIDED TIDES TIERS TIFFS TIKES TILDE TILED TILLS TILTS TIMED TIMID TINES TINGE TINGS TINNY TINTS TIPIS TIPSY TIROS TITAN TITHE TIZZY TOADS TOADY TOAST TODDY TOFFY TOGAE TOGAS TOILS TOKED TOKES TOLLS TOMBS TOMES TONAL TONED TONGS TONIC TONNE TOOTS TOPAZ TOQUE TORCH TORSI TORSO TORTE TORTS TORUS TOTED TOTEM TOTES TOUTS TOWED TOWEL TOXIN TOYED TRAIT TRAMP TRAMS TRAPS TRAWL TRAYS TREAD TREAS TREED TREKS TRESS TRIAD TRICE TRIKE TRILL TRIMS TRIOS TRIPE TRITE TROLL TROMP TRONS TROOP TROPE TROTH TROTS TROYS TRUCE TRUED TRUER TRUES TRUMP TRUSS TRYST TSARS TUBAS TUBBY TUBED TUBER TUCKS TUFTS TULIP TULLE TUMID TUMMY TUNAS TUNED TUNIC TUNNY TURDS TURFS TUSKS TUTOR TUTUS TUXES TWAIN TWANG TWEAK TWEED TWEET TWERK TWERP TWIGS TWILL TWINE TWINK TWIRL TWITS TYING TYKES TYPED TYPOS TYROS TZARS UDDER ULCER ULNAE ULNAS UMBEL UMBER UMIAK UMPED UNBAR UNCUT UNDID UNDUE UNFIT UNIFY UNITE UNMAN UNPIN UNSAY UNSET UNTIE UNWED UNZIP UPEND UPPED URGED URGES URINE USHER USURP USURY UTERI UTTER UVULA VACUA VAGUE VALES VALET VALOR VAMPS VANES VAPED VAPES VAPID VAPOR VASES VASTS VAUNT VEEPS VEERS VEGAN VEILS VEINS VELDS VELDT VENAL VENDS VENOM VENTS VERBS VERGE VERVE VESTS VETCH VEXED VEXES VIALS VIAND VIBES VICAR VICED VICES VIGIL VIGOR VILER VINES VIOLA VIOLS VIPER VIREO VISAS VISED VISES VISOR VIVAS VIVID VIXEN VIZOR VODKA VOGUE VOIDS VOILE VOLES VOLTS VOMIT VOTER VOUCH VOWED VOWEL VULVA VYING WACKO WACKS WACKY WADED WADER WADES WADIS WAFER WAFTS WAGED WAGER WAIFS WAILS WAIST WAITS WAIVE WAKED WAKEN WAKES WALDO WALED WALTZ WANDS WANED WANES WANKS WANLY WARDS WARES WAREZ WARMS WARNS WARPS WARTS WARTY WASPS WAVED WAVER WAXED WAXEN WAXES WEALS WEANS WEARS WEARY WEAVE WEDGE WEEDS WEEDY WEEPS WEEPY WEEST WEFTS WEIGH WEIRS WELCH WELDS WELTS WENCH WENDS WETLY WHACK WHAMS WHARF WHEAL WHELK WHELP WHENS WHETS WHIFF WHIMS WHINE WHINY WHIPS WHIRL WHIRR WHIRS WHISK WHIST WHITS WHIZZ WHOOP WHORE WHORL WICKS WIDEN WIDOW WIELD WIGHT WIKIS WILDS WILED WILES WILLS WILTS WIMPS WIMPY WINCE WINCH WINDY WINED WINKS WINOS WIPED WIPER WIPES WISER WISES WISPS WISPY WITTY WIZES WOKEN WOLFS WOMBS WONKY WOODY WOOED WOOER WOOFS WOOLY WOOZY WORDY WORMS WORMY WOVEN WOWED WRACK WRAPS WRAPT WRATH WREAK WRECK WRENS WREST WRIER WRING WRITS WROTH WRUNG WRYER WRYLY XCVII XENON XREFS XTERM XVIII XXIII XXVII XXXII XXXIV XXXIX XXXVI XYLEM YACKS YANKS YARNS YAWED YAWLS YAWNS YEAHS YEARN YELLS YELPS YESES YOCKS YODEL YOGIN YOGIS YOKED YOKEL YOKES YOLKS YOWLS YUCCA YUCKS YUCKY YUMMY YUPPY ZEBRA ZEBUS ZEROS ZESTS ZILCH ZINCS ZINGS ZIPPY ZOMBI ZONAL ZONED ZOOMS ZORCH ÉCLAT ÉPÉES ÉTUDE";
+    const DICTIONARY = new Set([...SOLUTIONS, ...EXTRA_WORDS.split(" ")]);
+
+    let solution = "";
+    let currentRow = 0;
+    let currentGuess = "";
+    let isGameOver = false;
+    let isRevealing = false;
+    let winningRow = -1;
+
+    const boardEl = document.getElementById("board");
+
+    function initGame() {
+      solution = SOLUTIONS[Math.floor(Math.random() * SOLUTIONS.length)];
+      currentRow = 0;
+      currentGuess = "";
+      isGameOver = false;
+      isRevealing = false;
+      winningRow = -1;
+
+      // Build board grid
+      boardEl.innerHTML = "";
+      for (let r = 0; r < ROWS; r++) {
+        const rowEl = document.createElement("div");
+        rowEl.className = "row";
+        for (let c = 0; c < COLS; c++) {
+          const tile = document.createElement("div");
+          tile.className = "tile";
+          tile.dataset.row = r;
+          tile.dataset.col = c;
+          tile.addEventListener("click", () => {
+            if (r === currentRow && currentGuess.length > 0) {
+              handleBackspace();
+            }
+          });
+          rowEl.appendChild(tile);
+        }
+        boardEl.appendChild(rowEl);
+      }
+
+      // Reset keyboard key colors
+      document.querySelectorAll(".key").forEach(k => {
+        k.classList.remove("status-correct", "status-present", "status-absent");
+      });
     }
-    boardEl.appendChild(row);
-  }
-  buildCol(leftKeys, leftLetters);
-  buildCol(rightKeys, rightLetters);
-}
-initBoard();
 
-function getLetterKey(ch) {
-  return document.querySelector(`key[data-key="${ch.toLowerCase()}"]`);
-}
-
-function updateKeyboard(letter, status) {
-  const keyEl = getLetterKey(letter);
-  if (!keyEl) return;
-
-  // Absent keys stay gray once marked (priority system below handles it).
-  const priority = { correct: 3, present: 2, absent: 1 };
-  const currentStatus = keyEl.classList.contains("status-correct") ? "correct"
-    : keyEl.classList.contains("status-present") ? "present"
-    : keyEl.classList.contains("status-absent") ? "absent" : null;
-  if (!currentStatus || priority[status] > priority[currentStatus]) {
-    // Remove old status classes
-    const removeClass = (cls) => { 
-      keyEl.classList.remove(cls); 
-      if (keyEl.dataset.key === cls) delete keyEl.dataset.status; 
-    };
-    ['correct', 'present', 'absent'].forEach(removeClass);
-    // Add new status
-    const addClass = (cls) => { 
-      keyEl.classList.add(cls); 
-      if (!keyEl.dataset.key || cls !== keyEl.dataset.key) keyEl.dataset.status = cls; 
-    };
-    addClass("status-" + status);
-  }
-}
-
-function handleKey(k, fromTouch = false) {
-  if (over) return;
-  
-  // Only accept single letters a-z A-Z — reject multi-char strings like "Backspace", "Enter"
-  const kl = k.toLowerCase();
-  if (!/^[a-z]$/.test(kl)) return; // ignore non-letter keys
-
-  current += kl;
-  updateRow();
-  if (current.length === COLS) checkGuess();
-}
-
-function handleTileClick(tileEl) {
-  // Find which column this tile is in relative to the current row being edited
-  const currentBoardRow = boardEl.children[currentRow];
-  let colIndex = -1;
-  for (let c = 0; c < COLS && colIndex === -1; c++) {
-    if (currentBoardRow.contains(tileEl)) {
-      colIndex = c;
-      break;
+    function restartGame() {
+      closeModal('stats-modal');
+      closeModal('help-modal');
+      initGame();
+      showToast("New word ready! Good luck.", 1500);
     }
-  }
 
-  // Get the letter from this tile's position in the current guess
-  const charAtPos = current[colIndex] || '';
-
-  if (!charAtPos) return; // empty slot, can't click it yet (nothing to do)
-
-  // Clicking a filled tile deletes that character instead of re-typing it
-  handleBackspace();
-}
-
-function updateRow() {
-  const row = boardEl.children[currentRow];
-  [...row.children].forEach((t, c) => {
-    t.textContent = c < current.length ? current[c] : "";
-    if (c < current.length && !t.classList.contains('status-absent')) {
-      t.classList.add("filled");
-    }
-  });
-}
-
-function scoreGuess(guess, solution) {
-  guess = guess.toUpperCase();
-  solution = solution.toUpperCase();
-  const result = new Array(COLS).fill("absent");
-  const solCounts = {};
-  for (const ch of solution) solCounts[ch] = (solCounts[ch] || 0) + 1;
-    for (let i = 0; i < COLS; i++) {
-      const ch = guess[i];
-      if (ch === solution[i]) { 
-        result[i] = "correct"; 
-        solCounts[ch]--; 
+    function handleKey(letter) {
+      if (isGameOver || isRevealing) return;
+      if (currentGuess.length < COLS) {
+        currentGuess += letter.toUpperCase();
+        updateBoardRow();
       }
     }
-  for (let i = 0; i < COLS; i++) {
-    if (result[i] !== "absent") continue;
-    const ch = guess[i];
-    if (solCounts[ch] > 0) { 
-      result[i] = "present"; 
-      solCounts[ch]--; 
-    }
-  }
-  return result;
-}
 
-function checkGuess() {
-  if (current.length !== COLS) return;
-  const score = scoreGuess(current, solution);
-  score.forEach((s, i) => {
-    const t = boardEl.children[currentRow].children[i];
-    // Only add status classes to non-absent tiles
-    if (!t.classList.contains('status-absent')) {
-      t.classList.add("filled", "status-" + s);
-      updateKeyboard(current[i], s);
+    function handleBackspace() {
+      if (isGameOver || isRevealing || currentGuess.length === 0) return;
+      currentGuess = currentGuess.slice(0, -1);
+      updateBoardRow();
     }
-  });
-  const win = current.toUpperCase() === solution;
-  if (!win) {
-    // Defensive reset: guarantee clean state transition even if something fails upstream
-    current = "";
-    currentRow++;
-    if (currentRow >= ROWS) {
-      over = true;
-      msgEl.textContent = "💀 The word was " + solution + ".";
-    } else {
-      // Force visual cleanup of the new row before accepting input again
-      const newRow = boardEl.children[currentRow];
-      [...newRow.children].forEach(t => t.classList.remove("filled"));
+
+    function updateBoardRow() {
+      const rowTiles = boardEl.children[currentRow].children;
+      for (let c = 0; c < COLS; c++) {
+        const tile = rowTiles[c];
+        if (c < currentGuess.length) {
+          tile.textContent = currentGuess[c];
+          tile.classList.add("filled");
+        } else {
+          tile.textContent = "";
+          tile.classList.remove("filled");
+        }
+      }
     }
-  } else {
-    over = true;
-    msgEl.textContent = "🎉 Solved!";
-  }
-}
 
-// Attach keyboard listener for desktop users (still works)
-document.addEventListener("keydown", (e) => {
-  if (!over && /[a-z]/.test(e.key)) { // only letters
-    handleKey(e.key, false);
-  }
-});
+    function scoreGuess(guess, target) {
+      const res = new Array(COLS).fill("absent");
+      const counts = {};
+      for (let i = 0; i < COLS; i++) {
+        const ch = target[i];
+        counts[ch] = (counts[ch] || 0) + 1;
+      }
+      // Pass 1: exact matches
+      for (let i = 0; i < COLS; i++) {
+        if (guess[i] === target[i]) {
+          res[i] = "correct";
+          counts[guess[i]]--;
+        }
+      }
+      // Pass 2: partial matches
+      for (let i = 0; i < COLS; i++) {
+        if (res[i] !== "absent") continue;
+        if (counts[guess[i]] > 0) {
+          res[i] = "present";
+          counts[guess[i]]--;
+        }
+      }
+      return res;
+    }
 
-function handleBackspace() {
-  if (over || current.length === 0) return;
-  current = current.slice(0, -1);
-  updateRow();
-}
-</script>
+    function updateKeyboardKey(letter, status) {
+      const keyEl = document.querySelector(`.key[data-key="${letter}"]`);
+      if (!keyEl) return;
+      const rank = { correct: 3, present: 2, absent: 1 };
+      const cur = keyEl.classList.contains("status-correct") ? "correct"
+                : keyEl.classList.contains("status-present") ? "present"
+                : keyEl.classList.contains("status-absent") ? "absent" : null;
+      if (!cur || rank[status] > rank[cur]) {
+        keyEl.classList.remove("status-correct", "status-present", "status-absent");
+        keyEl.classList.add(`status-${status}`);
+      }
+    }
+
+    function shakeCurrentRow() {
+      const rowEl = boardEl.children[currentRow];
+      rowEl.classList.remove("shake");
+      void rowEl.offsetWidth; // trigger reflow
+      rowEl.classList.add("shake");
+      setTimeout(() => rowEl.classList.remove("shake"), 500);
+    }
+
+    function submitGuess() {
+      if (isGameOver || isRevealing) return;
+
+      if (currentGuess.length < COLS) {
+        shakeCurrentRow();
+        showToast("Not enough letters");
+        return;
+      }
+
+      if (!DICTIONARY.has(currentGuess)) {
+        shakeCurrentRow();
+        showToast("Not in word list");
+        return;
+      }
+
+      isRevealing = true;
+      const guess = currentGuess;
+      const score = scoreGuess(guess, solution);
+      const rowTiles = boardEl.children[currentRow].children;
+      const flipDelay = 250;
+
+      for (let i = 0; i < COLS; i++) {
+        const tile = rowTiles[i];
+        setTimeout(() => {
+          tile.classList.add("flip");
+          setTimeout(() => {
+            tile.classList.remove("filled");
+            tile.classList.add(`status-${score[i]}`);
+            updateKeyboardKey(guess[i], score[i]);
+          }, 250); // change color at flip midpoint
+        }, i * flipDelay);
+      }
+
+      const totalFlipDuration = (COLS - 1) * flipDelay + 500;
+
+      setTimeout(() => {
+        isRevealing = false;
+        const won = (guess === solution);
+
+        if (won) {
+          isGameOver = true;
+          winningRow = currentRow;
+          recordGameStats(true, currentRow + 1);
+
+          // Bounce row
+          for (let i = 0; i < COLS; i++) {
+            setTimeout(() => {
+              rowTiles[i].classList.add("bounce");
+            }, i * 90);
+          }
+
+          const praises = ["Genius! 🤯", "Magnificent! 🌟", "Impressive! 👏", "Splendid! 🎉", "Great! 👍", "Phew! 😅", "By a thread! 🎯"];
+          const praise = praises[Math.min(currentRow, praises.length - 1)];
+          showToast(praise, 2200);
+
+          setTimeout(() => openStatsModal(), 1600);
+        } else if (currentRow + 1 >= ROWS) {
+          isGameOver = true;
+          recordGameStats(false, 0);
+          showToast("Word was: " + solution, 3500);
+          setTimeout(() => openStatsModal(), 2200);
+        } else {
+          currentRow++;
+          currentGuess = "";
+        }
+      }, totalFlipDuration);
+    }
+
+    // STATS & STORAGE
+    function getStats() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) return JSON.parse(raw);
+      } catch (e) {}
+      const dist = {};
+      for (let i = 1; i <= ROWS; i++) dist[i] = 0;
+      return {
+        gamesPlayed: 0,
+        gamesWon: 0,
+        currentStreak: 0,
+        maxStreak: 0,
+        guessDistribution: dist
+      };
+    }
+
+    function recordGameStats(won, numGuesses) {
+      const stats = getStats();
+      stats.gamesPlayed++;
+      if (won) {
+        stats.gamesWon++;
+        stats.currentStreak++;
+        if (stats.currentStreak > stats.maxStreak) stats.maxStreak = stats.currentStreak;
+        if (stats.guessDistribution[numGuesses] !== undefined) {
+          stats.guessDistribution[numGuesses]++;
+        }
+      } else {
+        stats.currentStreak = 0;
+      }
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(stats));
+      } catch (e) {}
+    }
+
+    function openStatsModal() {
+      const stats = getStats();
+      document.getElementById("stat-played").textContent = stats.gamesPlayed;
+      const winPct = stats.gamesPlayed > 0 ? Math.round((stats.gamesWon / stats.gamesPlayed) * 100) : 0;
+      document.getElementById("stat-win-pct").textContent = winPct + "%";
+      document.getElementById("stat-streak").textContent = stats.currentStreak;
+      document.getElementById("stat-max-streak").textContent = stats.maxStreak;
+
+      const graphEl = document.getElementById("dist-graph");
+      graphEl.innerHTML = "";
+      const maxCount = Math.max(1, ...Object.values(stats.guessDistribution));
+
+      for (let r = 1; r <= ROWS; r++) {
+        const count = stats.guessDistribution[r] || 0;
+        const pct = Math.max(8, Math.round((count / maxCount) * 100));
+        const isCurrentWin = (winningRow + 1 === r);
+
+        const rowDiv = document.createElement("div");
+        rowDiv.className = "dist-row";
+        rowDiv.innerHTML = `
+          <div class="dist-num">${r}</div>
+          <div class="dist-bar-wrap">
+            <div class="dist-bar ${isCurrentWin ? 'highlight' : ''}" style="width: ${pct}%">
+              ${count}
+            </div>
+          </div>
+        `;
+        graphEl.appendChild(rowDiv);
+      }
+
+      openModal("stats-modal");
+    }
+
+    function openModal(id) {
+      document.getElementById(id).classList.add("open");
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.remove("open");
+    }
+
+    // EMOJI SHARE
+    function shareResult() {
+      if (!isGameOver) {
+        showToast("Finish game to share result");
+        return;
+      }
+      const outcome = (winningRow >= 0) ? `${winningRow + 1}/${ROWS}` : `X/${ROWS}`;
+      let text = `${GAME_NAME} ${outcome}\n\n`;
+
+      const limit = (winningRow >= 0) ? winningRow + 1 : ROWS;
+      for (let r = 0; r < limit; r++) {
+        const tiles = boardEl.children[r].children;
+        for (let c = 0; c < COLS; c++) {
+          const t = tiles[c];
+          if (t.classList.contains("status-correct")) text += CORRECT_EMOJI;
+          else if (t.classList.contains("status-present")) text += PRESENT_EMOJI;
+          else text += ABSENT_EMOJI;
+        }
+        text += "\n";
+      }
+      text += "\ndustinjaeger.net";
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+          showToast("Copied result to clipboard! 📋");
+        }).catch(() => {
+          fallbackCopy(text);
+        });
+      } else {
+        fallbackCopy(text);
+      }
+    }
+
+    function fallbackCopy(text) {
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      try {
+        document.execCommand("copy");
+        showToast("Copied result to clipboard! 📋");
+      } catch (e) {
+        showToast("Unable to copy to clipboard");
+      }
+      document.body.removeChild(ta);
+    }
+
+    function showToast(msg, duration = 1800) {
+      const container = document.getElementById("toast-container");
+      const toast = document.createElement("div");
+      toast.className = "toast";
+      toast.textContent = msg;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.classList.add("fade-out");
+        setTimeout(() => toast.remove(), 250);
+      }, duration);
+    }
+
+    // KEYBOARD EVENT LISTENERS
+    document.addEventListener("keydown", (e) => {
+      if (e.ctrlKey || e.altKey || e.metaKey) return;
+      if (e.key === "Enter") {
+        submitGuess();
+      } else if (e.key === "Backspace" || e.key === "Delete") {
+        handleBackspace();
+      } else if (/^[a-zA-Z]$/.test(e.key)) {
+        handleKey(e.key.toUpperCase());
+      }
+    });
+
+    // VIRTUAL KEYBOARD LISTENERS
+    document.getElementById("keyboard").addEventListener("click", (e) => {
+      const btn = e.target.closest(".key");
+      if (!btn) return;
+      const key = btn.dataset.key;
+      if (key === "ENTER") {
+        submitGuess();
+      } else if (key === "BACKSPACE") {
+        handleBackspace();
+      } else if (key) {
+        handleKey(key);
+      }
+    });
+
+    // BUTTONS
+    document.getElementById("btn-help").addEventListener("click", () => openModal("help-modal"));
+    document.getElementById("btn-stats").addEventListener("click", () => openStatsModal());
+    document.getElementById("btn-restart").addEventListener("click", restartGame);
+
+    // Close modals on backdrop click
+    document.querySelectorAll(".modal-backdrop").forEach(backdrop => {
+      backdrop.addEventListener("click", (e) => {
+        if (e.target === backdrop) backdrop.classList.remove("open");
+      });
+    });
+
+    // START GAME
+    initGame();
+  </script>
 </body>
 </html>

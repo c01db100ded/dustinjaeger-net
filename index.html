@@ -3,9 +3,42 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dustin Jaeger — Systems Administrator Manager | IT Infrastructure</title>
-  <meta name="description" content="Dustin Jaeger — Systems Administrator Manager at Rimini Street. 10+ years in IT infrastructure, converged/hyperconverged systems, data protection, and team leadership. Based in Las Vegas, NV.">
+  <title>Dustin Jaeger — IT Infrastructure Manager | Cloud Migration | AI Enablement &amp; Governance</title>
+  <meta name="description" content="Dustin Jaeger — IT Infrastructure Manager. 15+ years leading global enterprise infrastructure, datacenter-to-cloud migration, governed AI adoption, and systems administration teams. Based in Las Vegas, NV.">
+  <link rel="canonical" href="https://dustinjaeger.net/">
+  <meta property="og:type" content="profile">
+  <meta property="og:title" content="Dustin Jaeger — IT Infrastructure Manager | Cloud Migration | AI Enablement &amp; Governance">
+  <meta property="og:description" content="15+ years leading enterprise IT infrastructure, datacenter-to-Azure transformation, governed AI enablement, and $2.3M+ in verified infrastructure &amp; energy savings.">
+  <meta property="og:url" content="https://dustinjaeger.net/">
+  <meta property="og:image" content="https://dustinjaeger.net/assets/dragon-icon.png">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Dustin Jaeger — IT Infrastructure Manager | Cloud Migration | AI Enablement">
+  <meta name="twitter:description" content="IT Infrastructure Manager with 15+ years in enterprise technology, cloud migration, AI governance, and global team leadership.">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🖥️</text></svg>">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Dustin Jaeger",
+    "jobTitle": "Manager, Systems Administration",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Rimini Street"
+    },
+    "url": "https://dustinjaeger.net",
+    "email": "mailto:dustin@dustinjaeger.net",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Las Vegas",
+      "addressRegion": "NV",
+      "addressCountry": "US"
+    },
+    "sameAs": [
+      "https://www.linkedin.com/in/dustinjaeger",
+      "https://github.com/c01db100ded"
+    ]
+  }
+  </script>
   
   <!-- Variable Font: Space Grotesk (display) + JetBrains Mono (code/ui) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -278,6 +311,7 @@
       gap: var(--space-5);
       list-style: none;
       align-items: center;
+      scroll-target-group: auto;
     }
     
     .nav-links a {
@@ -299,11 +333,13 @@
       transition: transform var(--motion-base) var(--ease-out);
     }
     
-    .nav-links a:hover {
+    .nav-links a:hover,
+    .nav-links a:is(:target-current, .\:target-current) {
       color: var(--color-accent);
     }
     
-    .nav-links a:hover::after {
+    .nav-links a:hover::after,
+    .nav-links a:is(:target-current, .\:target-current)::after {
       transform: scaleX(1);
       transform-origin: left;
     }
@@ -468,6 +504,15 @@
       background: var(--color-accent-dim);
     }
     
+    /* ── Typography Wrapping (Modern Web Guidance) ─────────────── */
+    h1, h2, h3, h4, .section-title {
+      text-wrap: balance;
+    }
+
+    p, li {
+      text-wrap: pretty;
+    }
+
     /* ── Hero ──────────────────────────────────────────────────── */
     .hero {
       min-height: 100dvh;
@@ -477,7 +522,7 @@
       text-align: center;
     }
     
-    .hero-content { max-width: var(--container-narrow); }
+    .hero-content { max-width: 820px; }
     
     .hero-badge {
       display: inline-block;
@@ -511,25 +556,26 @@
     }
     
     .hero-sub {
-      font-size: var(--text-xl);
+      font-size: var(--text-lg);
       color: var(--color-fg-muted);
       margin-bottom: var(--space-3);
-      max-width: 60ch;
+      max-width: 66ch;
       margin-left: auto;
       margin-right: auto;
-      line-height: 1.55;
+      line-height: 1.6;
       opacity: 0;
       transform: translateY(8px);
       animation: fadeUp var(--motion-slow) var(--ease-out) 0.3s forwards;
     }
     
     .hero-location {
-      font-size: var(--text-base);
+      font-size: var(--text-sm);
       color: var(--color-fg-subtle);
       margin-bottom: var(--space-8);
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-wrap: wrap;
       gap: var(--space-2);
       opacity: 0;
       transform: translateY(8px);
@@ -570,6 +616,7 @@
     
     .btn-primary:hover {
       background: var(--color-accent);
+      color: var(--color-bg);
       filter: brightness(1.1);
       transform: translateY(-2px);
       box-shadow: 0 8px 24px var(--color-accent-glow);
@@ -587,10 +634,10 @@
       transform: translateY(-2px);
     }
     
-    /* Stats Bar — asymmetric layout */
+    /* Stats Bar — 4 executive metrics */
     .stats {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: var(--space-6);
       padding: var(--space-8) 0;
       border-top: 1px solid var(--color-border);
@@ -615,8 +662,11 @@
       margin-top: var(--space-1);
     }
     
-    @media (max-width: 640px) {
-      .stats { gap: var(--space-4); }
+    @media (max-width: 720px) {
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-5);
+      }
       .stat-number { font-size: var(--text-xl); }
     }
     
@@ -657,7 +707,7 @@
     .section-desc {
       color: var(--color-fg-muted);
       font-size: var(--text-base);
-      max-width: 55ch;
+      max-width: 58ch;
       margin: var(--space-4) auto 0;
       line-height: 1.7;
     }
@@ -677,7 +727,7 @@
     /* ── Skills — Asymmetric Grid (NO three equal cards) ───────── */
     .skills-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: var(--space-5);
       max-width: var(--container-wide);
       margin: 0 auto;
@@ -687,7 +737,7 @@
     .skill-card.featured {
       grid-column: span 2;
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1.15fr 0.85fr;
       gap: var(--space-6);
       align-items: start;
       padding: var(--space-8);
@@ -764,11 +814,48 @@
       color: var(--color-accent);
       font-size: var(--text-xs);
     }
+
+    /* Certifications & Clearances Banner */
+    .cert-banner {
+      max-width: var(--container-wide);
+      margin: var(--space-6) auto 0;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-6);
+    }
+
+    .cert-banner-header {
+      font-size: var(--text-xs);
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--color-accent);
+      font-weight: 600;
+      margin-bottom: var(--space-3);
+    }
+
+    .cert-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+    }
+
+    .cert-pill {
+      font-size: var(--text-xs);
+      font-family: var(--font-mono);
+      background: var(--color-bg-elevated);
+      color: var(--color-fg);
+      padding: var(--space-2) var(--space-3);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--color-border-strong);
+      font-weight: 500;
+    }
     
     /* ── Experience Timeline ───────────────────────────────────── */
     .timeline {
       position: relative;
-      max-width: var(--container-narrow);
+      max-width: 820px;
       margin: 0 auto;
       padding-left: var(--space-8);
     }
@@ -811,7 +898,7 @@
     }
     
     .timeline-item h3 {
-      font-size: var(--text-lg);
+      font-size: var(--text-xl);
       font-weight: 600;
       color: var(--color-fg);
       margin-bottom: var(--space-1);
@@ -821,7 +908,30 @@
       font-size: var(--text-base);
       color: var(--color-fg-muted);
       font-weight: 400;
+      margin-bottom: var(--space-4);
+    }
+
+    .timeline-pillar {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: var(--space-5);
+      margin-bottom: var(--space-4);
+    }
+
+    .timeline-subhead {
+      font-size: var(--text-sm);
+      font-family: var(--font-mono);
+      color: var(--color-accent);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 600;
       margin-bottom: var(--space-3);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: var(--space-2);
     }
     
     .timeline-item p {
@@ -842,9 +952,14 @@
       color: var(--color-fg-muted);
       padding-left: var(--space-4);
       position: relative;
-      line-height: 1.6;
+      line-height: 1.65;
     }
     
+    .timeline-item ul li strong {
+      color: var(--color-fg);
+      font-weight: 600;
+    }
+
     .timeline-item ul li::before {
       content: '▸';
       position: absolute;
@@ -856,9 +971,16 @@
     /* ── Achievements / Projects ───────────────────────────────── */
     .projects-grid {
       display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
       gap: var(--space-6);
       max-width: var(--container-wide);
       margin: 0 auto;
+    }
+
+    @media (max-width: 640px) {
+      .projects-grid {
+        grid-template-columns: 1fr;
+      }
     }
     
     .project-card {
@@ -869,6 +991,9 @@
       transition: all var(--motion-base) var(--ease-out);
       position: relative;
       overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
     
     .project-card::before {
@@ -954,20 +1079,25 @@
       margin-top: var(--space-8);
     }
     
-    .social-links a {
+    .social-links a,
+    .social-links button {
       display: inline-flex;
       align-items: center;
       gap: var(--space-2);
       font-size: var(--text-sm);
+      font-family: inherit;
+      background: transparent;
       color: var(--color-fg-muted);
       padding: var(--space-3) var(--space-5);
       border: 1px solid var(--color-border);
       border-radius: var(--radius-md);
       font-weight: 500;
+      cursor: pointer;
       transition: all var(--motion-fast) var(--ease-out);
     }
     
-    .social-links a:hover {
+    .social-links a:hover,
+    .social-links button:hover {
       color: var(--color-accent);
       border-color: var(--color-accent);
       background: var(--color-accent-dim);
@@ -1002,6 +1132,44 @@
       .timeline-item { padding-left: var(--space-4); }
       .timeline-item::before { left: calc(-1 * var(--space-5)); width: 10px; height: 10px; }
       .skill-card.featured { padding: var(--space-6); }
+    }
+
+    /* ── Print Stylesheet (Recruiter PDF Export) ───────────────── */
+    @media print {
+      :root {
+        --color-bg: #ffffff;
+        --color-surface: #ffffff;
+        --color-surface-elevated: #ffffff;
+        --color-fg: #111111;
+        --color-fg-muted: #333333;
+        --color-fg-subtle: #555555;
+        --color-accent: #0f766e;
+        --color-border: #cccccc;
+      }
+      nav, .bg-grid, .hero-cta, footer {
+        display: none !important;
+      }
+      .hero {
+        min-height: auto;
+        padding: 1rem 0;
+      }
+      .hero h1 {
+        -webkit-text-fill-color: #111111;
+        color: #111111;
+        font-size: 2.2rem;
+      }
+      section {
+        padding: 1.25rem 0;
+        page-break-inside: avoid;
+      }
+      .reveal {
+        opacity: 1 !important;
+        transform: none !important;
+      }
+      .skill-card, .project-card, .timeline-pillar, .cert-banner {
+        break-inside: avoid;
+        box-shadow: none !important;
+      }
     }
   </style>
 </head>
@@ -1049,26 +1217,31 @@
   <!-- Hero -->
   <section class="hero" id="top">
     <div class="hero-content">
-      <div class="hero-badge">Systems Administrator Manager · Rimini Street</div>
+      <div class="hero-badge">IT Infrastructure Manager · Cloud Migration · AI Enablement &amp; Governance</div>
       <h1>Dustin Jaeger</h1>
-      <p class="hero-sub">IT infrastructure leader. 10+ years converged/hyperconverged systems, data protection, and team leadership. Based in Las Vegas.</p>
-      <p class="hero-location">📍 Las Vegas, Nevada</p>
+      <p class="hero-sub">IT infrastructure leader with 15+ years across enterprise technology and regulated gaming. Leading global systems administration across 10+ international offices — driving datacenter-to-Azure transformation and governed enterprise AI adoption while staying hands-on enough to build the automation, write the scripts, and run the cutover bridge.</p>
+      <p class="hero-location">📍 Las Vegas, NV · <a href="mailto:dustin@dustinjaeger.net">dustin@dustinjaeger.net</a> · <a href="https://linkedin.com/in/dustinjaeger" target="_blank" rel="noopener">linkedin.com/in/dustinjaeger</a></p>
       <div class="hero-cta">
-        <a href="#experience" class="btn btn-primary">See My Work</a>
-        <a href="#contact" class="btn btn-outline">Get In Touch</a>
+        <a href="#experience" class="btn btn-primary">View Experience</a>
+        <a href="#achievements" class="btn btn-outline">Key Impact</a>
+        <button type="button" class="btn btn-outline" onclick="window.print()">Print / Save PDF</button>
       </div>
       <div class="stats">
         <div class="stat">
-          <div class="stat-number">10+</div>
-          <div class="stat-label">Years in IT</div>
+          <div class="stat-number">15+</div>
+          <div class="stat-label">Years in Enterprise IT</div>
         </div>
         <div class="stat">
-          <div class="stat-number">$2M+</div>
-          <div class="stat-label">Cost Savings</div>
+          <div class="stat-number">10+</div>
+          <div class="stat-label">Global Offices Supported</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">$2.3M+</div>
+          <div class="stat-label">Verified Cost Savings</div>
         </div>
         <div class="stat">
           <div class="stat-number">2.7K+</div>
-          <div class="stat-label">Endpoints Managed</div>
+          <div class="stat-label">Enterprise Endpoints &amp; VDI</div>
         </div>
       </div>
     </div>
@@ -1078,21 +1251,21 @@
   <section id="about">
     <div class="container">
       <div class="section-header reveal">
-        <span class="section-label">About</span>
+        <span class="section-label">Professional Summary</span>
         <h2 class="section-title">Who I Am</h2>
       </div>
       <div class="about-text reveal">
         <p>
-          I'm a <span class="highlight">versatile IT leader and problem-solver</span> with over a decade of experience keeping critical infrastructure running across the Las Vegas area. I specialize in <span class="highlight">server hardware and operating systems</span>, <span class="highlight">data protection</span>, and <span class="highlight">systems monitoring</span>.
+          I am an <span class="highlight">IT infrastructure leader with 15+ years of progressive experience</span> across global enterprise technology and regulated gaming environments. Currently, I lead a global systems administration team at <span class="highlight">Rimini Street</span>, owning core infrastructure operations across <span class="highlight">10+ international offices</span>.
         </p>
         <p>
-          Throughout my career I've worked across <span class="highlight">converged and hyperconverged infrastructure</span>, <span class="highlight">storage area networks</span>, and large-scale endpoint environments — consistently finding ways to consolidate, optimize, and save money while improving reliability.
+          Recently, I helped lead an enterprise-wide <span class="highlight">datacenter-to-Azure cloud transformation</span>—driving large-scale server rationalization to retire legacy debt prior to migration—and helped stand up governed enterprise adoption of <span class="highlight">Microsoft 365 Copilot and Copilot Studio agents</span>.
         </p>
         <p>
-          I'm a creative and strategic thinker who translates complex technical challenges into <span class="highlight">cost-effective implementation plans</span>. I've trained property IT teams as a single contributor, led cross-functional projects, and built vendor relationships that deliver real results.
+          My career is anchored by measurable business outcomes: <span class="highlight">$300K/year</span> in storage consolidation savings, <span class="highlight">$2M+</span> in multi-property energy reductions, and large-scale global VDI and cloud transformations. I operate at the intersection of executive strategy and technical execution—<span class="highlight">hands-on enough to build the automation, write the scripts, and run the cutover bridge</span>.
         </p>
         <p>
-          When I'm not managing infrastructure, you'll find me tinkering with a homelab built around an Intel NUC, experimenting with AI agents, or figuring out how to make Starlink work without port forwarding.
+          Outside of enterprise operations, you'll find me tinkering in my homelab, building custom AI agents and automation workflows, or curating open-source infrastructure and security tools.
         </p>
       </div>
     </div>
@@ -1102,96 +1275,129 @@
   <section id="skills">
     <div class="container">
       <div class="section-header reveal">
-        <span class="section-label">Skills</span>
+        <span class="section-label">Core Competencies</span>
         <h2 class="section-title">What I Work With</h2>
-        <p class="section-desc">Deep expertise across the stack — from bare metal to automation, with a focus on operational excellence and cost efficiency.</p>
+        <p class="section-desc">Enterprise architecture across cloud migration, governed AI enablement, hybrid virtualization, identity security, disaster recovery, and engineering leadership.</p>
       </div>
       <div class="skills-grid">
-        <!-- Featured Card: Systems & Infrastructure -->
+        <!-- Featured Card: Cloud & Hybrid Infrastructure -->
         <div class="skill-card featured reveal">
           <div>
-            <h3>🖥️ Systems & Infrastructure</h3>
-            <p>Core competency across enterprise server platforms, virtualization, and converged infrastructure.</p>
+            <h3>☁️ Cloud Transformation &amp; Hybrid Infrastructure</h3>
+            <p>Architecting and executing large-scale datacenter-to-cloud migrations, server estate rationalization, and high-availability virtualization across global footprints.</p>
             <ul class="skill-bullets">
-              <li>Windows Server (2016–2022), Linux (RHEL, Ubuntu, Debian)</li>
-              <li>Active Directory, Group Policy, DNS, DHCP</li>
-              <li>VMware vSphere, Hyper-V, Hyperconverged Infrastructure</li>
-              <li>Cisco UCS / FlexPod, NetApp, Dell EMC VxRail</li>
+              <li>Microsoft Azure landing zones, Azure Migrate, hybrid connectivity &amp; wave-based cutovers</li>
+              <li>AWS EC2 &amp; global AWS WorkSpaces VDI deployments across international regions</li>
+              <li>VMware vSphere/vCenter, Hyper-V, HP Synergy/blade, Cisco UCS/FlexPod &amp; HCI</li>
+              <li>HPE Nimble, NetApp all-flash SAN/NAS, capacity modeling &amp; N+1 HA engineering</li>
             </ul>
           </div>
           <div>
-            <h3 style="margin-bottom:var(--space-2);color:var(--color-accent);font-size:var(--text-sm);text-transform:uppercase;letter-spacing:0.1em;">Key Platforms</h3>
+            <h3 style="margin-bottom:var(--space-2);color:var(--color-accent);font-size:var(--text-sm);text-transform:uppercase;letter-spacing:0.1em;">Cloud &amp; Compute Stack</h3>
             <div class="skill-list">
-              <span class="skill-tag">Windows Server</span>
-              <span class="skill-tag">VMware</span>
+              <span class="skill-tag">Microsoft Azure</span>
+              <span class="skill-tag">Azure Migrate</span>
+              <span class="skill-tag">Landing Zones</span>
+              <span class="skill-tag">AWS EC2</span>
+              <span class="skill-tag">AWS WorkSpaces</span>
+              <span class="skill-tag">VMware vSphere/vCenter</span>
               <span class="skill-tag">Hyper-V</span>
-              <span class="skill-tag">Active Directory</span>
-              <span class="skill-tag">FlexPod</span>
+              <span class="skill-tag">HPE Nimble</span>
               <span class="skill-tag">NetApp</span>
-              <span class="skill-tag">VxRail</span>
+              <span class="skill-tag">HP Synergy</span>
+              <span class="skill-tag">SAN / NAS</span>
+              <span class="skill-tag">HCI</span>
             </div>
           </div>
         </div>
         
         <!-- Regular cards -->
         <div class="skill-card reveal">
-          <h3>💾 Storage & Data Protection</h3>
-          <p>End-to-end data lifecycle: backup, replication, disaster recovery, archival.</p>
+          <h3>🤖 AI Enablement &amp; Automation</h3>
+          <p>Standing up governed enterprise AI adoption, agent lifecycle controls, and infrastructure automation that eliminates operational toil.</p>
           <div class="skill-list">
-            <span class="skill-tag">NetApp</span>
-            <span class="skill-tag">SAN/NAS</span>
-            <span class="skill-tag">Rubrik</span>
-            <span class="skill-tag">Veeam</span>
-            <span class="skill-tag">DR Replication</span>
-          </div>
-        </div>
-        
-        <div class="skill-card reveal">
-          <h3>🌐 Networking</h3>
-          <p>Enterprise networking from core switching to edge connectivity.</p>
-          <div class="skill-list">
-            <span class="skill-tag">TCP/IP</span>
-            <span class="skill-tag">VLANs</span>
-            <span class="skill-tag">VPN</span>
-            <span class="skill-tag">Starlink</span>
-            <span class="skill-tag">Firewalls</span>
-          </div>
-        </div>
-        
-        <div class="skill-card reveal">
-          <h3>📊 Monitoring & Security</h3>
-          <p>Observability, SIEM, endpoint protection, vulnerability management.</p>
-          <div class="skill-list">
-            <span class="skill-tag">Splunk</span>
-            <span class="skill-tag">SolarWinds</span>
-            <span class="skill-tag">Tanium</span>
-            <span class="skill-tag">PRTG</span>
-            <span class="skill-tag">SIEM</span>
-          </div>
-        </div>
-        
-        <div class="skill-card reveal">
-          <h3>⚙️ Automation & Scripting</h3>
-          <p>Eliminating toil through code. Infrastructure as code, runbooks, custom tooling.</p>
-          <div class="skill-list">
+            <span class="skill-tag">Microsoft 365 Copilot</span>
+            <span class="skill-tag">Copilot Cowork</span>
+            <span class="skill-tag">Copilot Studio Agents</span>
+            <span class="skill-tag">AI Governance</span>
+            <span class="skill-tag">Consumption Controls</span>
             <span class="skill-tag">PowerShell</span>
-            <span class="skill-tag">Bash</span>
             <span class="skill-tag">Python</span>
-            <span class="skill-tag">Ansible</span>
+            <span class="skill-tag">Bash</span>
             <span class="skill-tag">SQL</span>
           </div>
         </div>
         
         <div class="skill-card reveal">
-          <h3>👥 Leadership & Operations</h3>
-          <p>Building teams, managing vendors, translating tech for stakeholders.</p>
+          <h3>🔐 Identity &amp; Security</h3>
+          <p>Enterprise identity governance, zero-trust network access, privileged access management, and email authentication across regulated environments.</p>
           <div class="skill-list">
-            <span class="skill-tag">Team Leadership</span>
-            <span class="skill-tag">Vendor Mgmt</span>
-            <span class="skill-tag">IT Training</span>
-            <span class="skill-tag">Supply Chain</span>
-            <span class="skill-tag">Cross-functional</span>
+            <span class="skill-tag">Active Directory</span>
+            <span class="skill-tag">Entra ID</span>
+            <span class="skill-tag">Okta</span>
+            <span class="skill-tag">SailPoint</span>
+            <span class="skill-tag">PKI</span>
+            <span class="skill-tag">Palo Alto Prisma SASE</span>
+            <span class="skill-tag">Delinea PAM</span>
+            <span class="skill-tag">Proofpoint</span>
+            <span class="skill-tag">LAPS</span>
+            <span class="skill-tag">DMARC / DKIM</span>
           </div>
+        </div>
+        
+        <div class="skill-card reveal">
+          <h3>🛡️ Data Protection &amp; DR</h3>
+          <p>Resilient backup architecture, immutable recovery, datacenter evacuation/relocation, and strict RTO/RPO engineering.</p>
+          <div class="skill-list">
+            <span class="skill-tag">Cohesity</span>
+            <span class="skill-tag">Rubrik</span>
+            <span class="skill-tag">Veeam</span>
+            <span class="skill-tag">Zerto</span>
+            <span class="skill-tag">VMware SRM</span>
+            <span class="skill-tag">Azure Backup</span>
+            <span class="skill-tag">RTO / RPO Engineering</span>
+          </div>
+        </div>
+        
+        <div class="skill-card reveal">
+          <h3>📊 Endpoint &amp; Observability</h3>
+          <p>Global fleet management, telemetry, endpoint security, and ITSM workflows across thousands of seats and multi-region offices.</p>
+          <div class="skill-list">
+            <span class="skill-tag">SCCM / MECM</span>
+            <span class="skill-tag">Microsoft Intune</span>
+            <span class="skill-tag">JAMF</span>
+            <span class="skill-tag">SolarWinds</span>
+            <span class="skill-tag">Splunk</span>
+            <span class="skill-tag">Tanium</span>
+            <span class="skill-tag">ServiceNow</span>
+            <span class="skill-tag">Jira</span>
+          </div>
+        </div>
+        
+        <div class="skill-card reveal">
+          <h3>👥 Leadership &amp; Strategy</h3>
+          <p>Leading global engineering teams, authoring executive SWOT &amp; multi-year ROI roadmaps, and governing vendor &amp; migration partners.</p>
+          <div class="skill-list">
+            <span class="skill-tag">Global Team Leadership</span>
+            <span class="skill-tag">10+ Global Offices</span>
+            <span class="skill-tag">Executive SWOT &amp; Roadmaps</span>
+            <span class="skill-tag">Multi-Year ROI Modeling</span>
+            <span class="skill-tag">OKR &amp; Goals Frameworks</span>
+            <span class="skill-tag">Vendor &amp; Partner Mgmt</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Certifications & Clearances -->
+      <div class="cert-banner reveal">
+        <div class="cert-banner-header">Certifications, Training &amp; Regulatory Clearances</div>
+        <div class="cert-items">
+          <span class="cert-pill">CompTIA Linux+</span>
+          <span class="cert-pill">PCI Standards &amp; Data Security</span>
+          <span class="cert-pill">Palo Alto Prisma (SASE)</span>
+          <span class="cert-pill">Microsoft Copilot Studio Maker Enablement</span>
+          <span class="cert-pill">HP &amp; AWS Conference Training</span>
+          <span class="cert-pill">Gaming Licenses: NV · MO · PA · MI · CO</span>
         </div>
       </div>
     </div>
@@ -1201,77 +1407,116 @@
   <section id="experience">
     <div class="container">
       <div class="section-header reveal">
-        <span class="section-label">Experience</span>
-        <h2 class="section-title">Where I've Worked</h2>
-        <p class="section-desc">Progressive responsibility across gaming, entertainment, and enterprise software support.</p>
+        <span class="section-label">Professional Experience</span>
+        <h2 class="section-title">Where I've Led &amp; Delivered</h2>
+        <p class="section-desc">15+ years of progressive leadership across global enterprise software support and regulated multi-property gaming environments.</p>
       </div>
       <div class="timeline">
+        <!-- Rimini Street — Manager -->
         <div class="timeline-item reveal">
           <div class="timeline-date">Sep 2022 — Present</div>
-          <h3>Systems Administrator Manager</h3>
-          <h4>Rimini Street · Las Vegas, NV</h4>
-          <ul>
-            <li>Leading systems administration operations for a third-party enterprise software support company</li>
-            <li>Managing infrastructure across converged and hyperconverged environments</li>
-            <li>Overseeing data protection, systems monitoring, and vendor relationships</li>
-          </ul>
+          <h3>Manager, Systems Administration</h3>
+          <h4>Rimini Street · Las Vegas, NV · Global Enterprise Software Support</h4>
+
+          <div class="timeline-pillar">
+            <div class="timeline-subhead">
+              <span>☁️ Cloud Transformation: Datacenter-to-Azure Migration</span>
+              <span>Enterprise Program</span>
+            </div>
+            <ul>
+              <li>Key infrastructure leader on a multi-wave program migrating enterprise applications and data from on-premises VMware datacenters to <strong>Microsoft Azure</strong> in collaboration with migration partners, project management, security, network, and application teams.</li>
+              <li>Drove pre-migration server estate assessment and rationalization—retiring a significant majority of legacy workloads prior to cutover to right-size the footprint and avoid unnecessary cloud spend.</li>
+              <li>Executed a structured <strong>Assess, Migrate, Validate</strong> wave framework with application owner sign-off, test migrations, and validated rollback plans across directory services, file services, collaboration platforms, and core business systems.</li>
+              <li>Built custom reconciliation and validation tooling to track migration progress, decommissioning, and backup coverage across the global server estate.</li>
+            </ul>
+          </div>
+
+          <div class="timeline-pillar">
+            <div class="timeline-subhead">
+              <span>🤖 AI Enablement &amp; Governance</span>
+              <span>Enterprise Adoption</span>
+            </div>
+            <ul>
+              <li>Early adopter and internal champion for <strong>Microsoft 365 Copilot and Copilot Cowork</strong>, helping establish scoped role-based access and consumption governance controls.</li>
+              <li>Designed and built an automated workflow and time-classification agent in <strong>Copilot Studio</strong> that categorizes weekly operational and project activity to reduce administrative toil across engineering teams.</li>
+              <li>Contributed to enterprise <strong>AI governance frameworks</strong>, including agent lifecycle management, evaluation, approval, and publishing standards.</li>
+              <li>Applied AI tooling to complex infrastructure engineering tasks, including large-scale VM inventory reconciliation, capacity modeling, and scripted cluster orchestration.</li>
+            </ul>
+          </div>
+
+          <div class="timeline-pillar">
+            <div class="timeline-subhead">
+              <span>👥 Team Leadership &amp; Strategy</span>
+              <span>Global Scope</span>
+            </div>
+            <ul>
+              <li>Lead a global systems administration team supporting infrastructure across <strong>10+ international offices</strong>; own hiring, onboarding, performance reviews, and career advocacy.</li>
+              <li>Designed structured team goal frameworks balancing core operational reliability, professional development, and strategic engineering initiatives.</li>
+              <li>Author and present annual <strong>State of the Infrastructure SWOT</strong> analyses, multi-year technology roadmaps, and multi-year ROI/cost-optimization models to executive leadership.</li>
+            </ul>
+          </div>
+
+          <div class="timeline-pillar">
+            <div class="timeline-subhead">
+              <span>⚡ Infrastructure Delivery &amp; Modernization</span>
+              <span>Global Operations</span>
+            </div>
+            <ul>
+              <li>Directed multi-year infrastructure roadmaps covering SASE/VPN, identity governance automation, LAPS, remote desktop redesign, virtualization upgrades, compliance tooling, and email authentication (DMARC/DKIM).</li>
+              <li>Led enterprise-wide legacy Windows Server retirement and OS modernization programs across the virtualized server estate.</li>
+              <li>Scaled a global <strong>AWS WorkSpaces VDI</strong> and thin-client footprint across multiple international regions to support distributed workforce growth.</li>
+              <li>Relocated and modernized disaster recovery datacenter operations, reducing colocation overhead while maintaining strict enterprise RPO/RTO targets.</li>
+              <li>Drove Active Directory functional-level modernization, enterprise-wide MFA rollouts, and new office infrastructure buildouts across the US and APAC.</li>
+            </ul>
+          </div>
         </div>
+
+        <!-- Rimini Street — Lead / Sr. Systems Admin -->
         <div class="timeline-item reveal">
           <div class="timeline-date">May 2020 — Oct 2022</div>
-          <h3>Lead System Administrator → Sr. Systems Administrator</h3>
+          <h3>Lead Systems Administrator / Sr. Systems Administrator</h3>
           <h4>Rimini Street · Las Vegas, NV</h4>
           <ul>
-            <li>Progressed from Senior to Lead to Manager through demonstrated expertise</li>
-            <li>Managed critical server infrastructure and data protection systems</li>
+            <li><strong>SAN and storage SME:</strong> Led enterprise HPE Nimble installation, data migration, and VMware SRM integration to replace legacy storage arrays.</li>
+            <li>Drove ESXi/vCenter upgrades, high-availability SQL clustering, enterprise PKI buildout, and blade compute expansions with N+1 HA.</li>
+            <li>Migrated international office workloads to <strong>AWS EC2</strong>, eliminating substantial recurring hypervisor licensing and hardware costs.</li>
+            <li>Turned around an at-risk enterprise content migration project and delivered on schedule using an automated cross-vendor transfer pipeline.</li>
+            <li>Restructured Active Directory group architecture to enable Service Desk self-service and automated onboarding provisioning.</li>
           </ul>
         </div>
+
+        <!-- Penn National Gaming -->
         <div class="timeline-item reveal">
           <div class="timeline-date">Oct 2018 — May 2020</div>
           <h3>Systems Engineer</h3>
           <h4>Penn National Gaming / Hollywood Casinos · Las Vegas, NV</h4>
           <ul>
-            <li>Saved the organization <strong>$300K/year</strong> by consolidating 6 SANs into 1 all-flash NetApp</li>
-            <li>Reduced colocation footprint to just 6 racks</li>
-            <li>Independently migrated backup infrastructure: disk → tape → disk-to-disk → full DR Replication (Rubrik)</li>
-            <li>Administered converged and hyperconverged infrastructure across the enterprise</li>
-            <li>Successfully transitioned through company acquisition via demonstrated SME and communication skills</li>
+            <li>Consolidated six legacy SANs into one all-flash NetApp array, saving <strong>$300K/year</strong> and reducing the datacenter footprint to six racks.</li>
+            <li>Modernized backup architecture from tape to disk-to-disk to full DR replication on <strong>Rubrik</strong> with zero data loss.</li>
+            <li>Served as infrastructure SME through a full company acquisition, maintaining operational continuity and cross-team integration.</li>
           </ul>
         </div>
+
+        <!-- Pinnacle Entertainment -->
         <div class="timeline-item reveal">
           <div class="timeline-date">Oct 2015 — Oct 2018</div>
-          <h3>Systems Engineer → IT Business Analyst</h3>
+          <h3>Systems Engineer / IT Business Analyst</h3>
           <h4>Pinnacle Entertainment · Las Vegas, NV</h4>
           <ul>
-            <li>Maintained infrastructure health for <strong>15 properties and 2,700+ endpoints</strong></li>
-            <li>Removed unnecessary hardware, resulting in energy savings of <strong>over $2M</strong></li>
-            <li>Installed and administered FlexPod UCS, NetApp, and VMware environments</li>
-            <li>Recognized as SME for new deployments, critical incidents, and global outage resolution</li>
-            <li>Led P2V migrations for application teams across database and server environments</li>
-            <li>Leveraged Splunk, Tanium, and SolarWinds for enterprise-wide system health monitoring</li>
-            <li>As IT Business Analyst: troubleshot gaming systems across 13 properties, wrote SSRS reports and SQL queries for hardware trend analysis</li>
+            <li>Delivered <strong>$2M+ in energy savings</strong> by identifying and removing unneeded hardware across 15 properties without reducing operational capacity.</li>
+            <li>Built and supported <strong>FlexPod UCS, NetApp, and VMware</strong> environments across 15 properties and <strong>2,700+ endpoints</strong>; led enterprise P2V migrations.</li>
+            <li>Leveraged Splunk, Tanium, and SolarWinds for enterprise-wide health monitoring, and authored SQL/SSRS trend analysis across gaming properties.</li>
           </ul>
         </div>
+
+        <!-- Earlier Experience -->
         <div class="timeline-item reveal">
-          <div class="timeline-date">Jan 2014 — Sep 2015</div>
-          <h3>Systems Analyst</h3>
-          <h4>River City Casino & Hotel · St. Louis, MO</h4>
+          <div class="timeline-date">2009 — 2015</div>
+          <h3>Earlier Experience · Systems &amp; Support Engineering</h3>
+          <h4>St. Louis Area, MO · Regulated Gaming &amp; Hospitality</h4>
           <ul>
-            <li>Help Desk support for all IT-related systems across the property</li>
-            <li>Created custom software using Microsoft VB.NET</li>
-            <li>Built VBA-automated Excel, Word, and InfoPath documents</li>
-            <li>Established IT policies supporting executive leadership strategies</li>
-            <li>Diagnosed and replaced faulty hardware across network-attached peripherals</li>
-          </ul>
-        </div>
-        <div class="timeline-item reveal">
-          <div class="timeline-date">May 2009 — Jan 2014</div>
-          <h3>Associate Systems Analyst</h3>
-          <h4>Ameristar Casino · Saint Charles, MO</h4>
-          <ul>
-            <li>Help Desk troubleshooting for end user issues across gaming and non-gaming systems</li>
-            <li>Created and supported VBA-automated Excel, Word, and InfoPath documents</li>
-            <li>Maintained user accounts for gaming and non-gaming systems</li>
-            <li>Diagnosed and resolved hardware and software issues across the property</li>
+            <li><strong>Systems Analyst — River City Casino &amp; Hotel (2014–2015):</strong> Property-wide systems support, custom VB.NET tooling, VBA workflow automation, and executive IT policy implementation.</li>
+            <li><strong>Associate Systems Analyst — Ameristar Casino (2009–2014):</strong> Awarded <strong>Team Leader of the Quarter (March 2013)</strong>. Supported gaming and enterprise systems, identity provisioning, and automated document workflows.</li>
           </ul>
         </div>
       </div>
@@ -1282,49 +1527,91 @@
   <section id="achievements">
     <div class="container">
       <div class="section-header reveal">
-        <span class="section-label">Impact</span>
+        <span class="section-label">Executive Impact</span>
         <h2 class="section-title">Key Achievements</h2>
-        <p class="section-desc">Measurable outcomes from infrastructure optimization, cost reduction, and operational excellence.</p>
+        <p class="section-desc">Quantified business outcomes across cloud transformation, AI governance, infrastructure consolidation, and global scale.</p>
       </div>
       <div class="projects-grid">
         <div class="project-card reveal">
-          <span class="project-savings">💰 $2M+ Saved</span>
-          <h3>Hardware Consolidation & Energy Savings</h3>
-          <p>At Pinnacle Entertainment, identified and removed unnecessary hardware across 15 properties — resulting in over $2 million in energy savings while maintaining full operational capacity.</p>
+          <div>
+            <span class="project-savings">☁️ Cloud Rationalization</span>
+            <h3>Datacenter-to-Azure Transformation &amp; Estate Retirement</h3>
+            <p>Led pre-migration server estate rationalization across global datacenters—retiring a majority of legacy workloads rather than lifting-and-shifting to shrink cloud spend before commitment, while executing a multi-wave Assess, Migrate, Validate program with custom reconciliation tooling.</p>
+          </div>
           <div class="project-tags">
-            <span class="tag">Cost Optimization</span>
-            <span class="tag">Infrastructure</span>
-            <span class="tag">Energy Efficiency</span>
+            <span class="tag">Microsoft Azure</span>
+            <span class="tag">Estate Rationalization</span>
+            <span class="tag">Cost Avoidance</span>
+            <span class="tag">Cutover Leadership</span>
           </div>
         </div>
+
         <div class="project-card reveal">
-          <span class="project-savings">💰 $300K/yr Saved</span>
-          <h3>SAN Consolidation to All-Flash NetApp</h3>
-          <p>Consolidated 6 legacy SAN arrays into a single all-flash NetApp at Penn National Gaming. Reduced colocation footprint to 6 racks and modernized the storage tier.</p>
+          <div>
+            <span class="project-savings">🤖 Governed AI Adoption</span>
+            <h3>Enterprise Copilot Governance &amp; Studio Agents</h3>
+            <p>Championed governed adoption of M365 Copilot, Copilot Cowork, and Copilot Studio with role-based access and consumption controls. Designed and deployed custom workflow automation agents that classify operational activity and eliminate administrative toil.</p>
+          </div>
           <div class="project-tags">
-            <span class="tag">Storage</span>
-            <span class="tag">NetApp</span>
-            <span class="tag">Colocation</span>
+            <span class="tag">Copilot Studio</span>
+            <span class="tag">Copilot Cowork</span>
+            <span class="tag">AI Governance</span>
+            <span class="tag">Agentic Automation</span>
           </div>
         </div>
+
         <div class="project-card reveal">
-          <span class="project-savings">🛡️ Full DR</span>
-          <h3>Backup Infrastructure Modernization</h3>
-          <p>Independently migrated backup infrastructure through multiple generations: disk → tape → disk-to-disk → full DR replication (Rubrik). Zero data loss, tested recovery.</p>
+          <div>
+            <span class="project-savings">💰 Multi-Year ROI &amp; DR</span>
+            <h3>Executive Roadmaps, Cloud Cutovers &amp; DR Relocation</h3>
+            <p>Authored annual State of the Infrastructure SWOT and multi-year ROI models identifying major licensing, hosting, and backup cost reductions. Relocated disaster recovery operations and migrated international sites to AWS EC2 while maintaining strict RPO/RTO targets.</p>
+          </div>
           <div class="project-tags">
-            <span class="tag">Disaster Recovery</span>
-            <span class="tag">Rubrik</span>
-            <span class="tag">Data Protection</span>
+            <span class="tag">Executive Strategy</span>
+            <span class="tag">ROI Modeling</span>
+            <span class="tag">RPO/RTO Engineering</span>
+            <span class="tag">AWS EC2</span>
           </div>
         </div>
+
         <div class="project-card reveal">
-          <span class="project-savings">🔄 Acquisition Success</span>
-          <h3>Company Acquisition Transition</h3>
-          <p>Penn National Gaming transitioned to Hollywood Casinos. Maintained infrastructure continuity and knowledge transfer through organizational change.</p>
+          <div>
+            <span class="project-savings">🖥️ Global VDI Scale</span>
+            <h3>Multi-Region AWS WorkSpaces &amp; Fleet Modernization</h3>
+            <p>Scaled global AWS WorkSpaces VDI and thin-client infrastructure across multiple international regions and 10+ offices, while driving enterprise-wide legacy Windows Server retirement and Active Directory modernization.</p>
+          </div>
           <div class="project-tags">
-            <span class="tag">Change Management</span>
-            <span class="tag">SME</span>
-            <span class="tag">Communication</span>
+            <span class="tag">AWS WorkSpaces</span>
+            <span class="tag">Global VDI</span>
+            <span class="tag">Server Modernization</span>
+            <span class="tag">10+ Offices</span>
+          </div>
+        </div>
+
+        <div class="project-card reveal">
+          <div>
+            <span class="project-savings">💰 $300K/yr Saved</span>
+            <h3>SAN Consolidation to All-Flash NetApp</h3>
+            <p>Consolidated six legacy SAN arrays into a single all-flash NetApp array at Penn National Gaming, saving $300K annually, shrinking the colocation footprint to six racks, and modernizing backup to full Rubrik DR replication with zero data loss.</p>
+          </div>
+          <div class="project-tags">
+            <span class="tag">NetApp All-Flash</span>
+            <span class="tag">Rubrik DR</span>
+            <span class="tag">Colocation Reduction</span>
+          </div>
+        </div>
+
+        <div class="project-card reveal">
+          <div>
+            <span class="project-savings">⚡ $2M+ Energy Saved</span>
+            <h3>Multi-Property Hardware Rationalization</h3>
+            <p>Identified and decommissioned unneeded server and datacenter hardware across 15 Pinnacle Entertainment properties and 2,700+ endpoints—delivering over $2M in energy savings without reducing compute capacity.</p>
+          </div>
+          <div class="project-tags">
+            <span class="tag">FlexPod UCS</span>
+            <span class="tag">VMware</span>
+            <span class="tag">15 Properties</span>
+            <span class="tag">Green IT</span>
           </div>
         </div>
       </div>
@@ -1337,23 +1624,24 @@
       <div class="section-header reveal">
         <span class="section-label">Contact</span>
         <h2 class="section-title">Let's Connect</h2>
-        <p class="section-desc">Open to conversations about infrastructure challenges, team building, or homelab experiments.</p>
+        <p class="section-desc">Available for leadership discussions, cloud transformation &amp; AI governance initiatives, or comparing infrastructure notes.</p>
       </div>
-      <p class="about-text reveal" style="max-width:50ch;margin:0 auto;">
-        I'm always interested in connecting with fellow infrastructure engineers, security researchers, and anyone building interesting things. Whether it's a complex migration, a cost optimization puzzle, or just comparing homelab notes — reach out.
+      <p class="about-text reveal" style="max-width:54ch;margin:0 auto;">
+        Whether you're looking for an infrastructure leader who can align multi-year executive roadmaps with hands-on cutover execution, or want to connect on Azure migrations and enterprise Copilot governance — reach out directly.
       </p>
       <div class="social-links reveal">
-        <a href="https://github.com/c01db100ded" target="_blank" rel="noopener">GitHub</a>
+        <a href="mailto:dustin@dustinjaeger.net">✉️ dustin@dustinjaeger.net</a>
         <a href="https://linkedin.com/in/dustinjaeger" target="_blank" rel="noopener">LinkedIn</a>
-        <a href="mailto:dustin@dustinjaeger.net">Email</a>
-        <a href="links-page.html" target="_blank" rel="noopener">Curated Links</a>
+        <a href="https://github.com/c01db100ded" target="_blank" rel="noopener">GitHub</a>
+        <button type="button" onclick="window.print()">🖨️ Print / Save PDF</button>
+        <a href="links-page.html">Curated Links</a>
       </div>
     </div>
   </section>
 
   <!-- Footer -->
   <footer>
-    <p>Built with semantic HTML, CSS custom properties, and zero frameworks. <a href="https://github.com/c01db100ded/dustinjaeger-net" target="_blank" rel="noopener">Source on GitHub</a></p>
+    <p>Dustin Jaeger · Las Vegas, NV · Built with semantic HTML, CSS custom properties, and zero frameworks. <a href="https://github.com/c01db100ded/dustinjaeger-net" target="_blank" rel="noopener">Source on GitHub</a></p>
   </footer>
 
   <script>
@@ -1376,9 +1664,41 @@
       
       document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
     })();
+
+    // Scrollspy — native scroll-target-group with IntersectionObserver & aria-current fallback
+    (function() {
+      const supportsScrollTargetGroup = typeof CSS !== 'undefined' && CSS.supports && CSS.supports('scroll-target-group: auto');
+      const sectionLinks = document.querySelectorAll('.nav-links a[href^="#"]');
+      const sections = document.querySelectorAll('section[id]');
+
+      if (supportsScrollTargetGroup) {
+        const syncAriaCurrent = () => {
+          const currentLink = document.querySelector('.nav-links a:target-current');
+          sectionLinks.forEach(link => {
+            link.setAttribute('aria-current', link === currentLink ? 'true' : 'false');
+          });
+        };
+        syncAriaCurrent();
+        document.addEventListener('scrollend', syncAriaCurrent);
+      } else {
+        const spyObserver = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              const id = entry.target.getAttribute('id');
+              sectionLinks.forEach(link => {
+                const isActive = link.getAttribute('href') === `#${id}`;
+                link.classList.toggle(':target-current', isActive);
+                link.setAttribute('aria-current', isActive ? 'true' : 'false');
+              });
+            }
+          });
+        }, { rootMargin: '-45% 0px -45% 0px', threshold: 0 });
+
+        sections.forEach(section => spyObserver.observe(section));
+      }
+    })();
     
     // Nav Dropdown (click-outside & keyboard accessibility)
-    // Nav Elements
     const navToggle = document.getElementById('nav-toggle-btn');
     const navLinks = document.getElementById('nav-menu');
     const dropdown = document.querySelector('.nav-dropdown');

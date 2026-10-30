@@ -1,5 +1,14 @@
 # CHANGELOG — dustinjaeger.net
 
+## 2026-10-30 — 2026 executive resume overhaul & recruiter UX upgrades
+- Updated Hero, Professional Summary, Core Competencies, Experience Timeline, and Key Achievements in `index.html` to reflect updated 2026 resume (15+ years experience, IT Infrastructure Manager | Cloud Migration | AI Enablement & Governance)
+- Added structured four-pillar breakdown for Systems Administration Manager role: Datacenter-to-Azure Cloud Transformation, AI Enablement & Governance (M365 Copilot, Copilot Cowork, Copilot Studio agents), Team Leadership & Strategy, and Global Infrastructure Delivery
+- Expanded Lead/Sr. Systems Administrator (2020–2022) with enterprise SAN/Nimble/SRM, blade capacity HA, and AWS EC2 site migration accomplishments
+- Added dedicated Certifications, Training & Regulatory Clearances banner (Linux+, PCI Standards, Palo Alto Prisma SASE, Microsoft Copilot Studio Maker Enablement, NV/MO/PA/MI/CO gaming licenses)
+- Added Open Graph / Twitter Card metadata + JSON-LD `Person` schema (`dustin@dustinjaeger.net`)
+- Added `@media print` stylesheet and "Print / Save PDF" action button for one-click recruiter PDF export
+- Added native CSS `scroll-target-group` scrollspy with `IntersectionObserver` + `aria-current` fallback and balanced/pretty typographic wrapping
+
 ## 2026-10-15 — word puzzle games reset & timer leak fix
 - Fixed Play Again bug across FourInFive, FiveInSix, and SixInSeven where starting a new game could retain previous row inputs or skip to row 2
 - Implemented timeout tracking and cancellation (`clearAllGameTimeouts()`) to cleanly abort pending flip/bounce/modal animations upon restart

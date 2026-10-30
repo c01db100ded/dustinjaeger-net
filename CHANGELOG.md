@@ -6,7 +6,7 @@
 - Expanded Lead/Sr. Systems Administrator (2020–2022) with enterprise SAN/Nimble/SRM, blade capacity HA, and AWS EC2 site migration accomplishments
 - Added dedicated Certifications, Training & Regulatory Clearances banner (Linux+, PCI Standards, Palo Alto Prisma SASE, Microsoft Copilot Studio Maker Enablement, NV/MO/PA/MI/CO gaming licenses)
 - Added Open Graph / Twitter Card metadata + JSON-LD `Person` schema (`dustin@dustinjaeger.net`)
-- Added `@media print` stylesheet and "Print / Save PDF" action button for one-click recruiter PDF export
+- Generated dedicated executive 2-page PDF resume (`assets/Dustin_Jaeger_Resume.pdf`) and wired direct download links
 - Added native CSS `scroll-target-group` scrollspy with `IntersectionObserver` + `aria-current` fallback and balanced/pretty typographic wrapping
 
 ## 2026-10-15 — word puzzle games reset & timer leak fix
